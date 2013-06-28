@@ -77,6 +77,25 @@ class Twitter {
 		return $response;
 	}
 
+	public function linkify($tweet) {
+		// URL
+		$tweet = " ".preg_replace( "/(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]*)([[:alnum:]#?\/&=])/i", "<a href=\"\\1\\3\\4\" target=\"_blank\">\\1\\3\\4</a>", $tweet);
+
+		// Mailto
+		$tweet = preg_replace( "/(([a-z0-9_]|\\-|\\.)+@([^[:space:]]*)([[:alnum:]-]))/i", "<a href=\"mailto:\\1\">\\1</a>", $tweet);
+
+		// User
+		$tweet = preg_replace( "/ +@([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $tweet);
+
+		// Hashtag
+		$tweet = preg_replace( "/ +#([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
+
+		// Long URL
+		$tweet = preg_replace("/>(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]{10,20})([^[:space:]]*)([^[:space:]]{10,20})([[:alnum:]#?\/&=])</", ">\\3...\\5\\6<", $tweet);
+
+		return trim($tweet);
+	}
+
 	/**
 	 * Parameters :
 	 * - count (1-200)
