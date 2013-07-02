@@ -59,7 +59,7 @@ class Twitter {
 		$options = array();
 		$options[CURLOPT_HTTPHEADER] = array("Authorization: $auth");
 		if (mb_strtoupper($requestMethod) == 'POST'){
-			$options[CURLOPT_POSTFIELDS] = http_build_query($query);
+			$options[CURLOPT_POSTFIELDS] = http_build_query($parameters);
 			$options[CURLOPT_URL] = $baseUrl;
 		}
 		$options[CURLOPT_HEADER] = false;
