@@ -2,78 +2,27 @@
 
 use Config;
 
-class Twitter {
-	protected $twitter;
-	protected $apiUrl;
-	protected $consumerKey;
-	protected $consumerSecret;
-	protected $accessToken;
-	protected $accessTokenSecret;
+class Twitter extends tmhOAuth {
+	public function __construct($config = array()){
+		$config = array(
+			'consumer_key'    => Config::get('twitter::CONSUMER_KEY'),
+			'consumer_secret' => Config::get('twitter::CONSUMER_SECRET'),
+			'token'           => Config::get('twitter::ACCESS_TOKEN'),
+			'secret'          => Config::get('twitter::ACCESS_TOKEN_SECRET'),
 
-	public function __construct(){
-		$this->apiUrl = Config::get('twitter::API_URL');
-		$this->consumerKey = Config::get('twitter::CONSUMER_KEY');
-		$this->consumerSecret = Config::get('twitter::CONSUMER_SECRET');
-		$this->accessToken = Config::get('twitter::ACCESS_TOKEN');
-		$this->accessTokenSecret = Config::get('twitter::ACCESS_TOKEN_SECRET');
+			'use_ssl'         => Config::get('twitter::USE_SSL'),
+			'user_agent'      => 'TW-L4 ' . parent::VERSION,
+		);
+		parent::__construct($config);
 	}
 
-	public function query($name, $requestMethod = 'GET', $format = 'json', $parameters = array()){
-		$baseUrl = $this->apiUrl.$name.'.'.$format;
-
-		$oauth = array(
-			'oauth_consumer_key' => $this->consumerKey,
-			'oauth_token' => $this->accessToken,
-			'oauth_nonce' => md5(microtime() . rand()),
-			'oauth_timestamp' => time(),
-			'oauth_signature_method' => 'HMAC-SHA1',
-			'oauth_version' => '1.0'
-		);
-
-		$oauth = array_map("rawurlencode", $oauth);
-		$query = array_map("rawurlencode", $parameters);
-
-		$arr = array_merge($oauth, $query);
-
-		asort($arr);
-		ksort($arr);
-
-		$querystring = urldecode(http_build_query($arr, '', '&'));
-
-		$base_string = mb_strtoupper($requestMethod)."&".rawurlencode($baseUrl)."&".rawurlencode($querystring);
-
-		$key = rawurlencode($this->consumerSecret)."&".rawurlencode($this->accessTokenSecret);
-
-		$signature = rawurlencode(base64_encode(hash_hmac('sha1', $base_string, $key, true)));
-
-		if (mb_strtoupper($requestMethod) == 'GET'){
-			$baseUrl .= "?".http_build_query($query);
-			$baseUrl = str_replace("&amp;","&",$baseUrl);
-		}
-
-		$oauth['oauth_signature'] = $signature;
-		ksort($oauth);
-
-		$auth = "OAuth " . urldecode(http_build_query($oauth, '', ', '));
-
-		$options = array();
-		$options[CURLOPT_HTTPHEADER] = array("Authorization: $auth");
-		if (mb_strtoupper($requestMethod) == 'POST'){
-			$options[CURLOPT_POSTFIELDS] = http_build_query($parameters);
-			$options[CURLOPT_URL] = $baseUrl;
-		}
-		$options[CURLOPT_HEADER] = false;
-		if (mb_strtoupper($requestMethod) == 'GET'){
-			$options[CURLOPT_URL] = $baseUrl;
-		}
-		$options[CURLOPT_RETURNTRANSFER] = true;
-		$options[CURLOPT_SSL_VERIFYPEER] = false;
-
-		$feed = curl_init();
-		curl_setopt_array($feed, $options);
-		$response = curl_exec($feed);
-		curl_close($feed);
-
+	public function query($name, $requestMethod = 'GET', $format = 'json', $parameters = array(), $multipart = false){
+		$response = parent::user_request(array(
+			'method' => $requestMethod,
+			'url' => parent::url(Config::get('twitter::API_VERSION').'/'.$name),
+			'params' => $parameters,
+			'multipart' => $multipart
+		));
 		return $response;
 	}
 
@@ -242,7 +191,7 @@ class Twitter {
 			throw new \Exception('Parameter required missing : status or media[]');
 		}
 
-		$response = $this->query('statuses/update_with_media', 'POST', 'json', $parameters);
+		$response = $this->query('statuses/update_with_media', 'POST', 'json', $parameters, true);
 
 		return json_decode($response);
 	}
@@ -613,7 +562,7 @@ class Twitter {
 			throw new \Exception('Parameter required missing : image, tile or use');
 		}
 
-		$response = $this->query('account/update_profile_background_image', 'POST', 'json', $parameters);
+		$response = $this->query('account/update_profile_background_image', 'POST', 'json', $parameters, true);
 
 		return json_decode($response);
 	}
@@ -649,7 +598,7 @@ class Twitter {
 			throw new \Exception('Parameter required missing : image');
 		}
 
-		$response = $this->query('account/update_profile_image', 'POST', 'json', $parameters);
+		$response = $this->query('account/update_profile_image', 'POST', 'json', $parameters, true);
 
 		return json_decode($response);
 	}
