@@ -11,13 +11,13 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
                     ->getMock();
     }
 
-    protected function getTwitterExpecting(array $queryParams)
+    protected function getTwitterExpecting($endpoint, array $queryParams)
     {
         $twitter = $this->getTwitter();
         $twitter->expects($this->once())
                 ->method('query')
                 ->with(
-                    $this->anything(),
+                    $endpoint,
                     $this->anything(),
                     $this->anything(),
                     $queryParams
@@ -27,7 +27,7 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUsersWithScreenName()
     {
-        $twitter = $this->getTwitterExpecting(array(
+        $twitter = $this->getTwitterExpecting('users/show', array(
             'screen_name' => 'my_screen_name'
         ));
 
@@ -38,12 +38,58 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUsersWithId()
     {
-        $twitter = $this->getTwitterExpecting(array(
-            'id' => 1234567890
+        $twitter = $this->getTwitterExpecting('users/show', array(
+            'user_id' => 1234567890
         ));
 
         $twitter->getUsers(array(
-            'id' => 1234567890
+            'user_id' => 1234567890
+        ));
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testGetUsersInvalid()
+    {
+        $twitter = $this->getTwitter();
+
+        $twitter->getUsers(array(
+            'include_entities' => true
+        ));
+    }
+
+    public function testGetUsersLookupWithIds()
+    {
+        $twitter = $this->getTwitterExpecting('users/lookup', array(
+            'user_id' => '1,2,3,4'
+        ));
+
+        $twitter->getUsersLookup(array(
+            'user_id' => implode(',', array(1, 2, 3, 4))
+        ));
+    }
+
+    public function testGetUsersLookupWithScreenNames()
+    {
+        $twitter = $this->getTwitterExpecting('users/lookup', array(
+            'screen_name' => 'me,you,everybody'
+        ));
+
+        $twitter->getUsersLookup(array(
+            'screen_name' => implode(',', array('me', 'you', 'everybody'))
+        ));
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testGetUsersLookupInvalid()
+    {
+        $twitter = $this->getTwitter();
+
+        $twitter->getUsersLookup(array(
+            'include_entities' => true
         ));
     }
 }
