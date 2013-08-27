@@ -678,7 +678,7 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 */
 	public function getUsers($parameters = array()){
-		if (!array_key_exists('id', $parameters) || !array_key_exists('screen_name', $parameters)){
+		if (!array_key_exists('id', $parameters) && !array_key_exists('screen_name', $parameters)){
 			throw new \Exception('Parameter required missing : id or screen_name');
 		}
 
