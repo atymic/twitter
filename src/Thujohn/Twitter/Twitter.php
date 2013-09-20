@@ -678,8 +678,8 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 */
 	public function getUsers($parameters = array()){
-		if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)){
-			throw new \Exception('Parameter required missing : id or screen_name');
+		if (!array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters)){
+			throw new \Exception('Parameter required missing : user_id or screen_name');
 		}
 
 		$response = $this->query('users/show', 'GET', 'json', $parameters);
@@ -687,22 +687,21 @@ class Twitter extends tmhOAuth {
 		return json_decode($response);
 	}
 
-  /**
-   * Prameters :
-   * - user_id
-   * - screen_name
-   * - include_entities (0|1)
-   */
-  public function getUsersLookup($parameters = array()) {
-    if (!array_key_exists('screen_name', $parameters)
-        && !array_key_exists('user_id', $parameters)) {
-      throw new \Exception("Paramter required missing : user_id or screen_name");
-    }
+	/**
+	 * Prameters :
+	 * - user_id
+	 * - screen_name
+	 * - include_entities (0|1)
+	 */
+	public function getUsersLookup($parameters = array()) {
+		if (!array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters)){
+			throw new \Exception("Parameter required missing : user_id or screen_name");
+		}
 
-    $response = $this->query('users/lookup', 'GET', 'json', $parameters);
+		$response = $this->query('users/lookup', 'GET', 'json', $parameters);
 
-    return json_decode($response);
-  }
+		return json_decode($response);
+	}
 
 	/**
 	 * Parameters :
