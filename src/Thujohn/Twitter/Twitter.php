@@ -16,28 +16,42 @@ class Twitter extends tmhOAuth {
 		parent::__construct($config);
 	}
 
-	public function query($name, $requestMethod = 'GET', $format = 'json', $parameters = array(), $multipart = false){
+	public function query($name, $requestMethod = 'GET', $parameters = array(), $multipart = false){
 		$response = parent::user_request(array(
 			'method' => $requestMethod,
 			'url' => parent::url(Config::get('twitter::API_VERSION').'/'.$name),
 			'params' => $parameters,
 			'multipart' => $multipart
 		));
+
+		$format = 'json';
+		if (isset($parameters['format'])){
+			$format = $parameters['format'];
+		}
+
+		switch ($format){
+			default :
+			case 'json' : $response = json_decode($response);
+			break;
+			case 'array' : $response = json_decode($response, true);
+			break;
+		}
+
 		return $response;
 	}
 
 	public function linkify($tweet) {
 		// URL
-		$tweet = " ".preg_replace( "/(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]*)([[:alnum:]#?\/&=])/i", "<a href=\"\\1\\3\\4\" target=\"_blank\">\\1\\3\\4</a>", $tweet);
+		$tweet = " ".preg_replace("/(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]*)([[:alnum:]#?\/&=])/i", "<a href=\"\\1\\3\\4\" target=\"_blank\">\\1\\3\\4</a>", $tweet);
 
 		// Mailto
-		$tweet = preg_replace( "/(([a-z0-9_]|\\-|\\.)+@([^[:space:]]*)([[:alnum:]-]))/i", "<a href=\"mailto:\\1\">\\1</a>", $tweet);
+		$tweet = preg_replace("/(([a-z0-9_]|\\-|\\.)+@([^[:space:]]*)([[:alnum:]-]))/i", "<a href=\"mailto:\\1\">\\1</a>", $tweet);
 
 		// User
-		$tweet = preg_replace( "/ +@([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $tweet);
+		$tweet = preg_replace("/ +@([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $tweet);
 
 		// Hashtag
-		$tweet = preg_replace( "/ +#([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
+		$tweet = preg_replace("/ +#([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
 
 		// Long URL
 		$tweet = preg_replace("/>(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]{10,20})([^[:space:]]*)([^[:space:]]{10,20})([[:alnum:]#?\/&=])</", ">\\3...\\5\\6<", $tweet);
@@ -56,9 +70,9 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 */
 	public function getMentionsTimeline($parameters = array()){
-		$response = $this->query('statuses/mentions_timeline', 'GET', 'json', $parameters);
+		$response = $this->query('statuses/mentions_timeline', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -75,9 +89,9 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 */
 	public function getUserTimeline($parameters = array()){
-		$response = $this->query('statuses/user_timeline', 'GET', 'json', $parameters);
+		$response = $this->query('statuses/user_timeline', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -91,9 +105,9 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 */
 	public function getHomeTimeline($parameters = array()){
-		$response = $this->query('statuses/home_timeline', 'GET', 'json', $parameters);
+		$response = $this->query('statuses/home_timeline', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -106,9 +120,9 @@ class Twitter extends tmhOAuth {
 	 * - include_user_entities (0|1)
 	 */
 	public function getRtsTimeline($parameters = array()){
-		$response = $this->query('statuses/retweets_of_me', 'GET', 'json', $parameters);
+		$response = $this->query('statuses/retweets_of_me', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -117,9 +131,9 @@ class Twitter extends tmhOAuth {
 	 * - trim_user (0|1)
 	 */
 	public function getRts($id, $parameters = array()){
-		$response = $this->query('statuses/retweets/'.$id, 'GET', 'json', $parameters);
+		$response = $this->query('statuses/retweets/'.$id, 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -130,9 +144,9 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 */
 	public function getTweet($id, $parameters = array()){
-		$response = $this->query('statuses/show/'.$id, 'GET', 'json', $parameters);
+		$response = $this->query('statuses/show/'.$id, 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -150,9 +164,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : status');
 		}
 
-		$response = $this->query('statuses/update', 'POST', 'json', $parameters);
+		$response = $this->query('statuses/update', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -160,9 +174,9 @@ class Twitter extends tmhOAuth {
 	 * - trim_user (0|1)
 	 */
 	public function destroyTweet($id, $parameters = array()){
-		$response = $this->query('statuses/destroy/'.$id, 'POST', 'json', $parameters);
+		$response = $this->query('statuses/destroy/'.$id, 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -170,9 +184,9 @@ class Twitter extends tmhOAuth {
 	 * - trim_user (0|1)
 	 */
 	public function postRt($id, $parameters = array()){
-		$response = $this->query('statuses/retweet/'.$id, 'POST', 'json', $parameters);
+		$response = $this->query('statuses/retweet/'.$id, 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -191,9 +205,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : status or media[]');
 		}
 
-		$response = $this->query('statuses/update_with_media', 'POST', 'json', $parameters, true);
+		$response = $this->query('statuses/update_with_media', 'POST', $parameters, true);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -212,9 +226,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : id or url');
 		}
 
-		$response = $this->query('statuses/oembed', 'GET', 'json', $parameters);
+		$response = $this->query('statuses/oembed', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -228,9 +242,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : id');
 		}
 
-		$response = $this->query('statuses/retweeters/ids', 'GET', 'json', $parameters);
+		$response = $this->query('statuses/retweeters/ids', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -252,9 +266,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : q');
 		}
 
-		$response = $this->query('search/tweets', 'GET', 'json', $parameters);
+		$response = $this->query('search/tweets', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -266,9 +280,9 @@ class Twitter extends tmhOAuth {
 	 * - skip_status (0|1)
 	 */
 	public function getDmsIn($parameters = array()){
-		$response = $this->query('direct_messages', 'GET', 'json', $parameters);
+		$response = $this->query('direct_messages', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -280,9 +294,9 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 */
 	public function getDmsOut($parameters = array()){
-		$response = $this->query('direct_messages/sent', 'GET', 'json', $parameters);
+		$response = $this->query('direct_messages/sent', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -294,9 +308,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : id');
 		}
 
-		$response = $this->query('direct_messages/show', 'GET', 'json', $parameters);
+		$response = $this->query('direct_messages/show', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -309,9 +323,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : id');
 		}
 
-		$response = $this->query('direct_messages/destroy', 'POST', 'json', $parameters);
+		$response = $this->query('direct_messages/destroy', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -325,9 +339,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : user_id, screen_name or text');
 		}
 
-		$response = $this->query('direct_messages/new', 'POST', 'json', $parameters);
+		$response = $this->query('direct_messages/new', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -335,9 +349,9 @@ class Twitter extends tmhOAuth {
 	 * - stringify_ids (0|1)
 	 */
 	public function getNoRters($parameters = array()){
-		$response = $this->query('friendships/no_retweets/ids', 'GET', 'json', $parameters);
+		$response = $this->query('friendships/no_retweets/ids', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -349,9 +363,9 @@ class Twitter extends tmhOAuth {
 	 * - count (1-5000)
 	 */
 	public function getFriendsIds($parameters = array()){
-		$response = $this->query('friends/ids', 'GET', 'json', $parameters);
+		$response = $this->query('friends/ids', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -363,9 +377,9 @@ class Twitter extends tmhOAuth {
 	 * - count (1-5000)
 	 */
 	public function getFollowersIds($parameters = array()){
-		$response = $this->query('followers/ids', 'GET', 'json', $parameters);
+		$response = $this->query('followers/ids', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -374,9 +388,9 @@ class Twitter extends tmhOAuth {
 	 * - user_id
 	 */
 	public function getFriendshipsLookup($parameters = array()){
-		$response = $this->query('friendships/lookup', 'GET', 'json', $parameters);
+		$response = $this->query('friendships/lookup', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -385,9 +399,9 @@ class Twitter extends tmhOAuth {
 	 * - stringify_ids (0|1)
 	 */
 	public function getFriendshipsIn($parameters = array()){
-		$response = $this->query('friendships/incoming', 'GET', 'json', $parameters);
+		$response = $this->query('friendships/incoming', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -396,9 +410,9 @@ class Twitter extends tmhOAuth {
 	 * - stringify_ids (0|1)
 	 */
 	public function getFriendshipsOut($parameters = array()){
-		$response = $this->query('friendships/outgoing', 'GET', 'json', $parameters);
+		$response = $this->query('friendships/outgoing', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -412,9 +426,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
-		$response = $this->query('friendships/create', 'POST', 'json', $parameters);
+		$response = $this->query('friendships/create', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -427,9 +441,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
-		$response = $this->query('friendships/destroy', 'POST', 'json', $parameters);
+		$response = $this->query('friendships/destroy', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -444,9 +458,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
-		$response = $this->query('friendships/update', 'POST', 'json', $parameters);
+		$response = $this->query('friendships/update', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -457,9 +471,9 @@ class Twitter extends tmhOAuth {
 	 * - target_screen_name
 	 */
 	public function getFriendships($parameters = array()){
-		$response = $this->query('friendships/show', 'GET', 'json', $parameters);
+		$response = $this->query('friendships/show', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -471,9 +485,9 @@ class Twitter extends tmhOAuth {
 	 * - include_user_entities (0|1)
 	 */
 	public function getFriends($parameters = array()){
-		$response = $this->query('friends/list', 'GET', 'json', $parameters);
+		$response = $this->query('friends/list', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -485,15 +499,15 @@ class Twitter extends tmhOAuth {
 	 * - include_user_entities (0|1)
 	 */
 	public function getFollowers($parameters = array()){
-		$response = $this->query('followers/list', 'GET', 'json', $parameters);
+		$response = $this->query('followers/list', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function getSettings(){
-		$response = $this->query('account/settings', 'GET', 'json');
+	public function getSettings($parameters){
+		$response = $this->query('account/settings', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -510,9 +524,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter missing');
 		}
 
-		$response = $this->query('account/settings', 'POST', 'json', $parameters);
+		$response = $this->query('account/settings', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -525,9 +539,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : device');
 		}
 
-		$response = $this->query('account/update_delivery_device', 'POST', 'json', $parameters);
+		$response = $this->query('account/update_delivery_device', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -544,9 +558,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter missing');
 		}
 
-		$response = $this->query('account/update_profile', 'POST', 'json', $parameters);
+		$response = $this->query('account/update_profile', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -562,9 +576,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : image, tile or use');
 		}
 
-		$response = $this->query('account/update_profile_background_image', 'POST', 'json', $parameters, true);
+		$response = $this->query('account/update_profile_background_image', 'POST', $parameters, true);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -582,9 +596,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter missing');
 		}
 
-		$response = $this->query('account/update_profile_colors', 'POST', 'json', $parameters);
+		$response = $this->query('account/update_profile_colors', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -598,9 +612,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : image');
 		}
 
-		$response = $this->query('account/update_profile_image', 'POST', 'json', $parameters, true);
+		$response = $this->query('account/update_profile_image', 'POST', $parameters, true);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -609,9 +623,9 @@ class Twitter extends tmhOAuth {
 	 * - skip_status (0|1)
 	 */
 	public function getCredentials($parameters = array()){
-		$response = $this->query('account/verify_credentials', 'GET', 'json', $parameters);
+		$response = $this->query('account/verify_credentials', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -621,9 +635,9 @@ class Twitter extends tmhOAuth {
 	 * - cursor
 	 */
 	public function getBlocks($parameters = array()){
-		$response = $this->query('blocks/list', 'GET', 'json', $parameters);
+		$response = $this->query('blocks/list', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -632,9 +646,9 @@ class Twitter extends tmhOAuth {
 	 * - cursor
 	 */
 	public function getBlocksIds($parameters = array()){
-		$response = $this->query('blocks/ids', 'GET', 'json', $parameters);
+		$response = $this->query('blocks/ids', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -649,9 +663,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
-		$response = $this->query('blocks/create', 'POST', 'json', $parameters);
+		$response = $this->query('blocks/create', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -666,9 +680,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
-		$response = $this->query('blocks/destroy', 'POST', 'json', $parameters);
+		$response = $this->query('blocks/destroy', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -682,9 +696,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : user_id or screen_name');
 		}
 
-		$response = $this->query('users/show', 'GET', 'json', $parameters);
+		$response = $this->query('users/show', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -698,9 +712,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception("Parameter required missing : user_id or screen_name");
 		}
 
-		$response = $this->query('users/lookup', 'GET', 'json', $parameters);
+		$response = $this->query('users/lookup', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -715,9 +729,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : q');
 		}
 
-		$response = $this->query('users/search', 'GET', 'json', $parameters);
+		$response = $this->query('users/search', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -728,9 +742,9 @@ class Twitter extends tmhOAuth {
 	 * - skip_status (0|1)
 	 */
 	public function getUsersContributees($parameters = array()){
-		$response = $this->query('users/contributees', 'GET', 'json', $parameters);
+		$response = $this->query('users/contributees', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -741,15 +755,15 @@ class Twitter extends tmhOAuth {
 	 * - skip_status (0|1)
 	 */
 	public function getUsersContributors($parameters = array()){
-		$response = $this->query('users/contributors', 'GET', 'json', $parameters);
+		$response = $this->query('users/contributors', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function destroyUserBanner(){
-		$response = $this->query('account/remove_profile_banner', 'POST', 'json');
+	public function destroyUserBanner($parameters){
+		$response = $this->query('account/remove_profile_banner', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -765,9 +779,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : banner');
 		}
 
-		$response = $this->query('account/update_profile_banner', 'POST', 'json', $parameters);
+		$response = $this->query('account/update_profile_banner', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -776,9 +790,9 @@ class Twitter extends tmhOAuth {
 	 * - screen_name
 	 */
 	public function getUserBanner($parameters = array()){
-		$response = $this->query('users/profile_banner', 'GET', 'json', $parameters);
+		$response = $this->query('users/profile_banner', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -786,9 +800,9 @@ class Twitter extends tmhOAuth {
 	 * - lang
 	 */
 	public function getSuggesteds($slug, $parameters = array()){
-		$response = $this->query('users/suggestions/'.$slug, 'GET', 'json', $parameters);
+		$response = $this->query('users/suggestions/'.$slug, 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -796,15 +810,15 @@ class Twitter extends tmhOAuth {
 	 * - lang
 	 */
 	public function getSuggestions($parameters = array()){
-		$response = $this->query('users/suggestions', 'GET', 'json', $parameters);
+		$response = $this->query('users/suggestions', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	public function getSuggestedsMembers($slug){
-		$response = $this->query('users/suggestions/'.$slug.'/members', 'GET', 'json');
+		$response = $this->query('users/suggestions/'.$slug.'/members', 'GET');
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -817,9 +831,9 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 */
 	public function getFavorites($parameters = array()){
-		$response = $this->query('favorites/list', 'GET', 'json', $parameters);
+		$response = $this->query('favorites/list', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -832,9 +846,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : id');
 		}
 
-		$response = $this->query('favorites/destroy', 'POST', 'json', $parameters);
+		$response = $this->query('favorites/destroy', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -847,9 +861,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : id');
 		}
 
-		$response = $this->query('favorites/create', 'POST', 'json', $parameters);
+		$response = $this->query('favorites/create', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -859,9 +873,9 @@ class Twitter extends tmhOAuth {
 	 * - reverse (0|1)
 	 */
 	public function getLists($parameters = array()){
-		$response = $this->query('lists/list', 'GET', 'json', $parameters);
+		$response = $this->query('lists/list', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -881,9 +895,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/statuses', 'GET', 'json', $parameters);
+		$response = $this->query('lists/statuses', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -900,9 +914,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id, slug, owner_screen_name or owner_id');
 		}
 
-		$response = $this->query('lists/members/destroy', 'POST', 'json', $parameters);
+		$response = $this->query('lists/members/destroy', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -920,9 +934,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/subscribers', 'GET', 'json', $parameters);
+		$response = $this->query('lists/subscribers', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -937,9 +951,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : owner_screen_name, owner_id, list_id or slug');
 		}
 
-		$response = $this->query('lists/subscribers/create', 'POST', 'json', $parameters);
+		$response = $this->query('lists/subscribers/create', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -958,9 +972,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id, slug, user_id or screen_name');
 		}
 
-		$response = $this->query('lists/subscribers/show', 'GET', 'json', $parameters);
+		$response = $this->query('lists/subscribers/show', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -975,9 +989,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/subscribers/destroy', 'POST', 'json', $parameters);
+		$response = $this->query('lists/subscribers/destroy', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -994,9 +1008,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/members/create_all', 'POST', 'json', $parameters);
+		$response = $this->query('lists/members/create_all', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1015,9 +1029,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id, slug, user_id or screen_name');
 		}
 
-		$response = $this->query('lists/members/show', 'GET', 'json', $parameters);
+		$response = $this->query('lists/members/show', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1035,9 +1049,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/members', 'GET', 'json', $parameters);
+		$response = $this->query('lists/members', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1054,9 +1068,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id, slug, user_id or screen_name');
 		}
 
-		$response = $this->query('lists/members/create', 'POST', 'json', $parameters);
+		$response = $this->query('lists/members/create', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1071,9 +1085,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/destroy', 'POST', 'json', $parameters);
+		$response = $this->query('lists/destroy', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1091,9 +1105,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/update', 'POST', 'json', $parameters);
+		$response = $this->query('lists/update', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1107,9 +1121,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : name');
 		}
 
-		$response = $this->query('lists/create', 'POST', 'json', $parameters);
+		$response = $this->query('lists/create', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1124,9 +1138,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/show', 'GET', 'json', $parameters);
+		$response = $this->query('lists/show', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1137,9 +1151,9 @@ class Twitter extends tmhOAuth {
 	 * - cursor
 	 */
 	public function getListSubscriptions($parameters = array()){
-		$response = $this->query('lists/subscriptions', 'GET', 'json', $parameters);
+		$response = $this->query('lists/subscriptions', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1156,9 +1170,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
-		$response = $this->query('lists/members/destroy_all', 'POST', 'json', $parameters);
+		$response = $this->query('lists/members/destroy_all', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1169,21 +1183,21 @@ class Twitter extends tmhOAuth {
 	 * - cursor
 	 */
 	public function getListOwnerships($parameters = array()){
-		$response = $this->query('lists/ownerships', 'GET', 'json', $parameters);
+		$response = $this->query('lists/ownerships', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function getSavedSearches(){
-		$response = $this->query('saved_searches/list', 'GET', 'json');
+	public function getSavedSearches($parameters){
+		$response = $this->query('saved_searches/list', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	public function getSavedSearch($id){
-		$response = $this->query('saved_searches/show/'.$id, 'GET', 'json');
+		$response = $this->query('saved_searches/show/'.$id, 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1195,21 +1209,21 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : query');
 		}
 
-		$response = $this->query('saved_searches/create', 'POST', 'json', $parameters);
+		$response = $this->query('saved_searches/create', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	public function destroySavedSearch($id, $parameters = array()){
-		$response = $this->query('saved_searches/destroy/'.$id, 'POST', 'json', $parameters);
+		$response = $this->query('saved_searches/destroy/'.$id, 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	public function getGeo($id){
-		$response = $this->query('geo/id/'.$id, 'GET', 'json');
+		$response = $this->query('geo/id/'.$id, 'GET');
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1226,9 +1240,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : lat or long');
 		}
 
-		$response = $this->query('geo/reverse_geocode', 'GET', 'json', $parameters);
+		$response = $this->query('geo/reverse_geocode', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1245,9 +1259,9 @@ class Twitter extends tmhOAuth {
 	 * - callback
 	 */
 	public function getGeoSearch($parameters = array()){
-		$response = $this->query('geo/search', 'GET', 'json', $parameters);
+		$response = $this->query('geo/search', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1264,9 +1278,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : lat, long or name');
 		}
 
-		$response = $this->query('geo/similar_places', 'GET', 'json', $parameters);
+		$response = $this->query('geo/similar_places', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1284,9 +1298,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : name, contained_within, token, lat or long');
 		}
 
-		$response = $this->query('geo/place', 'POST', 'json', $parameters);
+		$response = $this->query('geo/place', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1299,15 +1313,15 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : id');
 		}
 
-		$response = $this->query('trends/place', 'GET', 'json', $parameters);
+		$response = $this->query('trends/place', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function getTrendsAvailable(){
-		$response = $this->query('trends/available', 'GET', 'json');
+	public function getTrendsAvailable($parameters){
+		$response = $this->query('trends/available', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1320,9 +1334,9 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter required missing : lat, long or name');
 		}
 
-		$response = $this->query('trends/closest', 'GET', 'json', $parameters);
+		$response = $this->query('trends/closest', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
 	/**
@@ -1335,38 +1349,38 @@ class Twitter extends tmhOAuth {
 			throw new \Exception('Parameter missing');
 		}
 
-		$response = $this->query('users/report_spam', 'POST', 'json', $parameters);
+		$response = $this->query('users/report_spam', 'POST', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function getHelpConfiguration(){
-		$response = $this->query('help/configuration', 'GET', 'json');
+	public function getHelpConfiguration($parameters){
+		$response = $this->query('help/configuration', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function getHelpLanguages(){
-		$response = $this->query('help/languages', 'GET', 'json');
+	public function getHelpLanguages($parameters){
+		$response = $this->query('help/languages', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function getHelpPrivacy(){
-		$response = $this->query('help/privacy', 'GET', 'json');
+	public function getHelpPrivacy($parameters){
+		$response = $this->query('help/privacy', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function getHelpTos(){
-		$response = $this->query('help/tos', 'GET', 'json');
+	public function getHelpTos($parameters){
+		$response = $this->query('help/tos', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 
-	public function getAppRateLimit(){
-		$response = $this->query('application/rate_limit_status', 'GET', 'json');
+	public function getAppRateLimit($parameters){
+		$response = $this->query('application/rate_limit_status', 'GET', $parameters);
 
-		return json_decode($response);
+		return $response;
 	}
 }
