@@ -4,22 +4,26 @@ use Config;
 
 class Twitter extends tmhOAuth {
 	public function __construct($config = array()){
-		$config['consumer_key']    = (isset($config['consumer_key'])? $config['consumer_key'] : Config::get('twitter::CONSUMER_KEY'));
-		$config['consumer_secret'] = (isset($config['consumer_secret'])? $config['consumer_secret'] : Config::get('twitter::CONSUMER_SECRET'));
-		$config['token']           = (isset($config['token'])? $config['token'] : Config::get('twitter::ACCESS_TOKEN'));
-		$config['secret']          = (isset($config['secret'])? $config['secret'] : Config::get('twitter::ACCESS_TOKEN_SECRET'));
-		$config['use_ssl']         = (isset($config['use_ssl'])? $config['use_ssl'] : Config::get('twitter::USE_SSL'));
-		$config['user_agent']      = (isset($config['user_agent'])? $config['user_agent'] : 'TW-L4 ' . parent::VERSION);
+		$config['consumer_key']    = (isset($config['consumer_key']) ? $config['consumer_key'] : Config::get('twitter::CONSUMER_KEY'));
+		$config['consumer_secret'] = (isset($config['consumer_secret']) ? $config['consumer_secret'] : Config::get('twitter::CONSUMER_SECRET'));
+		$config['token']           = (isset($config['token']) ? $config['token'] : Config::get('twitter::ACCESS_TOKEN'));
+		$config['secret']          = (isset($config['secret']) ? $config['secret'] : Config::get('twitter::ACCESS_TOKEN_SECRET'));
+
+		$config['use_ssl']         = (isset($config['use_ssl']) ? $config['use_ssl'] : Config::get('twitter::USE_SSL'));
+		$config['user_agent']      = (isset($config['user_agent']) ? $config['user_agent'] : 'TW-L4 ' . parent::VERSION);
+
 		parent::__construct($config);
 	}
 
 	public function query($name, $requestMethod = 'GET', $parameters = array(), $multipart = false){
-		$response = parent::user_request(array(
+		parent::user_request(array(
 			'method' => $requestMethod,
 			'url' => parent::url(Config::get('twitter::API_VERSION').'/'.$name),
 			'params' => $parameters,
 			'multipart' => $multipart
 		));
+
+		$response = $this->response;
 
 		$format = 'json';
 		if (isset($parameters['format'])){
@@ -28,9 +32,9 @@ class Twitter extends tmhOAuth {
 
 		switch ($format){
 			default :
-			case 'json' : $response = json_decode($response);
+			case 'json' : $response = $response['response'];
 			break;
-			case 'array' : $response = json_decode($response, true);
+			case 'array' : $response = json_decode($response['response'], true);
 			break;
 		}
 

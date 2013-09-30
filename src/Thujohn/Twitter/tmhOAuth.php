@@ -7,13 +7,14 @@
  * REST requests. OAuth authentication is sent using an Authorization Header.
  *
  * @author themattharris
- * @version 0.8.2
+ * @version 0.8.3
  *
- * 15 June 2013
+ * 19 August 2013
  */
-class tmhOAuth {
-  const VERSION = '0.8.2';
+defined('__DIR__') or define('__DIR__', dirname(__FILE__));
 
+class tmhOAuth {
+  const VERSION = '0.8.3';
   var $response = array();
 
   /**
@@ -51,6 +52,7 @@ class tmhOAuth {
         'oauth_signature_method'     => 'HMAC-SHA1',
 
         // you probably don't want to change any of these curl values
+        'curl_http_version'          => CURL_HTTP_VERSION_1_1,
         'curl_connecttimeout'        => 30,
         'curl_timeout'               => 10,
 
@@ -286,6 +288,30 @@ class tmhOAuth {
   }
 
   /**
+   * If the request uses multipart, and the parameter isn't a file path, prepend a space
+   * otherwise return the original value. we chose a space here as twitter whitespace trims from
+   * the beginning of the tweet. we don't use \0 here because it's the character for string
+   * termination.
+   *
+   * @param the parameter value
+   * @return string the original or modified string, depending on the request and the input parameter
+   */
+  private function multipart_escape($value) {
+    if (! $this->request_settings['multipart'] || strpos($value, '@') !== 0)
+      return $value;
+
+    // see if the parameter is a file.
+    // we split on the semi-colon as it's the delimiter used on media uploads
+    // for fields with semi-colons this will return the original string
+    list($file) = explode(';', substr($value, 1), 2);
+    if (file_exists($file))
+      return $value;
+
+    return " $value";
+  }
+
+
+  /**
    * Prepares all parameters for the base string and request.
    * Multipart parameters are ignored as they are not defined in the specification,
    * all other types of parameter are encoded for compatibility with OAuth.
@@ -326,7 +352,7 @@ class tmhOAuth {
       if (is_array($v))
         $v = implode(',', $v);
 
-      $v = $this->request_settings['multipart'] ? $v : $this->safe_encode($v);
+      $v = $this->request_settings['multipart'] ? $this->multipart_escape($v) : $this->safe_encode($v);
 
       // split parameters for the basestring and authorization header, and recreate the oauth1 array
       if ($doing_oauth1) {
@@ -750,6 +776,7 @@ class tmhOAuth {
     }
 
     curl_setopt_array($c, array(
+      CURLOPT_HTTP_VERSION   => $this->config['curl_http_version'],
       CURLOPT_USERAGENT      => $this->config['user_agent'],
       CURLOPT_CONNECTTIMEOUT => $this->config['curl_connecttimeout'],
       CURLOPT_TIMEOUT        => $this->config['curl_timeout'],
@@ -813,6 +840,6 @@ class tmhOAuth {
     }
     $this->response['raw'] .= $response;
 
-    return $response;
+    return $code;
   }
 }
