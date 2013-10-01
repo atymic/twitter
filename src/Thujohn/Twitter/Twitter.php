@@ -25,13 +25,15 @@ class Twitter extends tmhOAuth {
 
 		$response = $this->response;
 
-		$format = 'json';
+		$format = 'object';
 		if (isset($parameters['format'])){
 			$format = $parameters['format'];
 		}
 
 		switch ($format){
 			default :
+			case 'object' : $response = json_decode($response['response']);
+			break;
 			case 'json' : $response = $response['response'];
 			break;
 			case 'array' : $response = json_decode($response['response'], true);
