@@ -4,13 +4,17 @@ use Config;
 
 class Twitter extends tmhOAuth {
 	public function __construct($config = array()){
-		$config['consumer_key']    = (isset($config['consumer_key']) ? $config['consumer_key'] : Config::get('twitter::CONSUMER_KEY'));
-		$config['consumer_secret'] = (isset($config['consumer_secret']) ? $config['consumer_secret'] : Config::get('twitter::CONSUMER_SECRET'));
-		$config['token']           = (isset($config['token']) ? $config['token'] : Config::get('twitter::ACCESS_TOKEN'));
-		$config['secret']          = (isset($config['secret']) ? $config['secret'] : Config::get('twitter::ACCESS_TOKEN_SECRET'));
+		$default = array();
 
-		$config['use_ssl']         = (isset($config['use_ssl']) ? $config['use_ssl'] : Config::get('twitter::USE_SSL'));
-		$config['user_agent']      = (isset($config['user_agent']) ? $config['user_agent'] : 'TW-L4 ' . parent::VERSION);
+		$default['consumer_key'] = Config::get('twitter::CONSUMER_KEY');
+		$default['consumer_secret'] = Config::get('twitter::CONSUMER_SECRET');
+		$default['token'] = Config::get('twitter::ACCESS_TOKEN');
+		$default['secret'] = Config::get('twitter::ACCESS_TOKEN_SECRET');
+
+		$default['use_ssl'] = Config::get('twitter::USE_SSL');
+		$default['user_agent'] = 'TW-L4 '.parent::VERSION;
+		
+		$config = array_merge($default, $config);
 
 		parent::__construct($config);
 	}
