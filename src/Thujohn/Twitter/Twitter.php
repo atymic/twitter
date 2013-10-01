@@ -1,6 +1,7 @@
 <?php namespace Thujohn\Twitter;
 
 use Config;
+use Carbon\Carbon as Carbon;
 
 class Twitter extends tmhOAuth {
 	public function __construct($config = array()){
@@ -64,6 +65,17 @@ class Twitter extends tmhOAuth {
 		$tweet = preg_replace("/>(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]{10,20})([^[:space:]]*)([^[:space:]]{10,20})([[:alnum:]#?\/&=])</", ">\\3...\\5\\6<", $tweet);
 
 		return trim($tweet);
+	}
+
+	public function ago($timestamp){
+		if (is_numeric($timestamp) && (int)$timestamp == $timestamp){
+			$carbon = Carbon::createFromTimeStamp($timestamp);
+		}else{
+			$dt = new \DateTime($timestamp);
+			$carbon = Carbon::instance($dt);
+		}
+
+		return $carbon->diffForHumans();
 	}
 
 	/**
