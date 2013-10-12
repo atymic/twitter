@@ -3,7 +3,7 @@
     "description": "Twitter API for Laravel 4",
 	"keywords": ["twitter", "laravel", "laravel4"],
     "license": "MIT",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "authors": [
         {
             "name": "thujohn",
