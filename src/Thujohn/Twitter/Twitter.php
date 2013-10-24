@@ -441,7 +441,7 @@ class Twitter extends tmhOAuth {
 	 * - follow (0|1)
 	 */
 	public function postFollow($parameters = array()){
-		if (!array_key_exists('screen_name', $parameters) || !array_key_exists('user_id', $parameters)){
+		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)){
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
@@ -456,7 +456,7 @@ class Twitter extends tmhOAuth {
 	 * - user_id
 	 */
 	public function postUnfollow($parameters = array()){
-		if (!array_key_exists('screen_name', $parameters) || !array_key_exists('user_id', $parameters)){
+		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)){
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
@@ -473,7 +473,7 @@ class Twitter extends tmhOAuth {
 	 * - retweets (0|1)
 	 */
 	public function postFollowUpdate($parameters = array()){
-		if (!array_key_exists('screen_name', $parameters) || !array_key_exists('user_id', $parameters)){
+		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)){
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
