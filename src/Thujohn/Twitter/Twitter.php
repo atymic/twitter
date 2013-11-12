@@ -241,7 +241,7 @@ class Twitter extends tmhOAuth {
 	 * - lang
 	 */
 	public function getOembed($parameters = array()){
-		if (!array_key_exists('id', $parameters) || !array_key_exists('url', $parameters)){
+		if (!array_key_exists('id', $parameters) && !array_key_exists('url', $parameters)){
 			throw new \Exception('Parameter required missing : id or url');
 		}
 
