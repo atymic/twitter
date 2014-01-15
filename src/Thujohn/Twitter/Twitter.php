@@ -354,7 +354,7 @@ class Twitter extends tmhOAuth {
 	 * - text
 	 */
 	public function postDm($parameters = array()){
-		if (!array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters) || !array_key_exists('text', $parameters)){
+		if ((!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) || !array_key_exists('text', $parameters)){
 			throw new \Exception('Parameter required missing : user_id, screen_name or text');
 		}
 
