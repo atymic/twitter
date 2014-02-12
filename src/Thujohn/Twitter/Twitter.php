@@ -2,6 +2,7 @@
 
 use Config;
 use Carbon\Carbon as Carbon;
+use tmhOAuth;
 
 class Twitter extends tmhOAuth {
 	public function __construct($config = array()){
@@ -14,7 +15,7 @@ class Twitter extends tmhOAuth {
 
 		$default['use_ssl'] = Config::get('twitter::USE_SSL');
 		$default['user_agent'] = 'TW-L4 '.parent::VERSION;
-		
+
 		$config = array_merge($default, $config);
 
 		parent::__construct($config);
