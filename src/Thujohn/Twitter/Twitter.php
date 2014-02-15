@@ -78,6 +78,14 @@ class Twitter extends tmhOAuth {
 
 		return $carbon->diffForHumans();
 	}
+	
+	public function linkUser($user) {
+		return '//twitter.com/' . (is_object($user) ? $user->name : $user);
+	}
+	
+	public function linkTweet($tweet) {
+		return $this->linkUser($tweet->user) . '/status/' . $tweet->id_str;
+	}
 
 	/**
 	 * Parameters :
