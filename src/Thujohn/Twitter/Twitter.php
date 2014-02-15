@@ -80,7 +80,7 @@ class Twitter extends tmhOAuth {
 	}
 	
 	public function linkUser($user) {
-		return '//twitter.com/' . $user->name;
+		return '//twitter.com/' . (is_object($user) ? $user->name : $user);
 	}
 	
 	public function linkTweet($tweet) {
