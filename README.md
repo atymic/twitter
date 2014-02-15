@@ -55,6 +55,16 @@ Ago : Converts date into difference (2 hours ago)
 Twitter::ago($timestamp);
 ```
 
+LinkUser : Generates a link to a specific user, by their user object (such as $tweet->user), or id/string.
+```php
+Twitter::linkUser($user);
+```
+
+LinkTweet : Generates a link to a specific tweet.
+```php
+Twitter::linkTweet($tweet);
+```
+
 
 ## Examples
 
