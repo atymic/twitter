@@ -11,9 +11,13 @@ class Twitter extends tmhOAuth {
 
 		$default['consumer_key'] = Config::get('twitter::CONSUMER_KEY');
 		$default['consumer_secret'] = Config::get('twitter::CONSUMER_SECRET');
-		$default['token']  = Session::get('access_token')['oauth_token'];
-		$default['secret'] = Session::get('access_token')['oauth_token_secret'];
-
+		$default['token'] = Config::get('twitter::ACCESS_TOKEN');
+		$default['secret'] = Config::get('twitter::ACCESS_TOKEN_SECRET');
+		if(Session::has('access_token')){
+			$default['token']  = Session::get('access_token')['oauth_token'];
+			$default['secret'] = Session::get('access_token')['oauth_token_secret'];
+		}
+		
 		$default['use_ssl'] = Config::get('twitter::USE_SSL');
 		$default['user_agent'] = 'TW-L4 '.parent::VERSION;
 
