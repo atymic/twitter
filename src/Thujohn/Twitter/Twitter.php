@@ -3,6 +3,7 @@
 use Config;
 use Carbon\Carbon as Carbon;
 use tmhOAuth;
+use Session;
 
 class Twitter extends tmhOAuth {
 	public function __construct($config = array()){
@@ -10,8 +11,8 @@ class Twitter extends tmhOAuth {
 
 		$default['consumer_key'] = Config::get('twitter::CONSUMER_KEY');
 		$default['consumer_secret'] = Config::get('twitter::CONSUMER_SECRET');
-		$default['token'] = Config::get('twitter::ACCESS_TOKEN');
-		$default['secret'] = Config::get('twitter::ACCESS_TOKEN_SECRET');
+		$default['token']  = Session::get('access_token')['oauth_token'];
+		$default['secret'] = Session::get('access_token')['oauth_token_secret'];
 
 		$default['use_ssl'] = Config::get('twitter::USE_SSL');
 		$default['user_agent'] = 'TW-L4 '.parent::VERSION;
