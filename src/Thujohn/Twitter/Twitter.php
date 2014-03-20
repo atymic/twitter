@@ -5,7 +5,9 @@ use Carbon\Carbon as Carbon;
 use tmhOAuth;
 
 class Twitter extends tmhOAuth {
-	public function __construct($config = array()){
+
+	public function __construct($config = array())
+	{
 		$default = array();
 
 		$default['consumer_key'] = Config::get('twitter::CONSUMER_KEY');
@@ -21,7 +23,8 @@ class Twitter extends tmhOAuth {
 		parent::__construct($config);
 	}
 
-	public function query($name, $requestMethod = 'GET', $parameters = array(), $multipart = false){
+	public function query($name, $requestMethod = 'GET', $parameters = array(), $multipart = false)
+	{
 		parent::user_request(array(
 			'method' => $requestMethod,
 			'url' => parent::url(Config::get('twitter::API_VERSION').'/'.$name),
@@ -32,11 +35,13 @@ class Twitter extends tmhOAuth {
 		$response = $this->response;
 
 		$format = 'object';
-		if (isset($parameters['format'])){
+		if (isset($parameters['format']))
+		{
 			$format = $parameters['format'];
 		}
 
-		switch ($format){
+		switch ($format)
+		{
 			default :
 			case 'object' : $response = json_decode($response['response']);
 			break;
@@ -49,7 +54,8 @@ class Twitter extends tmhOAuth {
 		return $response;
 	}
 
-	public function linkify($tweet) {
+	public function linkify($tweet)
+	{
 		// URL
 		$tweet = " ".preg_replace("/(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]*)([[:alnum:]#?\/&=])/i", "<a href=\"\\1\\3\\4\" target=\"_blank\">\\1\\3\\4</a>", $tweet);
 
@@ -60,7 +66,7 @@ class Twitter extends tmhOAuth {
 		$tweet = preg_replace("/ +@([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $tweet);
 
 		// Hashtag
-		$tweet = preg_replace("/ +#([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
+		$tweet = preg_replace("/ +#([a-z0-9_\p{Cyrillic}\d]*)?/u", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
 
 		// Long URL
 		$tweet = preg_replace("/>(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]{10,20})([^[:space:]]*)([^[:space:]]{10,20})([[:alnum:]#?\/&=])</", ">\\3...\\5\\6<", $tweet);
@@ -68,10 +74,14 @@ class Twitter extends tmhOAuth {
 		return trim($tweet);
 	}
 
-	public function ago($timestamp){
-		if (is_numeric($timestamp) && (int)$timestamp == $timestamp){
+	public function ago($timestamp)
+	{
+		if (is_numeric($timestamp) && (int)$timestamp == $timestamp)
+		{
 			$carbon = Carbon::createFromTimeStamp($timestamp);
-		}else{
+		}
+		else
+		{
 			$dt = new \DateTime($timestamp);
 			$carbon = Carbon::instance($dt);
 		}
@@ -79,11 +89,13 @@ class Twitter extends tmhOAuth {
 		return $carbon->diffForHumans();
 	}
 	
-	public function linkUser($user) {
+	public function linkUser($user)
+	{
 		return '//twitter.com/' . (is_object($user) ? $user->screen_name : $user);
 	}
 	
-	public function linkTweet($tweet) {
+	public function linkTweet($tweet)
+	{
 		return $this->linkUser($tweet->user) . '/status/' . $tweet->id_str;
 	}
 
@@ -97,7 +109,8 @@ class Twitter extends tmhOAuth {
 	 * - contributor_details (0|1)
 	 * - include_entities (0|1)
 	 */
-	public function getMentionsTimeline($parameters = array()){
+	public function getMentionsTimeline($parameters = array())
+	{
 		$response = $this->query('statuses/mentions_timeline', 'GET', $parameters);
 
 		return $response;
@@ -116,7 +129,8 @@ class Twitter extends tmhOAuth {
 	 * - contributor_details (0|1)
 	 * - include_entities (0|1)
 	 */
-	public function getUserTimeline($parameters = array()){
+	public function getUserTimeline($parameters = array())
+	{
 		$response = $this->query('statuses/user_timeline', 'GET', $parameters);
 
 		return $response;
@@ -132,7 +146,8 @@ class Twitter extends tmhOAuth {
 	 * - contributor_details (0|1)
 	 * - include_entities (0|1)
 	 */
-	public function getHomeTimeline($parameters = array()){
+	public function getHomeTimeline($parameters = array())
+	{
 		$response = $this->query('statuses/home_timeline', 'GET', $parameters);
 
 		return $response;
@@ -147,7 +162,8 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - include_user_entities (0|1)
 	 */
-	public function getRtsTimeline($parameters = array()){
+	public function getRtsTimeline($parameters = array())
+	{
 		$response = $this->query('statuses/retweets_of_me', 'GET', $parameters);
 
 		return $response;
@@ -158,7 +174,8 @@ class Twitter extends tmhOAuth {
 	 * - count (1-200)
 	 * - trim_user (0|1)
 	 */
-	public function getRts($id, $parameters = array()){
+	public function getRts($id, $parameters = array())
+	{
 		$response = $this->query('statuses/retweets/'.$id, 'GET', $parameters);
 
 		return $response;
@@ -171,7 +188,8 @@ class Twitter extends tmhOAuth {
 	 * - include_my_retweet (0|1)
 	 * - include_entities (0|1)
 	 */
-	public function getTweet($id, $parameters = array()){
+	public function getTweet($id, $parameters = array())
+	{
 		$response = $this->query('statuses/show/'.$id, 'GET', $parameters);
 
 		return $response;
@@ -187,8 +205,10 @@ class Twitter extends tmhOAuth {
 	 * - display_coordinates (0|1)
 	 * - trim_user (0|1)
 	 */
-	public function postTweet($parameters = array()){
-		if (!array_key_exists('status', $parameters)){
+	public function postTweet($parameters = array())
+	{
+		if (!array_key_exists('status', $parameters))
+		{
 			throw new \Exception('Parameter required missing : status');
 		}
 
@@ -201,7 +221,8 @@ class Twitter extends tmhOAuth {
 	 * Parameters :
 	 * - trim_user (0|1)
 	 */
-	public function destroyTweet($id, $parameters = array()){
+	public function destroyTweet($id, $parameters = array())
+	{
 		$response = $this->query('statuses/destroy/'.$id, 'POST', $parameters);
 
 		return $response;
@@ -211,7 +232,8 @@ class Twitter extends tmhOAuth {
 	 * Parameters :
 	 * - trim_user (0|1)
 	 */
-	public function postRt($id, $parameters = array()){
+	public function postRt($id, $parameters = array())
+	{
 		$response = $this->query('statuses/retweet/'.$id, 'POST', $parameters);
 
 		return $response;
@@ -228,8 +250,10 @@ class Twitter extends tmhOAuth {
 	 * - place_id
 	 * - display_coordinates (0|1)
 	 */
-	public function postTweetMedia($parameters = array()){
-		if (!array_key_exists('status', $parameters) || !array_key_exists('media[]', $parameters)){
+	public function postTweetMedia($parameters = array())
+	{
+		if (!array_key_exists('status', $parameters) || !array_key_exists('media[]', $parameters))
+		{
 			throw new \Exception('Parameter required missing : status or media[]');
 		}
 
@@ -249,8 +273,10 @@ class Twitter extends tmhOAuth {
 	 * - related (twitterapi|twittermedia|twitter)
 	 * - lang
 	 */
-	public function getOembed($parameters = array()){
-		if (!array_key_exists('id', $parameters) && !array_key_exists('url', $parameters)){
+	public function getOembed($parameters = array())
+	{
+		if (!array_key_exists('id', $parameters) && !array_key_exists('url', $parameters))
+		{
 			throw new \Exception('Parameter required missing : id or url');
 		}
 
@@ -265,8 +291,10 @@ class Twitter extends tmhOAuth {
 	 * - cursor
 	 * - stringify_ids (0|1)
 	 */
-	public function getRters($parameters = array()){
-		if (!array_key_exists('id', $parameters)){
+	public function getRters($parameters = array())
+	{
+		if (!array_key_exists('id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : id');
 		}
 
@@ -289,8 +317,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - callback
 	 */
-	public function getSearch($parameters = array()){
-		if (!array_key_exists('q', $parameters)){
+	public function getSearch($parameters = array())
+	{
+		if (!array_key_exists('q', $parameters))
+		{
 			throw new \Exception('Parameter required missing : q');
 		}
 
@@ -307,7 +337,8 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function getDmsIn($parameters = array()){
+	public function getDmsIn($parameters = array())
+	{
 		$response = $this->query('direct_messages', 'GET', $parameters);
 
 		return $response;
@@ -321,7 +352,8 @@ class Twitter extends tmhOAuth {
 	 * - page
 	 * - include_entities (0|1)
 	 */
-	public function getDmsOut($parameters = array()){
+	public function getDmsOut($parameters = array())
+	{
 		$response = $this->query('direct_messages/sent', 'GET', $parameters);
 
 		return $response;
@@ -331,8 +363,10 @@ class Twitter extends tmhOAuth {
 	 * Parameters :
 	 * - id
 	 */
-	public function getDm($parameters = array()){
-		if (!array_key_exists('id', $parameters)){
+	public function getDm($parameters = array())
+	{
+		if (!array_key_exists('id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : id');
 		}
 
@@ -346,8 +380,10 @@ class Twitter extends tmhOAuth {
 	 * - id
 	 * - include_entities
 	 */
-	public function destroyDm($parameters = array()){
-		if (!array_key_exists('id', $parameters)){
+	public function destroyDm($parameters = array())
+	{
+		if (!array_key_exists('id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : id');
 		}
 
@@ -362,8 +398,10 @@ class Twitter extends tmhOAuth {
 	 * - screen_name
 	 * - text
 	 */
-	public function postDm($parameters = array()){
-		if ((!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) || !array_key_exists('text', $parameters)){
+	public function postDm($parameters = array())
+	{
+		if ((!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) || !array_key_exists('text', $parameters))
+		{
 			throw new \Exception('Parameter required missing : user_id, screen_name or text');
 		}
 
@@ -376,7 +414,8 @@ class Twitter extends tmhOAuth {
 	 * Parameters :
 	 * - stringify_ids (0|1)
 	 */
-	public function getNoRters($parameters = array()){
+	public function getNoRters($parameters = array())
+	{
 		$response = $this->query('friendships/no_retweets/ids', 'GET', $parameters);
 
 		return $response;
@@ -390,7 +429,8 @@ class Twitter extends tmhOAuth {
 	 * - stringify_ids (0|1)
 	 * - count (1-5000)
 	 */
-	public function getFriendsIds($parameters = array()){
+	public function getFriendsIds($parameters = array())
+	{
 		$response = $this->query('friends/ids', 'GET', $parameters);
 
 		return $response;
@@ -404,7 +444,8 @@ class Twitter extends tmhOAuth {
 	 * - stringify_ids (0|1)
 	 * - count (1-5000)
 	 */
-	public function getFollowersIds($parameters = array()){
+	public function getFollowersIds($parameters = array())
+	{
 		$response = $this->query('followers/ids', 'GET', $parameters);
 
 		return $response;
@@ -415,7 +456,8 @@ class Twitter extends tmhOAuth {
 	 * - screen_name
 	 * - user_id
 	 */
-	public function getFriendshipsLookup($parameters = array()){
+	public function getFriendshipsLookup($parameters = array())
+	{
 		$response = $this->query('friendships/lookup', 'GET', $parameters);
 
 		return $response;
@@ -426,7 +468,8 @@ class Twitter extends tmhOAuth {
 	 * - cursor
 	 * - stringify_ids (0|1)
 	 */
-	public function getFriendshipsIn($parameters = array()){
+	public function getFriendshipsIn($parameters = array())
+	{
 		$response = $this->query('friendships/incoming', 'GET', $parameters);
 
 		return $response;
@@ -437,7 +480,8 @@ class Twitter extends tmhOAuth {
 	 * - cursor
 	 * - stringify_ids (0|1)
 	 */
-	public function getFriendshipsOut($parameters = array()){
+	public function getFriendshipsOut($parameters = array())
+	{
 		$response = $this->query('friendships/outgoing', 'GET', $parameters);
 
 		return $response;
@@ -449,8 +493,10 @@ class Twitter extends tmhOAuth {
 	 * - user_id
 	 * - follow (0|1)
 	 */
-	public function postFollow($parameters = array()){
-		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)){
+	public function postFollow($parameters = array())
+	{
+		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
@@ -464,8 +510,10 @@ class Twitter extends tmhOAuth {
 	 * - screen_name
 	 * - user_id
 	 */
-	public function postUnfollow($parameters = array()){
-		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)){
+	public function postUnfollow($parameters = array())
+	{
+		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
@@ -481,8 +529,10 @@ class Twitter extends tmhOAuth {
 	 * - device (0|1)
 	 * - retweets (0|1)
 	 */
-	public function postFollowUpdate($parameters = array()){
-		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)){
+	public function postFollowUpdate($parameters = array())
+	{
+		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
@@ -498,7 +548,8 @@ class Twitter extends tmhOAuth {
 	 * - target_id
 	 * - target_screen_name
 	 */
-	public function getFriendships($parameters = array()){
+	public function getFriendships($parameters = array())
+	{
 		$response = $this->query('friendships/show', 'GET', $parameters);
 
 		return $response;
@@ -512,7 +563,8 @@ class Twitter extends tmhOAuth {
 	 * - skip_status (0|1)
 	 * - include_user_entities (0|1)
 	 */
-	public function getFriends($parameters = array()){
+	public function getFriends($parameters = array())
+	{
 		$response = $this->query('friends/list', 'GET', $parameters);
 
 		return $response;
@@ -526,13 +578,15 @@ class Twitter extends tmhOAuth {
 	 * - skip_status (0|1)
 	 * - include_user_entities (0|1)
 	 */
-	public function getFollowers($parameters = array()){
+	public function getFollowers($parameters = array())
+	{
 		$response = $this->query('followers/list', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function getSettings($parameters){
+	public function getSettings($parameters)
+	{
 		$response = $this->query('account/settings', 'GET', $parameters);
 
 		return $response;
@@ -547,8 +601,10 @@ class Twitter extends tmhOAuth {
 	 * - time_zone
 	 * - lang
 	 */
-	public function postSettings($parameters = array()){
-		if (empty($parameters)){
+	public function postSettings($parameters = array())
+	{
+		if (empty($parameters))
+		{
 			throw new \Exception('Parameter missing');
 		}
 
@@ -562,8 +618,10 @@ class Twitter extends tmhOAuth {
 	 * - device (sms|none)
 	 * - include_entities (0|1)
 	 */
-	public function postSettingsDevice($parameters = array()){
-		if (!array_key_exists('device', $parameters)){
+	public function postSettingsDevice($parameters = array())
+	{
+		if (!array_key_exists('device', $parameters))
+		{
 			throw new \Exception('Parameter required missing : device');
 		}
 
@@ -581,8 +639,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function postProfile($parameters = array()){
-		if (empty($parameters)){
+	public function postProfile($parameters = array())
+	{
+		if (empty($parameters))
+		{
 			throw new \Exception('Parameter missing');
 		}
 
@@ -599,8 +659,10 @@ class Twitter extends tmhOAuth {
 	 * - skip_status (0|1)
 	 * - use (0|1)
 	 */
-	public function postBackground($parameters = array()){
-		if (!array_key_exists('image', $parameters) || !array_key_exists('tile', $parameters) || !array_key_exists('use', $parameters)){
+	public function postBackground($parameters = array())
+	{
+		if (!array_key_exists('image', $parameters) || !array_key_exists('tile', $parameters) || !array_key_exists('use', $parameters))
+		{
 			throw new \Exception('Parameter required missing : image, tile or use');
 		}
 
@@ -619,8 +681,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function postColors($parameters = array()){
-		if (empty($parameters)){
+	public function postColors($parameters = array())
+	{
+		if (empty($parameters))
+		{
 			throw new \Exception('Parameter missing');
 		}
 
@@ -635,8 +699,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function postProfileImage($parameters = array()){
-		if (!array_key_exists('image', $parameters)){
+	public function postProfileImage($parameters = array())
+	{
+		if (!array_key_exists('image', $parameters))
+		{
 			throw new \Exception('Parameter required missing : image');
 		}
 
@@ -650,7 +716,8 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function getCredentials($parameters = array()){
+	public function getCredentials($parameters = array())
+	{
 		$response = $this->query('account/verify_credentials', 'GET', $parameters);
 
 		return $response;
@@ -662,7 +729,8 @@ class Twitter extends tmhOAuth {
 	 * - skip_status (0|1)
 	 * - cursor
 	 */
-	public function getBlocks($parameters = array()){
+	public function getBlocks($parameters = array())
+	{
 		$response = $this->query('blocks/list', 'GET', $parameters);
 
 		return $response;
@@ -673,7 +741,8 @@ class Twitter extends tmhOAuth {
 	 * - stringify_ids (0|1)
 	 * - cursor
 	 */
-	public function getBlocksIds($parameters = array()){
+	public function getBlocksIds($parameters = array())
+	{
 		$response = $this->query('blocks/ids', 'GET', $parameters);
 
 		return $response;
@@ -686,8 +755,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function postBlock($parameters = array()){
-		if (!array_key_exists('screen_name', $parameters) || !array_key_exists('user_id', $parameters)){
+	public function postBlock($parameters = array())
+	{
+		if (!array_key_exists('screen_name', $parameters) || !array_key_exists('user_id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
@@ -703,8 +774,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function destroyBlock($parameters = array()){
-		if (!array_key_exists('screen_name', $parameters) || !array_key_exists('user_id', $parameters)){
+	public function destroyBlock($parameters = array())
+	{
+		if (!array_key_exists('screen_name', $parameters) || !array_key_exists('user_id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : screen_name or user_id');
 		}
 
@@ -719,8 +792,10 @@ class Twitter extends tmhOAuth {
 	 * - screen_name
 	 * - include_entities (0|1)
 	 */
-	public function getUsers($parameters = array()){
-		if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)){
+	public function getUsers($parameters = array())
+	{
+		if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters))
+		{
 			throw new \Exception('Parameter required missing : user_id or screen_name');
 		}
 
@@ -735,8 +810,10 @@ class Twitter extends tmhOAuth {
 	 * - screen_name
 	 * - include_entities (0|1)
 	 */
-	public function getUsersLookup($parameters = array()) {
-		if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)){
+	public function getUsersLookup($parameters = array())
+	{
+		if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters))
+		{
 			throw new \Exception("Parameter required missing : user_id or screen_name");
 		}
 
@@ -752,8 +829,10 @@ class Twitter extends tmhOAuth {
 	 * - count
 	 * - include_entities (0|1)
 	 */
-	public function getUsersSearch($parameters = array()){
-		if (!array_key_exists('q', $parameters)){
+	public function getUsersSearch($parameters = array())
+	{
+		if (!array_key_exists('q', $parameters))
+		{
 			throw new \Exception('Parameter required missing : q');
 		}
 
@@ -769,7 +848,8 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function getUsersContributees($parameters = array()){
+	public function getUsersContributees($parameters = array())
+	{
 		$response = $this->query('users/contributees', 'GET', $parameters);
 
 		return $response;
@@ -782,13 +862,15 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function getUsersContributors($parameters = array()){
+	public function getUsersContributors($parameters = array())
+	{
 		$response = $this->query('users/contributors', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function destroyUserBanner($parameters){
+	public function destroyUserBanner($parameters)
+	{
 		$response = $this->query('account/remove_profile_banner', 'POST', $parameters);
 
 		return $response;
@@ -802,7 +884,8 @@ class Twitter extends tmhOAuth {
 	 * - offset_left
 	 * - offset_top
 	 */
-	public function postUserBanner($parameters = array()){
+	public function postUserBanner($parameters = array())
+	{
 		if (!array_key_exists('banner', $parameters)){
 			throw new \Exception('Parameter required missing : banner');
 		}
@@ -817,7 +900,8 @@ class Twitter extends tmhOAuth {
 	 * - user_id
 	 * - screen_name
 	 */
-	public function getUserBanner($parameters = array()){
+	public function getUserBanner($parameters = array())
+	{
 		$response = $this->query('users/profile_banner', 'GET', $parameters);
 
 		return $response;
@@ -827,7 +911,8 @@ class Twitter extends tmhOAuth {
 	 * Parameters :
 	 * - lang
 	 */
-	public function getSuggesteds($slug, $parameters = array()){
+	public function getSuggesteds($slug, $parameters = array())
+	{
 		$response = $this->query('users/suggestions/'.$slug, 'GET', $parameters);
 
 		return $response;
@@ -837,13 +922,15 @@ class Twitter extends tmhOAuth {
 	 * Parameters :
 	 * - lang
 	 */
-	public function getSuggestions($parameters = array()){
+	public function getSuggestions($parameters = array())
+	{
 		$response = $this->query('users/suggestions', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function getSuggestedsMembers($slug){
+	public function getSuggestedsMembers($slug)
+	{
 		$response = $this->query('users/suggestions/'.$slug.'/members', 'GET');
 
 		return $response;
@@ -858,7 +945,8 @@ class Twitter extends tmhOAuth {
 	 * - max_id
 	 * - include_entities (0|1)
 	 */
-	public function getFavorites($parameters = array()){
+	public function getFavorites($parameters = array())
+	{
 		$response = $this->query('favorites/list', 'GET', $parameters);
 
 		return $response;
@@ -869,8 +957,10 @@ class Twitter extends tmhOAuth {
 	 * - id
 	 * - include_entities (0|1)
 	 */
-	public function destroyFavorite($parameters = array()){
-		if (!array_key_exists('id', $parameters)){
+	public function destroyFavorite($parameters = array())
+	{
+		if (!array_key_exists('id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : id');
 		}
 
@@ -884,8 +974,10 @@ class Twitter extends tmhOAuth {
 	 * - id
 	 * - include_entities (0|1)
 	 */
-	public function postFavorite($parameters = array()){
-		if (!array_key_exists('id', $parameters)){
+	public function postFavorite($parameters = array())
+	{
+		if (!array_key_exists('id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : id');
 		}
 
@@ -900,7 +992,8 @@ class Twitter extends tmhOAuth {
 	 * - screen_name
 	 * - reverse (0|1)
 	 */
-	public function getLists($parameters = array()){
+	public function getLists($parameters = array())
+	{
 		$response = $this->query('lists/list', 'GET', $parameters);
 
 		return $response;
@@ -918,8 +1011,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - include_rts (0|1)
 	 */
-	public function getListsStatuses($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function getListsStatuses($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -937,8 +1032,10 @@ class Twitter extends tmhOAuth {
 	 * - owner_screen_name
 	 * - owner_id
 	 */
-	public function destroyListMember($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('owner_screen_name', $parameters) || !array_key_exists('owner_id', $parameters)){
+	public function destroyListMember($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('owner_screen_name', $parameters) || !array_key_exists('owner_id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id, slug, owner_screen_name or owner_id');
 		}
 
@@ -957,8 +1054,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function getListsSubscribers($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function getListsSubscribers($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -974,8 +1073,10 @@ class Twitter extends tmhOAuth {
 	 * - list_id
 	 * - slug
 	 */
-	public function postListSubscriber($parameters = array()){
-		if (!array_key_exists('owner_screen_name', $parameters) || !array_key_exists('owner_id', $parameters) || !array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function postListSubscriber($parameters = array())
+	{
+		if (!array_key_exists('owner_screen_name', $parameters) || !array_key_exists('owner_id', $parameters) || !array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : owner_screen_name, owner_id, list_id or slug');
 		}
 
@@ -995,8 +1096,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function getListSubscriber($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters)){
+	public function getListSubscriber($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id, slug, user_id or screen_name');
 		}
 
@@ -1012,8 +1115,10 @@ class Twitter extends tmhOAuth {
 	 * - owner_screen_name
 	 * - owner_id
 	 */
-	public function destroyListSubscriber($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function destroyListSubscriber($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -1031,8 +1136,10 @@ class Twitter extends tmhOAuth {
 	 * - owner_screen_name
 	 * - owner_id
 	 */
-	public function postListCreateAll($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function postListCreateAll($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -1052,8 +1159,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function getListMember($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters)){
+	public function getListMember($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id, slug, user_id or screen_name');
 		}
 
@@ -1072,8 +1181,10 @@ class Twitter extends tmhOAuth {
 	 * - include_entities (0|1)
 	 * - skip_status (0|1)
 	 */
-	public function getListMembers($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function getListMembers($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -1091,8 +1202,10 @@ class Twitter extends tmhOAuth {
 	 * - owner_screen_name
 	 * - owner_id
 	 */
-	public function postListMember($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters)){
+	public function postListMember($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id, slug, user_id or screen_name');
 		}
 
@@ -1108,8 +1221,10 @@ class Twitter extends tmhOAuth {
 	 * - list_id
 	 * - slug
 	 */
-	public function destroyList($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function destroyList($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -1128,8 +1243,10 @@ class Twitter extends tmhOAuth {
 	 * - owner_screen_name
 	 * - owner_id
 	 */
-	public function postListUpdate($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function postListUpdate($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -1144,8 +1261,10 @@ class Twitter extends tmhOAuth {
 	 * - mode (public|private)
 	 * - description
 	 */
-	public function postList($parameters = array()){
-		if (!array_key_exists('name', $parameters)){
+	public function postList($parameters = array())
+	{
+		if (!array_key_exists('name', $parameters))
+		{
 			throw new \Exception('Parameter required missing : name');
 		}
 
@@ -1161,8 +1280,10 @@ class Twitter extends tmhOAuth {
 	 * - owner_screen_name
 	 * - owner_id
 	 */
-	public function getList($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function getList($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -1178,7 +1299,8 @@ class Twitter extends tmhOAuth {
 	 * - count (1-1000)
 	 * - cursor
 	 */
-	public function getListSubscriptions($parameters = array()){
+	public function getListSubscriptions($parameters = array())
+	{
 		$response = $this->query('lists/subscriptions', 'GET', $parameters);
 
 		return $response;
@@ -1193,8 +1315,10 @@ class Twitter extends tmhOAuth {
 	 * - owner_screen_name
 	 * - owner_id
 	 */
-	public function destroyListMembers($parameters = array()){
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters)){
+	public function destroyListMembers($parameters = array())
+	{
+		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
@@ -1210,19 +1334,22 @@ class Twitter extends tmhOAuth {
 	 * - count (1-1000)
 	 * - cursor
 	 */
-	public function getListOwnerships($parameters = array()){
+	public function getListOwnerships($parameters = array())
+	{
 		$response = $this->query('lists/ownerships', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function getSavedSearches($parameters){
+	public function getSavedSearches($parameters)
+	{
 		$response = $this->query('saved_searches/list', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function getSavedSearch($id){
+	public function getSavedSearch($id)
+	{
 		$response = $this->query('saved_searches/show/'.$id, 'GET', $parameters);
 
 		return $response;
@@ -1232,8 +1359,10 @@ class Twitter extends tmhOAuth {
 	 * Parameters :
 	 * - query
 	 */
-	public function postSavedSearch($parameters = array()){
-		if (!array_key_exists('query', $parameters)){
+	public function postSavedSearch($parameters = array())
+	{
+		if (!array_key_exists('query', $parameters))
+		{
 			throw new \Exception('Parameter required missing : query');
 		}
 
@@ -1242,13 +1371,15 @@ class Twitter extends tmhOAuth {
 		return $response;
 	}
 
-	public function destroySavedSearch($id, $parameters = array()){
+	public function destroySavedSearch($id, $parameters = array())
+	{
 		$response = $this->query('saved_searches/destroy/'.$id, 'POST', $parameters);
 
 		return $response;
 	}
 
-	public function getGeo($id){
+	public function getGeo($id)
+	{
 		$response = $this->query('geo/id/'.$id, 'GET');
 
 		return $response;
@@ -1263,8 +1394,10 @@ class Twitter extends tmhOAuth {
 	 * - max_results
 	 * - callback
 	 */
-	public function getGeoReverse($parameters = array()){
-		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters)){
+	public function getGeoReverse($parameters = array())
+	{
+		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters))
+		{
 			throw new \Exception('Parameter required missing : lat or long');
 		}
 
@@ -1286,7 +1419,8 @@ class Twitter extends tmhOAuth {
 	 * - attribute:street_address
 	 * - callback
 	 */
-	public function getGeoSearch($parameters = array()){
+	public function getGeoSearch($parameters = array())
+	{
 		$response = $this->query('geo/search', 'GET', $parameters);
 
 		return $response;
@@ -1301,8 +1435,10 @@ class Twitter extends tmhOAuth {
 	 * - attribute:street_address
 	 * - callback
 	 */
-	public function getGeoSimilar($parameters = array()){
-		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters) || !array_key_exists('name', $parameters)){
+	public function getGeoSimilar($parameters = array())
+	{
+		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters) || !array_key_exists('name', $parameters))
+		{
 			throw new \Exception('Parameter required missing : lat, long or name');
 		}
 
@@ -1321,8 +1457,10 @@ class Twitter extends tmhOAuth {
 	 * - attribute:street_address
 	 * - callback
 	 */
-	public function postGeo($parameters = array()){
-		if (!array_key_exists('name', $parameters) || !array_key_exists('contained_within', $parameters) || !array_key_exists('token', $parameters) || !array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters)){
+	public function postGeo($parameters = array())
+	{
+		if (!array_key_exists('name', $parameters) || !array_key_exists('contained_within', $parameters) || !array_key_exists('token', $parameters) || !array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters))
+		{
 			throw new \Exception('Parameter required missing : name, contained_within, token, lat or long');
 		}
 
@@ -1336,8 +1474,10 @@ class Twitter extends tmhOAuth {
 	 * - id
 	 * - exclude
 	 */
-	public function getTrendsPlace($parameters = array()){
-		if (!array_key_exists('id', $parameters)){
+	public function getTrendsPlace($parameters = array())
+	{
+		if (!array_key_exists('id', $parameters))
+		{
 			throw new \Exception('Parameter required missing : id');
 		}
 
@@ -1346,7 +1486,8 @@ class Twitter extends tmhOAuth {
 		return $response;
 	}
 
-	public function getTrendsAvailable($parameters){
+	public function getTrendsAvailable($parameters)
+	{
 		$response = $this->query('trends/available', 'GET', $parameters);
 
 		return $response;
@@ -1357,8 +1498,10 @@ class Twitter extends tmhOAuth {
 	 * - lat
 	 * - long
 	 */
-	public function getTrendsClosest($parameters = array()){
-		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters)){
+	public function getTrendsClosest($parameters = array())
+	{
+		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters))
+		{
 			throw new \Exception('Parameter required missing : lat, long or name');
 		}
 
@@ -1372,8 +1515,10 @@ class Twitter extends tmhOAuth {
 	 * - screen_name
 	 * - user_id
 	 */
-	public function postSpam($parameters = array()){
-		if (empty($parameters)){
+	public function postSpam($parameters = array())
+	{
+		if (empty($parameters))
+		{
 			throw new \Exception('Parameter missing');
 		}
 
@@ -1382,33 +1527,39 @@ class Twitter extends tmhOAuth {
 		return $response;
 	}
 
-	public function getHelpConfiguration($parameters){
+	public function getHelpConfiguration($parameters)
+	{
 		$response = $this->query('help/configuration', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function getHelpLanguages($parameters){
+	public function getHelpLanguages($parameters)
+	{
 		$response = $this->query('help/languages', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function getHelpPrivacy($parameters){
+	public function getHelpPrivacy($parameters)
+	{
 		$response = $this->query('help/privacy', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function getHelpTos($parameters){
+	public function getHelpTos($parameters)
+	{
 		$response = $this->query('help/tos', 'GET', $parameters);
 
 		return $response;
 	}
 
-	public function getAppRateLimit($parameters){
+	public function getAppRateLimit($parameters)
+	{
 		$response = $this->query('application/rate_limit_status', 'GET', $parameters);
 
 		return $response;
 	}
+
 }
