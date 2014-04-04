@@ -66,7 +66,7 @@ class Twitter extends tmhOAuth {
 		$tweet = preg_replace("/ +@([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $tweet);
 
 		// Hashtag
-		$tweet = preg_replace("/ +#([a-z0-9_\p{Cyrillic}\d]*)?/u", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
+		$tweet = preg_replace('/#([\\d\\w]+)/', '<a href="http://twitter.com/search?q=%23$1&src=hash" target="_blank">$0</a>', $tweet);
 
 		// Long URL
 		$tweet = preg_replace("/>(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]{10,20})([^[:space:]]*)([^[:space:]]{10,20})([[:alnum:]#?\/&=])</", ">\\3...\\5\\6<", $tweet);
