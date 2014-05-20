@@ -11,11 +11,13 @@ class Twitter extends tmhOAuth {
 	{
 		$default = array();
 
-		$default['consumer_key'] = Config::get('twitter::CONSUMER_KEY');
+		$default['consumer_key']    = Config::get('twitter::CONSUMER_KEY');
 		$default['consumer_secret'] = Config::get('twitter::CONSUMER_SECRET');
-		$default['token'] = Config::get('twitter::ACCESS_TOKEN');
-		$default['secret'] = Config::get('twitter::ACCESS_TOKEN_SECRET');
-		if(Session::has('access_token')){
+		$default['token']           = Config::get('twitter::ACCESS_TOKEN');
+		$default['secret']          = Config::get('twitter::ACCESS_TOKEN_SECRET');
+
+		if (Session::has('access_token'))
+		{
 			$default['token']  = Session::get('access_token')['oauth_token'];
 			$default['secret'] = Session::get('access_token')['oauth_token_secret'];
 		}
@@ -31,9 +33,9 @@ class Twitter extends tmhOAuth {
 	public function query($name, $requestMethod = 'GET', $parameters = array(), $multipart = false)
 	{
 		parent::user_request(array(
-			'method' => $requestMethod,
-			'url' => parent::url(Config::get('twitter::API_VERSION').'/'.$name),
-			'params' => $parameters,
+			'method'    => $requestMethod,
+			'url'       => parent::url(Config::get('twitter::API_VERSION').'/'.$name),
+			'params'    => $parameters,
 			'multipart' => $multipart
 		));
 
@@ -71,7 +73,7 @@ class Twitter extends tmhOAuth {
 		$tweet = preg_replace("/ +@([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $tweet);
 
 		// Hashtag
-		$tweet = preg_replace("/ +#([a-z0-9_\p{Cyrillic}\d]*)?/i", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
+		$tweet = preg_replace("/ +#([a-z0-9_\p{Cyrillic}\d]*)?/ui", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
 
 		// Long URL
 		$tweet = preg_replace("/>(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]{10,20})([^[:space:]]*)([^[:space:]]{10,20})([[:alnum:]#?\/&=])</", ">\\3...\\5\\6<", $tweet);
