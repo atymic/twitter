@@ -18,8 +18,13 @@ class Twitter extends tmhOAuth {
 
 		if (Session::has('access_token'))
 		{
-			$default['token']  = Session::get('access_token')['oauth_token'];
-			$default['secret'] = Session::get('access_token')['oauth_token_secret'];
+			$access_token = Session::get('access_token');
+
+			if (is_array($access_token) && isset($access_token['oauth_token']) && isset($access_token['oauth_token_secret']) && !empty($access_token['oauth_token']) && !empty($access_token['oauth_token_secret']))
+			{
+				$default['token']  = $access_token['oauth_token'];
+				$default['secret'] = $access_token['oauth_token_secret'];
+			}
 		}
 		
 		$default['use_ssl'] = Config::get('twitter::USE_SSL');
