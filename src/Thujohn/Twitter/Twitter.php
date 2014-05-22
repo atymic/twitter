@@ -52,9 +52,9 @@ class Twitter extends tmhOAuth {
 			default :
 			case 'object' : $response = json_decode($response['response']);
 			break;
-			case 'json' : $response = $response['response'];
+			case 'json'   : $response = $response['response'];
 			break;
-			case 'array' : $response = json_decode($response['response'], true);
+			case 'array'  : $response = json_decode($response['response'], true);
 			break;
 		}
 
@@ -63,20 +63,36 @@ class Twitter extends tmhOAuth {
 
 	public function linkify($tweet)
 	{
+		$tweet = ' '.$tweet;
+
+		$patterns             = array();
+		$patterns['url']      = '(?xi)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))';
+		$patterns['mailto']   = '(([a-z0-9_]|\\-|\\.)+@([^[:space:]]*)([[:alnum:]-]))';
+		$patterns['user']     = ' +@([a-z0-9_]*)?';
+		$patterns['hashtag']  = ' +#([a-z0-9_\p{Cyrillic}\d]*)?';
+		$patterns['long_url'] = '>(([[:alnum:]]+:\/\/)|www\.)?([^[:space:]]{10,20})([^[:space:]]*)([^[:space:]]{10,20})([[:alnum:]#?\/&=])<';
+
 		// URL
-		$tweet = " ".preg_replace("/(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]*)([[:alnum:]#?\/&=])/i", "<a href=\"\\1\\3\\4\" target=\"_blank\">\\1\\3\\4</a>", $tweet);
+		$pattern = '(?xi)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))';
+		$tweet   = preg_replace_callback('#'.$patterns['url'].'#i', function($matches)
+		{
+			$input = $matches[0];
+			$url   = preg_match('!^https?://!i', $input) ? $input : "http://$input";
+
+			return '<a href="'.$url.'" target="_blank" rel="nofollow">'."$input</a>";
+		}, $tweet);
 
 		// Mailto
-		$tweet = preg_replace("/(([a-z0-9_]|\\-|\\.)+@([^[:space:]]*)([[:alnum:]-]))/i", "<a href=\"mailto:\\1\">\\1</a>", $tweet);
+		$tweet = preg_replace('/'.$patterns['mailto'].'/i', "<a href=\"mailto:\\1\">\\1</a>", $tweet);
 
 		// User
-		$tweet = preg_replace("/ +@([a-z0-9_]*)?/i", " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $tweet);
+		$tweet = preg_replace('/'.$patterns['user'].'/i', " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $tweet);
 
 		// Hashtag
-		$tweet = preg_replace("/ +#([a-z0-9_\p{Cyrillic}\d]*)?/ui", " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
+		$tweet = preg_replace('/'.$patterns['hashtag'].'/ui', " <a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $tweet);
 
 		// Long URL
-		$tweet = preg_replace("/>(([[:alnum:]]+:\/\/)|www\.)([^[:space:]]{10,20})([^[:space:]]*)([^[:space:]]{10,20})([[:alnum:]#?\/&=])</", ">\\3...\\5\\6<", $tweet);
+		$tweet = preg_replace('/'.$patterns['long_url'].'/', ">\\3...\\5\\6<", $tweet);
 
 		return trim($tweet);
 	}
