@@ -34,6 +34,9 @@ Now add the alias.
 ## Configuration
 
 Run `php artisan config:publish thujohn/twitter` and modify the config file with your own informations.
+```
+/app/config/packages/thujohn/twitter/config.php
+```
 
 
 ## Special parameter
