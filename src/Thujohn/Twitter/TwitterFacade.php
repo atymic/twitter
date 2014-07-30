@@ -9,6 +9,6 @@ class TwitterFacade extends Facade {
 	 *
 	 * @return string
 	 */
-	protected static function getFacadeAccessor() { return 'twitter'; }
+	protected static function getFacadeAccessor() { return 'ttwitter'; }
 
 }

@@ -11,10 +11,10 @@ class Twitter extends tmhOAuth {
 	{
 		$default = array();
 
-		$default['consumer_key']    = Config::get('twitter::CONSUMER_KEY');
-		$default['consumer_secret'] = Config::get('twitter::CONSUMER_SECRET');
-		$default['token']           = Config::get('twitter::ACCESS_TOKEN');
-		$default['secret']          = Config::get('twitter::ACCESS_TOKEN_SECRET');
+		$default['consumer_key']    = Config::get('thujohn/twitter::CONSUMER_KEY');
+		$default['consumer_secret'] = Config::get('thujohn/twitter::CONSUMER_SECRET');
+		$default['token']           = Config::get('thujohn/twitter::ACCESS_TOKEN');
+		$default['secret']          = Config::get('thujohn/twitter::ACCESS_TOKEN_SECRET');
 
 		if (Session::has('access_token'))
 		{
@@ -27,7 +27,7 @@ class Twitter extends tmhOAuth {
 			}
 		}
 		
-		$default['use_ssl'] = Config::get('twitter::USE_SSL');
+		$default['use_ssl'] = Config::get('thujohn/twitter::USE_SSL');
 		$default['user_agent'] = 'TW-L4 '.parent::VERSION;
 
 		$config = array_merge($default, $config);
@@ -39,7 +39,7 @@ class Twitter extends tmhOAuth {
 	{
 		parent::user_request(array(
 			'method'    => $requestMethod,
-			'url'       => parent::url(Config::get('twitter::API_VERSION').'/'.$name),
+			'url'       => parent::url(Config::get('thujohn/twitter::API_VERSION').'/'.$name),
 			'params'    => $parameters,
 			'multipart' => $multipart
 		));

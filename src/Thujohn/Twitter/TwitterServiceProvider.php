@@ -18,7 +18,7 @@ class TwitterServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('thujohn/twitter');
+		$this->package('thujohn/twitter', 'thujohn/twitter');
 	}
 
 	/**
@@ -28,9 +28,9 @@ class TwitterServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		$this->app['twitter'] = $this->app->share(function($app)
+		$this->app['ttwitter'] = $this->app->share(function($app)
 		{
-			return new Twitter;
+			return new \Thujohn\Twitter\Twitter;
 		});
 	}
 
@@ -41,7 +41,7 @@ class TwitterServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('twitter');
+		return array('ttwitter');
 	}
 
 }
