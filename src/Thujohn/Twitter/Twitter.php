@@ -7,14 +7,19 @@ use Session;
 
 class Twitter extends tmhOAuth {
 
+	/**
+	 * Store the default config values for the class
+	 */
+	private $default;
+
 	public function __construct($config = array())
 	{
-		$default = array();
+		$this->default = array();
 
-		$default['consumer_key']    = Config::get('thujohn/twitter::CONSUMER_KEY');
-		$default['consumer_secret'] = Config::get('thujohn/twitter::CONSUMER_SECRET');
-		$default['token']           = Config::get('thujohn/twitter::ACCESS_TOKEN');
-		$default['secret']          = Config::get('thujohn/twitter::ACCESS_TOKEN_SECRET');
+		$this->default['consumer_key']    = Config::get('thujohn/twitter::CONSUMER_KEY');
+		$this->default['consumer_secret'] = Config::get('thujohn/twitter::CONSUMER_SECRET');
+		$this->default['token']           = Config::get('thujohn/twitter::ACCESS_TOKEN');
+		$this->default['secret']          = Config::get('thujohn/twitter::ACCESS_TOKEN_SECRET');
 
 		if (Session::has('access_token'))
 		{
@@ -22,17 +27,105 @@ class Twitter extends tmhOAuth {
 
 			if (is_array($access_token) && isset($access_token['oauth_token']) && isset($access_token['oauth_token_secret']) && !empty($access_token['oauth_token']) && !empty($access_token['oauth_token_secret']))
 			{
-				$default['token']  = $access_token['oauth_token'];
-				$default['secret'] = $access_token['oauth_token_secret'];
+				$this->default['token']  = $access_token['oauth_token'];
+				$this->default['secret'] = $access_token['oauth_token_secret'];
 			}
 		}
-		
-		$default['use_ssl'] = Config::get('thujohn/twitter::USE_SSL');
-		$default['user_agent'] = 'TW-L4 '.parent::VERSION;
+		$this->default['use_ssl'] = Config::get('thujohn/twitter::USE_SSL');
+		$this->default['user_agent'] = 'TW-L4 '.parent::VERSION;
 
-		$config = array_merge($default, $config);
+		$config = array_merge($this->default, $config);
 
 		parent::__construct($config);
+	}
+
+	/**
+	 * Set new config values for the OAuth class like different tokens.
+	 *
+	 * @param Array $config An array containing the values that should be overwritten.
+	 *
+	 * @return void
+	 */
+	public function set_new_config($config) {
+		// The consumer key and secret must always be included when reconfiguring
+		$config = array_merge($this->default, $config);
+		parent::reconfigure($config);
+	}
+
+	/**
+	 * Get a request_token from Twitter
+	 *
+	 * @param String $oauth_callback [Optional] The callback provided for Twitter's API.
+	 * 				The user will be redirected there after authorizing your app on Twitter.
+	 *
+	 * @returns Array|Bool a key/value array containing oauth_token and oauth_token_secret
+	 * 						in case of success
+	 */
+	function getRequestToken($oauth_callback = NULL) {
+		$parameters = array();
+		if (!empty($oauth_callback)) {
+			$parameters['oauth_callback'] = $oauth_callback;
+		}
+		parent::request('GET', parent::url(Config::get('thujohn/twitter::REQUEST_TOKEN_URL'), ''),  $parameters);
+
+		$response = $this->response;
+		$this->http_code = $this->response['code'];
+		if(isset($response['code']) && $response['code'] == 200 && !empty($response)) {
+			$get_parameters = $response['response'];
+			$token = array();
+			parse_str($get_parameters, $token);
+		}
+
+		// Return the token if it was properly retrieved
+		if( isset($token['oauth_token'], $token['oauth_token_secret']) ){
+			return $token;
+		} else {
+			return FALSE;
+		}
+	}
+
+	/**
+	 * Get an access token for a logged in user
+	 *
+	 * @returns Array|Bool key/value array containing the token in case of success
+	 */
+	function getAccessToken($oauth_verifier = FALSE) {
+		$parameters = array();
+		if (!empty($oauth_verifier)) {
+			$parameters['oauth_verifier'] = $oauth_verifier;
+		}
+
+		parent::request('GET', parent::url(Config::get('thujohn/twitter::ACCESS_TOKEN_URL'), ''),  $parameters);
+
+		$response = $this->response;
+		$this->http_code = $this->response['code'];
+		if(isset($response['code']) && $response['code'] == 200 && !empty($response)) {
+			$get_parameters = $response['response'];
+			$token = array();
+			parse_str($get_parameters, $token);
+			// Reconfigure the tmhOAuth class with the new tokens
+			parent::reconfigure(array('token' => $token['oauth_token'], 'secret' => $token['oauth_token_secret']));
+			return $token;
+		}
+		return FALSE;
+	}
+
+	/**
+	 * Get the authorize URL
+	 *
+	 * @returns string
+	 */
+	function getAuthorizeURL($token, $sign_in_with_twitter = TRUE, $force_login = FALSE) {
+		if (is_array($token)) {
+			$token = $token['oauth_token'];
+		}
+		if ($force_login) {
+			return Config::get('thujohn/twitter::AUTHENTICATE_URL') . "?oauth_token={$token}&force_login=true";
+		} else if (empty($sign_in_with_twitter)) {
+			return Config::get('thujohn/twitter::AUTHORIZE_URL') . "?oauth_token={$token}";
+		} else {
+			return Config::get('thujohn/twitter::AUTHENTICATE_URL') . "?oauth_token={$token}";
+		}
 	}
 
 	public function query($name, $requestMethod = 'GET', $parameters = array(), $multipart = false)
@@ -116,12 +209,12 @@ class Twitter extends tmhOAuth {
 
 		return $carbon->diffForHumans();
 	}
-	
+
 	public function linkUser($user)
 	{
 		return '//twitter.com/' . (is_object($user) ? $user->screen_name : $user);
 	}
-	
+
 	public function linkTweet($tweet)
 	{
 		return $this->linkUser($tweet->user) . '/status/' . $tweet->id_str;
