@@ -104,7 +104,7 @@ class Twitter extends tmhOAuth {
 			$token = array();
 			parse_str($get_parameters, $token);
 			// Reconfigure the tmhOAuth class with the new tokens
-			parent::reconfigure(array('token' => $token['oauth_token'], 'secret' => $token['oauth_token_secret']));
+			$this->set_new_config(array('token' => $token['oauth_token'], 'secret' => $token['oauth_token_secret']));
 			return $token;
 		}
 		return FALSE;
