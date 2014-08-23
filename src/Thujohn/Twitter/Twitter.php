@@ -69,7 +69,6 @@ class Twitter extends tmhOAuth {
 		parent::request('GET', parent::url(Config::get('thujohn/twitter::REQUEST_TOKEN_URL'), ''),  $parameters);
 
 		$response = $this->response;
-		$this->http_code = $this->response['code'];
 		if(isset($response['code']) && $response['code'] == 200 && !empty($response)) {
 			$get_parameters = $response['response'];
 			$token = array();
@@ -98,7 +97,6 @@ class Twitter extends tmhOAuth {
 		parent::request('GET', parent::url(Config::get('thujohn/twitter::ACCESS_TOKEN_URL'), ''),  $parameters);
 
 		$response = $this->response;
-		$this->http_code = $this->response['code'];
 		if(isset($response['code']) && $response['code'] == 200 && !empty($response)) {
 			$get_parameters = $response['response'];
 			$token = array();
