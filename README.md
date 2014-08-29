@@ -114,7 +114,7 @@ Route::get('/twitter/login', function()
 	$callback_url = 'http://' . $_SERVER['HTTP_HOST'] . '/twitter/callback';
 	// Make sure we make this request w/o tokens, overwrite the default values in case of login.
 	Twitter::set_new_config(array('token' => '', 'secret' => ''));
-	$token = Twitter::getRequestToken($url);
+	$token = Twitter::getRequestToken($callback_url);
 	if( isset( $token['oauth_token_secret'] ) ) {
 		$url = Twitter::getAuthorizeURL($token, $sign_in_twitter, $force_login);
 
