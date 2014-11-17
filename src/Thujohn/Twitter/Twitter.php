@@ -217,7 +217,17 @@ class Twitter extends tmhOAuth {
 	{
 		return $this->linkUser($tweet->user) . '/status/' . $tweet->id_str;
 	}
+	
+	public function linkRetweet($tweet)
+	{
+		return '//twitter.com/intent/retweet?tweet_id=' . $tweet->id_str;
+	}
 
+	public function linkAddTweetToFavorites($tweet)
+	{
+		return '//twitter.com/intent/favorite?tweet_id=' . $tweet->id_str;
+	}
+	
 	/**
 	 * Parameters :
 	 * - count (1-200)
