@@ -1312,7 +1312,7 @@ class Twitter extends tmhOAuth {
 	 */
 	public function getListMembers($parameters = array())
 	{
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
 		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
@@ -1411,7 +1411,7 @@ class Twitter extends tmhOAuth {
 	 */
 	public function getList($parameters = array())
 	{
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
 		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
