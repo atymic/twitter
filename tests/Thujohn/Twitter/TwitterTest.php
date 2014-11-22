@@ -24,6 +24,13 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
         return $twitter;
     }
 
+    public function paramTest($endpoint, $testedMethod, $params)
+    {
+        $twitter = $this->getTwitterExpecting($endpoint, $params);
+
+        $twitter->$testedMethod($params);
+    }
+
     public function testGetUsersWithScreenName()
     {
         $twitter = $this->getTwitterExpecting('users/show', array(
