@@ -1417,8 +1417,10 @@ class Twitter extends tmhOAuth {
 	 */
 	public function getList($parameters = array())
 	{
-		if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
-		{
+        if (!array_key_exists('list_id', $parameters) && (!array_key_exists('slug', $parameters) ||
+                (array_key_exists('slug', $parameters) && !array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))
+            )
+        ){
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
 
