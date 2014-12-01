@@ -99,148 +99,149 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    /*
+    /**
     * getList can accept list_id, or slug and owner_screen_name, or slug and owner_id
+    *
+    * Use a Data Provider to test this method with different params without repeating our code
+    * @dataProvider providerGetList
     */
-    public function testGetListWithId()
+    public function testGetList($params)
     {
-        $this->paramTest('lists/show', 'getList', array(
-            'list_id'=>1
-        ));
+        $this->paramTest('lists/show', 'getList', $params);
     }
 
-    public function testGetListWithSlugAndName()
+    public function providerGetList()
     {
-        $this->paramTest('lists/show', 'getList', array(
-            'slug' => 'sugar_to_kiss',
-            'owner_screen_name' => 'elwood'
-        ));
-    }
-
-    public function testGetListWithSlugAndUserId()
-    {
-        $this->paramTest('lists/show', 'getList', array(
-            'slug' => 'sugar_to_kiss',
-            'owner_id' => 1
-        ));
+        return array(
+            array(
+                array('list_id'=>1),
+            ),
+            array(
+                array('slug'=>'sugar_to_kiss', 'owner_screen_name'=>'elwood')
+            ),
+            array(
+                array('slug'=>'sugar_to_kiss', 'owner_id'=>1)
+            )
+        );
     }
 
     /**
-     * @expectedException Exception
-     */
-    public function testGetListInvalid()
+    *
+    * @dataProvider providerGetListBad
+    */
+    public function testGetListFails($params)
     {
+        $this->setExpectedException('Exception');
         $twitter = $this->getTwitter();
-
-        $twitter->getList(array(
-            'slug' => 'sweetheart_to_miss',
-        ));
+        $twitter->getList($params);
     }
 
-    /*
+    public function providerGetListBad()
+    {
+        return array(
+            array(
+                array('slug'=>1),
+            )
+        );
+    }
+
+    /**
     * getListMembers can accept list_id, or slug and owner_screen_name, or slug and owner_id
+    *
+    * @dataProvider providerGetListMembers
     */
-    public function testGetListMembersWithId()
+    public function testGetListMembers($params)
     {
-        $this->paramTest('lists/members', 'getListMembers', array(
-            'list_id' => 1
-        ));
+        $this->paramTest('lists/members', 'getListMembers', $params);
     }
 
-    public function testGetListMembersWithSlugAndName()
+    public function providerGetListMembers()
     {
-        $this->paramTest('lists/members', 'getListMembers', array(
-            'slug' => 'sugar_to_kiss',
-            'owner_screen_name' => 'elwood'
-        ));
-    }
-
-    public function testGetListMembersWithSlugAndUserId()
-    {
-        $this->paramTest('lists/members', 'getListMembers', array(
-            'slug' => 'sugar_to_kiss',
-            'owner_id' => 1
-        ));
+        return array(
+            array(
+                array('list_id'=>1),
+            ),
+            array(
+                array('slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood'),
+            ),
+            array(
+                array('slug' => 'sugar_to_kiss', 'owner_id' => 1),
+            )
+        );
     }
 
     /**
-     * @expectedException Exception
-     */
-    public function testGetListMembersInvalid()
+    * @dataProvider providerGetListMembersBad
+    */
+    public function testGetListMembersFails($params)
     {
+        $this->setExpectedException('Exception');
         $twitter = $this->getTwitter();
-
-        $twitter->getListMembers(array(
-            'slug' => 'sweetheart_to_miss',
-        ));
+        $twitter->getListMembers($params);
     }
 
-    /*
+    public function providerGetListMembersBad()
+    {
+        return array(
+            array(
+                array('slug' => 'sweetheart_to_miss')
+            )
+        );
+    }
+
+    /**
     * getListMember can accept list_id and user_id, or list_id and screen_name,
     * or slug and owner_screen_name and user_id, or slug and owner_screen_name and screen_name,
     * or slug and owner_id and user_id, or slug and owner_id and screen_name
+    *
+    * @dataProvider providerGetListMember
     */
-    public function testGetListMemberWithIdAndUserId()
+    public function testGetListMember($params)
     {
-        $this->paramTest('lists/members/show', 'getListMember', array(
-            'list_id' => 1,
-            'user_id' => 2
-        ));
+        $this->paramTest('lists/members/show', 'getListMember', $params);
     }
 
-    public function testGetListMemberWithIdAndScreenName()
+    public function providerGetListMember()
     {
-        $this->paramTest('lists/members/show', 'getListMember', array(
-            'list_id' => 1,
-            'screen_name' => 'jake'
-        ));
-    }
-
-    public function testGetListMemberWithSlugAndOwnerNameAndUserId()
-    {
-        $this->paramTest('lists/members/show', 'getListMember', array(
-            'slug' => 'sugar_to_kiss',
-            'owner_screen_name' => 'elwood',
-            'user_id' => 2
-        ));
-    }
-
-    public function testGetListMemberWithSlugAndOwnerNameAndScreenName()
-    {
-        $this->paramTest('lists/members/show', 'getListMember', array(
-            'slug' => 'sugar_to_kiss',
-            'owner_screen_name' => 'elwood',
-            'screen_name' => 'jake'
-        ));
-    }
-
-    public function testGetListMemberWithSlugAndOwnerIdAndScreenName()
-    {
-        $this->paramTest('lists/members/show', 'getListMember', array(
-            'slug' => 'sugar_to_kiss',
-            'owner_id' => 1,
-            'screen_name' => 'jake'
-        ));
-    }
-
-    public function testGetListMemberWithSlugAndOwnerIdAndUserId()
-    {
-        $this->paramTest('lists/members/show', 'getListMember', array(
-            'slug' => 'sugar_to_kiss',
-            'owner_id' => 1,
-            'user_id' => 2
-        ));
+        return array(
+            array(
+                array('list_id' => 1, 'user_id' => 2)
+            ),
+            array(
+                array('list_id' => 1, 'screen_name' => 'jake')
+            ),
+            array(
+                array('slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood', 'user_id' => 2)
+            ),
+            array(
+                array('slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood', 'screen_name' => 'jake')
+            ),
+            array(
+                array('slug' => 'sugar_to_kiss', 'owner_id' => 1, 'screen_name' => 'jake')
+            ),
+            array(
+                array('slug' => 'sugar_to_kiss', 'owner_id' => 1, 'user_id' => 2)
+            )
+        );
     }
 
     /**
-     * @expectedException Exception
-     */
-    public function testGetListMemberInvalid()
+    * @dataProvider providerGetListMemberBad
+    */
+    public function testGetListMemberFails($params)
     {
+        $this->setExpectedException('Exception');
         $twitter = $this->getTwitter();
-
-        $twitter->getListMember(array(
-            'slug' => 'sweetheart_to_miss',
-        ));
+        $twitter->getListMembers($params);
     }
+
+    public function providerGetListMemberBad()
+    {
+        return array(
+            array(
+                array('slug' => 'sweetheart_to_miss')
+            )
+        );
+    }
+
 }
