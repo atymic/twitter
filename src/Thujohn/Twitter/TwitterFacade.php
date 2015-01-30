@@ -12,7 +12,7 @@ class TwitterFacade extends Facade
 	 */
 	protected static function getFacadeAccessor()
 	{
-		return 'twitter';
+		return 'ttwitter';
 	}
 
 }

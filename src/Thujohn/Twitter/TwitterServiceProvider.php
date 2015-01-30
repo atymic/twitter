@@ -37,7 +37,7 @@ class TwitterServiceProvider extends ServiceProvider
 	 */
 	public function provides()
 	{
-		return [ 'twitter' ];
+		return [ 'ttwitter' ];
 	}
 
 }
