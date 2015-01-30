@@ -2,7 +2,8 @@
 
 use Illuminate\Support\ServiceProvider;
 
-class TwitterServiceProvider extends ServiceProvider {
+class TwitterServiceProvider extends ServiceProvider
+{
 
 	/**
 	 * Indicates if loading of the provider is deferred.
@@ -19,14 +20,14 @@ class TwitterServiceProvider extends ServiceProvider {
 	public function register()
 	{
 
-		$configPath = __DIR__.'/../../config/twitter.php';
-		$this->mergeConfigFrom($configPath, 'twitter');
-		$this->publishes([$configPath => config_path('twitter.php')]);
+		$configPath = __DIR__ . '/../../config/twitter.php';
+		$this->mergeConfigFrom( $configPath, 'twitter' );
+		$this->publishes( [ $configPath => config_path( 'twitter.php' ) ] );
 
-		$this->app['twitter'] = $this->app->share(function()
+		$this->app['twitter'] = $this->app->share( function ()
 		{
 			return new \Thujohn\Twitter\Twitter;
-		});
+		} );
 	}
 
 	/**
@@ -36,7 +37,7 @@ class TwitterServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('twitter');
+		return [ 'twitter' ];
 	}
 
 }
