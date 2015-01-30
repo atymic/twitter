@@ -1,9 +1,7 @@
 <?php namespace Thujohn\Twitter;
 
-use Config;
 use Carbon\Carbon as Carbon;
 use tmhOAuth;
-use Session;
 
 class Twitter extends tmhOAuth {
 
@@ -12,18 +10,28 @@ class Twitter extends tmhOAuth {
 	 */
 	private $default;
 
+	/**
+	 * The Laravel application instance.
+	 *
+	 * @var \Illuminate\Foundation\Application
+	 */
+	protected $app;
+
 	public function __construct($config = array())
 	{
+		
 		$this->default = array();
+		
+		$this->app = app();
 
-		$this->default['consumer_key']    = Config::get('thujohn/twitter::CONSUMER_KEY');
-		$this->default['consumer_secret'] = Config::get('thujohn/twitter::CONSUMER_SECRET');
-		$this->default['token']           = Config::get('thujohn/twitter::ACCESS_TOKEN');
-		$this->default['secret']          = Config::get('thujohn/twitter::ACCESS_TOKEN_SECRET');
+		$this->default['consumer_key']    = $this->app['config']->get('twitter.CONSUMER_KEY');
+		$this->default['consumer_secret'] = $this->app['config']->get('twitter.CONSUMER_SECRET');
+		$this->default['token']           = $this->app['config']->get('twitter.ACCESS_TOKEN');
+		$this->default['secret']          = $this->app['config']->get('twitter.ACCESS_TOKEN_SECRET');
 
-		if (Session::has('access_token'))
+		if ($this->app['session']->has('access_token'))
 		{
-			$access_token = Session::get('access_token');
+			$access_token = $this->app['session']->get('access_token');
 
 			if (is_array($access_token) && isset($access_token['oauth_token']) && isset($access_token['oauth_token_secret']) && !empty($access_token['oauth_token']) && !empty($access_token['oauth_token_secret']))
 			{
@@ -31,8 +39,8 @@ class Twitter extends tmhOAuth {
 				$this->default['secret'] = $access_token['oauth_token_secret'];
 			}
 		}
-		$this->default['use_ssl'] = Config::get('thujohn/twitter::USE_SSL');
-		$this->default['user_agent'] = 'TW-L4 '.parent::VERSION;
+		$this->default['use_ssl'] = $this->app['config']->get('twitter.USE_SSL');
+		$this->default['user_agent'] = 'TW-L5 '.parent::VERSION;
 
 		$config = array_merge($this->default, $config);
 
@@ -66,7 +74,7 @@ class Twitter extends tmhOAuth {
 		if (!empty($oauth_callback)) {
 			$parameters['oauth_callback'] = $oauth_callback;
 		}
-		parent::request('GET', parent::url(Config::get('thujohn/twitter::REQUEST_TOKEN_URL'), ''),  $parameters);
+		parent::request('GET', parent::url($this->app['config']->get('twitter.REQUEST_TOKEN_URL'), ''),  $parameters);
 
 		$response = $this->response;
 		if(isset($response['code']) && $response['code'] == 200 && !empty($response)) {
@@ -94,7 +102,7 @@ class Twitter extends tmhOAuth {
 			$parameters['oauth_verifier'] = $oauth_verifier;
 		}
 
-		parent::request('GET', parent::url(Config::get('thujohn/twitter::ACCESS_TOKEN_URL'), ''),  $parameters);
+		parent::request('GET', parent::url($this->app['config']->get('twitter.ACCESS_TOKEN_URL'), ''),  $parameters);
 
 		$response = $this->response;
 		if(isset($response['code']) && $response['code'] == 200 && !empty($response)) {
@@ -118,11 +126,11 @@ class Twitter extends tmhOAuth {
 			$token = $token['oauth_token'];
 		}
 		if ($force_login) {
-			return Config::get('thujohn/twitter::AUTHENTICATE_URL') . "?oauth_token={$token}&force_login=true";
+			return $this->app['config']->get('twitter.AUTHENTICATE_URL') . "?oauth_token={$token}&force_login=true";
 		} else if (empty($sign_in_with_twitter)) {
-			return Config::get('thujohn/twitter::AUTHORIZE_URL') . "?oauth_token={$token}";
+			return $this->app['config']->get('twitter.AUTHORIZE_URL') . "?oauth_token={$token}";
 		} else {
-			return Config::get('thujohn/twitter::AUTHENTICATE_URL') . "?oauth_token={$token}";
+			return $this->app['config']->get('twitter.AUTHENTICATE_URL') . "?oauth_token={$token}";
 		}
 	}
 
@@ -130,7 +138,7 @@ class Twitter extends tmhOAuth {
 	{
 		parent::user_request(array(
 			'method'    => $requestMethod,
-			'url'       => parent::url(Config::get('thujohn/twitter::API_VERSION').'/'.$name),
+			'url'       => parent::url($this->app['config']->get('twitter.API_VERSION').'/'.$name),
 			'params'    => $parameters,
 			'multipart' => $multipart
 		));

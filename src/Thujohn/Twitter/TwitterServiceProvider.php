@@ -12,23 +12,18 @@ class TwitterServiceProvider extends ServiceProvider {
 	protected $defer = false;
 
 	/**
-	 * Bootstrap the application events.
-	 *
-	 * @return void
-	 */
-	public function boot()
-	{
-		$this->package('thujohn/twitter', 'thujohn/twitter');
-	}
-
-	/**
 	 * Register the service provider.
 	 *
 	 * @return void
 	 */
 	public function register()
 	{
-		$this->app['ttwitter'] = $this->app->share(function($app)
+
+		$configPath = __DIR__.'/../../config/twitter.php';
+		$this->mergeConfigFrom($configPath, 'twitter');
+		$this->publishes([$configPath => config_path('twitter.php')]);
+
+		$this->app['twitter'] = $this->app->share(function()
 		{
 			return new \Thujohn\Twitter\Twitter;
 		});
@@ -41,7 +36,7 @@ class TwitterServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('ttwitter');
+		return ['twitter'];
 	}
 
 }
