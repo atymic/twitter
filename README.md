@@ -30,10 +30,10 @@ Now add the alias.
 
 
 ## Configuration
+Copy the package config to your local config with the publish command:
 
-Run `php artisan vendor:publish thujohn/twitter` and modify the config file with your own informations.
 ```
-config/twitter.php
+php artisan vendor:publish
 ```
 
 
