@@ -22,7 +22,7 @@ class TwitterServiceProvider extends ServiceProvider
 
 		$configPath = __DIR__ . '/../../config/twitter.php';
 		$this->mergeConfigFrom( $configPath, 'twitter' );
-		$this->publishes( [ $configPath => config_path( 'twitter.php' ) ] );
+		$this->publishes( [ $configPath => config_path( 'thujohn-twitter.php' ) ] );
 
 		$this->app['twitter'] = $this->app->share( function ()
 		{
