@@ -1,19 +1,22 @@
 {
     "name": "thujohn/twitter",
-    "description": "Twitter API for Laravel 4",
-	"keywords": ["twitter", "laravel", "laravel4"],
+    "description": "Twitter API for Laravel 5",
+	"keywords": ["twitter", "laravel", "laravel5"],
     "license": "MIT",
-    "version": "1.2.0",
     "authors": [
         {
             "name": "thujohn",
             "email": "jonathan.thuau@gmail.com"
+        },
+        {
+            "name": "mikevrind",
+            "email": "mikevrind@me.com"
         }
     ],
     "require": {
-        "php": ">=5.3.0",
-        "illuminate/support": "4.*|5.*",
-        "themattharris/tmhoauth": "~0.8.3"
+        "php": ">=5.4.0",
+        "illuminate/support": "5.*",
+        "themattharris/tmhoauth": "~0.8.4"
     },
     "autoload": {
         "psr-0": {

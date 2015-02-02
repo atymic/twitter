@@ -1,41 +1,39 @@
 # Twitter
 
-Twitter API for Laravel 4
+Twitter API for Laravel 5
 
 You need to create an application and create your access token in the [developer console](https://dev.twitter.com/).
 
-[![Build Status](https://travis-ci.org/thujohn/twitter-l4.png?branch=master)](https://travis-ci.org/thujohn/twitter-l4)
-
+[![Build Status](https://travis-ci.org/thujohn/twitter-l4.png?branch=2.0)](https://travis-ci.org/thujohn/twitter-l4)
 
 ## Installation
 
-Add `thujohn/twitter` to `composer.json`.
+Require this package with composer:
+
 ```
-"thujohn/twitter": "dev-master"
+composer require thujohn/twitter
 ```
 
-Run `composer update` to pull down the latest version of Twitter.
-
-Now open up `app/config/app.php` and add the service provider to your `providers` array.
+Now open up `config/app.php` and add the service provider to your `providers` array.
 ```php
-'providers' => array(
+'providers' => [
 	'Thujohn\Twitter\TwitterServiceProvider',
-)
+]
 ```
 
 Now add the alias.
 ```php
-'aliases' => array(
+'aliases' => [
 	'Twitter' => 'Thujohn\Twitter\TwitterFacade',
-)
+]
 ```
 
 
 ## Configuration
+Copy the package config to your local config with the publish command:
 
-Run `php artisan config:publish thujohn/twitter` and modify the config file with your own informations.
 ```
-/app/config/packages/thujohn/twitter/config.php
+php artisan vendor:publish
 ```
 
 
@@ -75,7 +73,7 @@ Returns a collection of the most recent Tweets posted by the user indicated by t
 ```php
 Route::get('/', function()
 {
-	return Twitter::getUserTimeline(array('screen_name' => 'thujohn', 'count' => 20, 'format' => 'json'));
+	return Twitter::getUserTimeline(['screen_name' => 'thujohn', 'count' => 20, 'format' => 'json']);
 });
 ```
 
@@ -83,7 +81,7 @@ Returns a collection of the most recent Tweets and retweets posted by the authen
 ```php
 Route::get('/', function()
 {
-	return Twitter::getHomeTimeline(array('count' => 20, 'format' => 'json'));
+	return Twitter::getHomeTimeline(['count' => 20, 'format' => 'json']);
 });
 ```
 
@@ -91,7 +89,7 @@ Returns the X most recent mentions (tweets containing a users's @screen_name) fo
 ```php
 Route::get('/', function()
 {
-	return Twitter::getMentionsTimeline(array('count' => 20, 'format' => 'json'));
+	return Twitter::getMentionsTimeline(['count' => 20, 'format' => 'json']);
 });
 ```
 
@@ -99,7 +97,7 @@ Updates the authenticating user's current status, also known as tweeting.
 ```php
 Route::get('/', function()
 {
-	return Twitter::postTweet(array('status' => 'Laravel is beautiful', 'format' => 'json'));
+	return Twitter::postTweet(['status' => 'Laravel is beautiful', 'format' => 'json']);
 });
 ```
 
@@ -113,7 +111,7 @@ Route::get('/twitter/login', function()
 	$force_login = FALSE;
 	$callback_url = 'http://' . $_SERVER['HTTP_HOST'] . '/twitter/callback';
 	// Make sure we make this request w/o tokens, overwrite the default values in case of login.
-	Twitter::set_new_config(array('token' => '', 'secret' => ''));
+	Twitter::set_new_config(['token' => '', 'secret' => '']);
 	$token = Twitter::getRequestToken($callback_url);
 	if( isset( $token['oauth_token_secret'] ) ) {
 		$url = Twitter::getAuthorizeURL($token, $sign_in_twitter, $force_login);
@@ -131,10 +129,10 @@ Route::get('/twitter/callback', function() {
 	// You should set this route on your Twitter Application settings as the callback
 	// https://apps.twitter.com/app/YOUR-APP-ID/settings
 	if(Session::has('oauth_request_token')) {
-		$request_token = array(
+		$request_token = [
 			'token' => Session::get('oauth_request_token'),
 			'secret' => Session::get('oauth_request_token_secret'),
-		);
+		];
 
 		Twitter::set_new_config($request_token);
 
