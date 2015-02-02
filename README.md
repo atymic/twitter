@@ -6,6 +6,8 @@ You need to create an application and create your access token in the [developer
 
 [![Build Status](https://travis-ci.org/thujohn/twitter-l4.png?branch=master)](https://travis-ci.org/thujohn/twitter-l4)
 
+### For Laravel 5, please use the [2.0 branch](https://github.com/thujohn/twitter-l4/tree/2.0)!
+
 
 ## Installation
 
