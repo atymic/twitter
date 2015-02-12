@@ -25,10 +25,10 @@ class Twitter extends tmhOAuth
 
 		$this->app = app();
 
-		$this->default['consumer_key']    = $this->app['config']->get( 'twitter.CONSUMER_KEY' );
-		$this->default['consumer_secret'] = $this->app['config']->get( 'twitter.CONSUMER_SECRET' );
-		$this->default['token']           = $this->app['config']->get( 'twitter.ACCESS_TOKEN' );
-		$this->default['secret']          = $this->app['config']->get( 'twitter.ACCESS_TOKEN_SECRET' );
+		$this->default['consumer_key']    = $this->app['config']->get( 'ttwitter.CONSUMER_KEY' );
+		$this->default['consumer_secret'] = $this->app['config']->get( 'ttwitter.CONSUMER_SECRET' );
+		$this->default['token']           = $this->app['config']->get( 'ttwitter.ACCESS_TOKEN' );
+		$this->default['secret']          = $this->app['config']->get( 'ttwitter.ACCESS_TOKEN_SECRET' );
 
 		if( $this->app['session']->has( 'access_token' ) )
 		{
@@ -40,7 +40,7 @@ class Twitter extends tmhOAuth
 				$this->default['secret'] = $access_token['oauth_token_secret'];
 			}
 		}
-		$this->default['use_ssl']    = $this->app['config']->get( 'twitter.USE_SSL' );
+		$this->default['use_ssl']    = $this->app['config']->get( 'ttwitter.USE_SSL' );
 		$this->default['user_agent'] = 'TW-L5 ' . parent::VERSION;
 
 		$config = array_merge( $this->default, $config );
@@ -78,7 +78,7 @@ class Twitter extends tmhOAuth
 		{
 			$parameters['oauth_callback'] = $oauth_callback;
 		}
-		parent::request( 'GET', parent::url( $this->app['config']->get( 'twitter.REQUEST_TOKEN_URL' ), '' ), $parameters );
+		parent::request( 'GET', parent::url( $this->app['config']->get( 'ttwitter.REQUEST_TOKEN_URL' ), '' ), $parameters );
 
 		$response = $this->response;
 		if( isset( $response['code'] ) && $response['code'] == 200 && !empty( $response ) )
@@ -112,7 +112,7 @@ class Twitter extends tmhOAuth
 			$parameters['oauth_verifier'] = $oauth_verifier;
 		}
 
-		parent::request( 'GET', parent::url( $this->app['config']->get( 'twitter.ACCESS_TOKEN_URL' ), '' ), $parameters );
+		parent::request( 'GET', parent::url( $this->app['config']->get( 'ttwitter.ACCESS_TOKEN_URL' ), '' ), $parameters );
 
 		$response = $this->response;
 		if( isset( $response['code'] ) && $response['code'] == 200 && !empty( $response ) )
@@ -142,15 +142,15 @@ class Twitter extends tmhOAuth
 		}
 		if( $force_login )
 		{
-			return $this->app['config']->get( 'twitter.AUTHENTICATE_URL' ) . "?oauth_token={$token}&force_login=true";
+			return $this->app['config']->get( 'ttwitter.AUTHENTICATE_URL' ) . "?oauth_token={$token}&force_login=true";
 		}
 		else if( empty( $sign_in_with_twitter ) )
 		{
-			return $this->app['config']->get( 'twitter.AUTHORIZE_URL' ) . "?oauth_token={$token}";
+			return $this->app['config']->get( 'ttwitter.AUTHORIZE_URL' ) . "?oauth_token={$token}";
 		}
 		else
 		{
-			return $this->app['config']->get( 'twitter.AUTHENTICATE_URL' ) . "?oauth_token={$token}";
+			return $this->app['config']->get( 'ttwitter.AUTHENTICATE_URL' ) . "?oauth_token={$token}";
 		}
 	}
 
@@ -158,7 +158,7 @@ class Twitter extends tmhOAuth
 	{
 		parent::user_request( [
 			'method'    => $requestMethod,
-			'url'       => parent::url( $this->app['config']->get( 'twitter.API_VERSION' ) . '/' . $name ),
+			'url'       => parent::url( $this->app['config']->get( 'ttwitter.API_VERSION' ) . '/' . $name ),
 			'params'    => $parameters,
 			'multipart' => $multipart
 		] );

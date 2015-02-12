@@ -20,11 +20,11 @@ class TwitterServiceProvider extends ServiceProvider
 	public function register()
 	{
 
-		$configPath = __DIR__ . '/../../config/twitter.php';
-		$this->mergeConfigFrom( $configPath, 'twitter' );
-		$this->publishes( [ $configPath => config_path( 'thujohn-twitter.php' ) ] );
+		$configPath = __DIR__ . '/../../config/thujohn.twitter.php';
+		$this->mergeConfigFrom( $configPath, 'ttwitter' );
+		$this->publishes( [ $configPath => config_path( 'thujohn.twitter.php' ) ] );
 
-		$this->app['twitter'] = $this->app->share( function ()
+		$this->app['ttwitter'] = $this->app->share( function ()
 		{
 			return new \Thujohn\Twitter\Twitter;
 		} );
