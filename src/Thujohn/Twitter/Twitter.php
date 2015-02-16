@@ -1267,7 +1267,7 @@ class Twitter extends tmhOAuth {
 	 */
 	public function postListCreateAll($parameters = array())
 	{
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
 		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
@@ -1341,8 +1341,11 @@ class Twitter extends tmhOAuth {
 	 */
 	public function postListMember($parameters = array())
 	{
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters) || !array_key_exists('user_id', $parameters) || !array_key_exists('screen_name', $parameters))
-		{
+		if (
+			(!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
+			|| 
+			(!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters))
+		) {
 			throw new \Exception('Parameter required missing : list_id, slug, user_id or screen_name');
 		}
 
@@ -1360,7 +1363,7 @@ class Twitter extends tmhOAuth {
 	 */
 	public function destroyList($parameters = array())
 	{
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
 		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
@@ -1382,7 +1385,7 @@ class Twitter extends tmhOAuth {
 	 */
 	public function postListUpdate($parameters = array())
 	{
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
 		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
@@ -1456,7 +1459,7 @@ class Twitter extends tmhOAuth {
 	 */
 	public function destroyListMembers($parameters = array())
 	{
-		if (!array_key_exists('list_id', $parameters) || !array_key_exists('slug', $parameters))
+		if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
 		{
 			throw new \Exception('Parameter required missing : list_id or slug');
 		}
