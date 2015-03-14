@@ -190,6 +190,11 @@ class Twitter extends tmhOAuth
 
 	public function linkify( $tweet )
 	{
+		if(is_object($tweet))
+		{
+			$tweet = $tweet->text;
+		}
+
 		$tweet = ' ' . $tweet;
 
 		$patterns             = [ ];
