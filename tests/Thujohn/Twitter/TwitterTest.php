@@ -244,4 +244,16 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
         );
     }
 
+    public function testLinkify()
+    {
+        $string = '@user posted an awesome #tweet hit me up: me@example.com http://example.com http://some.com/really/long/url/with/many/many/levels.jpg?query=yes';
+        $object = new stdClass();
+        $object->text = $string;
+        $expected = '<a href="https://twitter.com/user" target="_blank">@user</a> posted an awesome  <a href="https://twitter.com/search?q=%23tweet" target="_blank">#tweet</a> hit me up: <a href="mailto:me@example.com">me@example.com</a> <a href="http://example.com" target="_blank" rel="nofollow">http://example.com</a> <a href="http://some.com/really/long/url/with/many/many/levels.jpg?query=yes" target="_blank" rel="nofollow">some.com/really/long/u...jpg?query=yes</a>';
+        $t = $this->getTwitter();
+        $sOut = $t->linkify($string);
+        $oOut = $t->linkify($object);
+        $this->assertEquals($expected, $sOut);
+        $this->assertEquals($expected, $oOut);
+    }
 }
