@@ -115,7 +115,7 @@ Route::get('/twitter/login', function()
 	$force_login = FALSE;
 	$callback_url = 'http://' . $_SERVER['HTTP_HOST'] . '/twitter/callback';
 	// Make sure we make this request w/o tokens, overwrite the default values in case of login.
-	Twitter::set_new_config(array('token' => '', 'secret' => ''));
+	Twitter::setNewConfig(array('token' => '', 'secret' => ''));
 	$token = Twitter::getRequestToken($callback_url);
 	if( isset( $token['oauth_token_secret'] ) ) {
 		$url = Twitter::getAuthorizeURL($token, $sign_in_twitter, $force_login);
@@ -138,7 +138,7 @@ Route::get('/twitter/callback', function() {
 			'secret' => Session::get('oauth_request_token_secret'),
 		);
 
-		Twitter::set_new_config($request_token);
+		Twitter::setNewConfig($request_token);
 
 		$oauth_verifier = FALSE;
 		if(Input::has('oauth_verifier')) {
