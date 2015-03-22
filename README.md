@@ -37,6 +37,8 @@ The package now requires PHP >= 5.4.0
 
 Config file has been updated (debug, UPLOAD_URL, ACCESS_TOKEN_URL, REQUEST_TOKEN_URL)
 
+set_new_config() has been renamed reconfig()
+
 
 ## Configuration (Laravel 4)
 
