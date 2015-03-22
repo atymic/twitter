@@ -1,8 +1,8 @@
-<?php namespace Thujohn\Twitter;
+<?php namespace Thujohn\Twitter\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class TwitterFacade extends Facade {
+class Twitter extends Facade {
 
 	/**
 	 * Get the registered name of the component.

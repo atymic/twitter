@@ -2,6 +2,8 @@
 
 use Illuminate\Support\ServiceProvider;
 
+use Thujohn\Twitter\Twitter;
+
 class TwitterServiceProvider extends ServiceProvider {
 
 	/**
@@ -18,7 +20,7 @@ class TwitterServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('thujohn/twitter', 'thujohn/twitter');
+		//
 	}
 
 	/**
@@ -28,9 +30,25 @@ class TwitterServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
+		$app = $this->app ?: app();
+		$laravel_version = substr($app::VERSION, 0, strpos($app::VERSION, '.'));
+
+		if ($laravel_version == 5)
+		{
+			$this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'ttwitter');
+
+			$this->publishes([
+				__DIR__.'/../../config/config.php' => config_path('ttwitter.php'),
+			]);
+		}
+		else if ($laravel_version == 4)
+		{
+			$this->package('thujohn/twitter', 'ttwitter', __DIR__.'/../..');
+		}
+
 		$this->app['ttwitter'] = $this->app->share(function($app)
 		{
-			return new \Thujohn\Twitter\Twitter;
+			return new Twitter($app['config'], $app['session.store']);
 		});
 	}
 
@@ -41,7 +59,7 @@ class TwitterServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('ttwitter');
+		return ['ttwitter'];
 	}
 
 }
