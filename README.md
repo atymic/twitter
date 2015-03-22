@@ -11,12 +11,17 @@ You need to create an application and create your access token in the [Applicati
 
 Add `thujohn/twitter` to `composer.json`.
 ```
-"thujohn/twitter": "dev-master"
+"thujohn/twitter": "~2.0"
 ```
 
 Run `composer update` to pull down the latest version of Twitter.
 
-Now open up `app/config/app.php` and add the service provider to your `providers` array.
+Or run
+```
+composer require thujohn/twitter
+```
+
+Now open up `/config/app.php` and add the service provider to your `providers` array.
 ```php
 'providers' => [
 	'Thujohn\Twitter\TwitterServiceProvider',
@@ -26,7 +31,7 @@ Now open up `app/config/app.php` and add the service provider to your `providers
 Now add the alias.
 ```php
 'aliases' => [
-	'Twitter' => 'Thujohn\Twitter\TwitterFacade',
+	'Twitter' => 'Thujohn\Twitter\Facades\Twitter',
 ]
 ```
 
@@ -34,6 +39,8 @@ Now add the alias.
 ## Upgrading from 1.x.x
 
 The package now requires PHP >= 5.4.0
+
+Facade has changed (Thujohn\Twitter\Facades\Twitter)
 
 Config file has been updated (debug, UPLOAD_URL, ACCESS_TOKEN_URL, REQUEST_TOKEN_URL)
 
@@ -52,7 +59,7 @@ Run `php artisan config:publish thujohn/twitter` and modify the config file with
 
 Run `php artisan vendor:publish` and modify the config file with your own informations.
 ```
-/app/config/ttwitter.php
+/config/ttwitter.php
 ```
 
 
