@@ -4,7 +4,7 @@ Twitter API for Laravel 4/5
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
-[![Build Status](https://travis-ci.org/thujohn/twitter-l4.png?branch=master)](https://travis-ci.org/thujohn/twitter-l4)
+[![Build Status](https://travis-ci.org/thujohn/twitter.png?branch=master)](https://travis-ci.org/thujohn/twitter)
 
 
 ## Installation
