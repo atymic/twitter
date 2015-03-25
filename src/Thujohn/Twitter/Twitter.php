@@ -442,4 +442,16 @@ class Twitter extends tmhOAuth {
 		}
 	}
 
+	/**
+	 * Allows a registered application to revoke an issued OAuth 2 Bearer Token by presenting its client credentials.
+	 * Once a Bearer Token has been invalidated, new creation attempts will yield a different Bearer Token and usage of the invalidated token will no longer be allowed.
+	 */
+	public function revokeToken()
+	{
+		if(isset($access_token['oauth_token']))
+		{
+			return $this->post('oauth2/invalidate_token', $access_token['oauth_token']);
+		}
+	}
+
 }
