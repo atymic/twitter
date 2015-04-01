@@ -430,6 +430,11 @@ class Twitter extends tmhOAuth {
 		return 'https://twitter.com/intent/favorite?tweet_id=' . $tweet->id_str;
 	}
 
+	public function linkReply($tweet)
+	{
+		return 'https://twitter.com/intent/tweet?in_reply_to=' . $tweet->id_str;
+	}
+
 	private function jsonDecode($json, $assoc = false)
 	{
 		if (version_compare(PHP_VERSION, '5.4.0', '>=') && !(defined('JSON_C_VERSION') && PHP_INT_SIZE > 4))
