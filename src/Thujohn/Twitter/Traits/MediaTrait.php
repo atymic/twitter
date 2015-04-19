@@ -12,7 +12,7 @@ Trait MediaTrait {
 	 */
 	public function uploadMedia($parameters = [])
 	{
-        if (!array_key_exists('media', $parameters) || !array_key_exists('media_data', $parameters)) {
+        if (!array_key_exists('media', $parameters) && !array_key_exists('media_data', $parameters)) {
             throw new Exception('Parameter required missing : media or media_data');
         }
         if (array_key_exists('media', $parameters) && array_key_exists('media_data', $parameters)) {
