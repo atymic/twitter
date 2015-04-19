@@ -12,10 +12,12 @@ Trait MediaTrait {
 	 */
 	public function uploadMedia($parameters = [])
 	{
-		if (!array_key_exists('media', $parameters))
-		{
-			throw new Exception('Parameter required missing : media');
-		}
+        if (!array_key_exists('media', $parameters) || !array_key_exists('media_data', $parameters)) {
+            throw new Exception('Parameter required missing : media or media_data');
+        }
+        if (array_key_exists('media', $parameters) && array_key_exists('media_data', $parameters)) {
+            throw new Exception('You cannot use media and media_data at the same time');
+        }
 
 		return $this->post('media/upload', $parameters, true);
 	}
