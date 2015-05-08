@@ -53,6 +53,7 @@ Run `php artisan config:publish thujohn/twitter` and modify the config file with
 ```
 /app/config/packages/thujohn/twitter/config.php
 ```
+Also, make sure to remove the env in the config file and replace it with your information.
 
 
 ## Configuration (Laravel 5)
@@ -60,6 +61,13 @@ Run `php artisan config:publish thujohn/twitter` and modify the config file with
 Run `php artisan vendor:publish` and modify the config file with your own informations.
 ```
 /config/ttwitter.php
+```
+With Laravel 5, it's simple to edit the config.php file - in face you don't even need to touch it! Just add the following to your .env file and you'll be on your way:
+```
+TWITTER_CONSUMER_KEY = 
+TWITTER_CONSUMER_SECRET = 
+TWITTER_ACCESS_TOKEN = 
+TWITTER_ACCESS_TOKEN_SECRET =
 ```
 
 
