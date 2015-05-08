@@ -58,11 +58,11 @@ Also, make sure to remove the env in the config file and replace it with your in
 
 ## Configuration (Laravel 5)
 
-Run `php artisan vendor:publish` and modify the config file with your own informations.
+Run `php artisan vendor:publish` and modify the config file with your own information.
 ```
 /config/ttwitter.php
 ```
-With Laravel 5, it's simple to edit the config.php file - in face you don't even need to touch it! Just add the following to your .env file and you'll be on your way:
+With Laravel 5, it's simple to edit the config.php file - in fact you don't even need to touch it! Just add the following to your .env file and you'll be on your way:
 ```
 TWITTER_CONSUMER_KEY = 
 TWITTER_CONSUMER_SECRET = 
