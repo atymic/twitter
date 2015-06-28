@@ -263,7 +263,7 @@ class Twitter extends tmhOAuth {
 
 		if ($this->error)
 		{
-			$this->log('ERROR_CODE : '.$response['errorno']);
+			$this->log('ERROR_CODE : '.$response['errno']);
 			$this->log('ERROR_MSG : '.$response['error']);
 		}
 
