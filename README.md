@@ -60,7 +60,7 @@ Also, make sure to remove the env in the config file and replace it with your in
 
 Run `php artisan vendor:publish` and modify the config file with your own information.
 ```
-/config/ttwitter.php
+/config/twitter.php
 ```
 With Laravel 5, it's simple to edit the config.php file - in fact you don't even need to touch it! Just add the following to your .env file and you'll be on your way:
 ```
