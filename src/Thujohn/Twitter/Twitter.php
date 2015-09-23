@@ -267,7 +267,8 @@ class Twitter extends tmhOAuth {
 			$this->log('ERROR_MSG : '.$response['error']);
 		}
 
-		if (isset($response['code']) && $response['code'] != 200)
+		// TODO: maybe refactor response code checking to a function
+		if (isset($response['code']) && $response['code'] >= 200 && $response['code'] <= 299)
 		{
 			$_response = $this->jsonDecode($response['response'], true);
 
