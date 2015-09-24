@@ -5,10 +5,10 @@ use Exception;
 Trait MediaTrait {
 
 	/**
-	 * Upload media (images) to Twitter, to use in a Tweet or Twitter-hosted Card.
+	 * Upload media (images or videos) to Twitter, to use in a Tweet or Twitter-hosted Card.
 	 *
 	 * Parameters :
-	 * - media
+	 * - media: stream of data to be uploaded
 	 */
 	public function uploadMedia($parameters = [])
 	{
@@ -54,7 +54,7 @@ Trait MediaTrait {
 		$init_parameters = [
 			'command' => 'INIT',
 			'media_type' => $this->getMediaMime($parameters['media']),
-			'total_bytes' => filesize($parameters['media'])
+			'total_bytes' => strlen($parameters['media'])
 		];
 		$init_result = $this->post('media/upload', $init_parameters, true);
 
@@ -62,7 +62,7 @@ Trait MediaTrait {
 			return $init_result;
 		}
 
-		$chunked = $this->splitFileInChunks(file_get_contents($parameters['media']));
+		$chunked = $this->splitFileInChunks($parameters['media']);
 		$i = 0;
 		foreach ($chunked as $chunk) {
 			$append_parameters = [
@@ -102,13 +102,13 @@ Trait MediaTrait {
 	}
 
 	/**
-	 * @param $path
+	 * @param $binary
 	 *
 	 * @return mixed
 	 */
-	private function getMediaMime($path) {
+	private function getMediaMime($binary) {
 		$finfo = finfo_open(FILEINFO_MIME_TYPE);
-		$v = finfo_file($finfo, $path);
+		$v = finfo_buffer($finfo, $binary);
 		finfo_close($finfo);
 
 		return $v;
