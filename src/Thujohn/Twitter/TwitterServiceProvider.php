@@ -42,7 +42,6 @@ class TwitterServiceProvider extends ServiceProvider {
 		{
 			$this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'ttwitter');
 			if ($this->isLumen) {
-				$he = new HelpersExtended();
 				$this->publishes([
 					__DIR__ . '/../../config/config.php' => app()->basePath()
 						. '/config' . ('ttwitter.php' ? '/' . 'ttwitter.php' : 'ttwitter.php'),
