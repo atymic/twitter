@@ -33,7 +33,8 @@ class TwitterServiceProvider extends ServiceProvider {
 		$app = $this->app ?: app();
 		$laravel_version = substr($app->version(), 0, strpos($app->version(), '.'));
 
-		if (strpos(strtolower($laravel_version), 'lumen') !== false) {
+		if (strpos(strtolower($laravel_version), 'lumen') !== false)
+		{
 			$this->isLumen = true;
 			$laravel_version = str_replace('Lumen (', '', $laravel_version);
 		}
