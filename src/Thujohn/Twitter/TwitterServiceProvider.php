@@ -1,7 +1,6 @@
 <?php namespace Thujohn\Twitter;
 
 use Illuminate\Support\ServiceProvider;
-use App\Library\HelpersExtended;
 use Thujohn\Twitter\Twitter;
 
 class TwitterServiceProvider extends ServiceProvider {
@@ -45,7 +44,8 @@ class TwitterServiceProvider extends ServiceProvider {
 			if ($this->isLumen) {
 				$he = new HelpersExtended();
 				$this->publishes([
-					__DIR__ . '/../../config/config.php' => $he->config_path('ttwitter.php'),
+					__DIR__ . '/../../config/config.php' => app()->basePath()
+						. '/config' . ('ttwitter.php' ? '/' . 'ttwitter.php' : 'ttwitter.php'),
 				]);
 			} else {
 				$this->publishes([
