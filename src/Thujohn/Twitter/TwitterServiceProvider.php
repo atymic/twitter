@@ -1,7 +1,7 @@
 <?php namespace Thujohn\Twitter;
 
 use Illuminate\Support\ServiceProvider;
-
+use App\Library\HelpersExtended;
 use Thujohn\Twitter\Twitter;
 
 class TwitterServiceProvider extends ServiceProvider {
@@ -12,6 +12,7 @@ class TwitterServiceProvider extends ServiceProvider {
 	 * @var bool
 	 */
 	protected $defer = false;
+	protected $isLumen = false;
 
 	/**
 	 * Bootstrap the application events.
@@ -31,15 +32,26 @@ class TwitterServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$app = $this->app ?: app();
-		$laravel_version = substr($app::VERSION, 0, strpos($app::VERSION, '.'));
+		$laravel_version = substr($app->version(), 0, strpos($app->version(), '.'));
+
+		if (strpos(strtolower($laravel_version), 'lumen') !== false) {
+			$this->isLumen = true;
+			$laravel_version = str_replace('Lumen (', '', $laravel_version);
+		}
 
 		if ($laravel_version == 5)
 		{
 			$this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'ttwitter');
-
-			$this->publishes([
-				__DIR__.'/../../config/config.php' => config_path('ttwitter.php'),
-			]);
+			if ($this->isLumen) {
+				$he = new HelpersExtended();
+				$this->publishes([
+					__DIR__ . '/../../config/config.php' => $he->config_path('ttwitter.php'),
+				]);
+			} else {
+				$this->publishes([
+					__DIR__ . '/../../config/config.php' => config_path('ttwitter.php'),
+				]);
+			}
 		}
 		else if ($laravel_version == 4)
 		{
