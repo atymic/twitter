@@ -42,12 +42,15 @@ class TwitterServiceProvider extends ServiceProvider {
 		if ($laravel_version == 5)
 		{
 			$this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'ttwitter');
-			if ($this->isLumen) {
+			if ($this->isLumen)
+			{
 				$this->publishes([
 					__DIR__ . '/../../config/config.php' => app()->basePath()
 						. '/config' . ('ttwitter.php' ? '/' . 'ttwitter.php' : 'ttwitter.php'),
 				]);
-			} else {
+			}
+			else
+			{
 				$this->publishes([
 					__DIR__ . '/../../config/config.php' => config_path('ttwitter.php'),
 				]);
