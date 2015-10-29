@@ -6,7 +6,7 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
     protected function getTwitter()
     {
         return $this->getMockBuilder('Thujohn\Twitter\Twitter')
-                    ->setMethods(array('query'))
+                    ->setMethods(['query'])
                     ->disableOriginalConstructor()
                     ->getMock();
     }
@@ -21,6 +21,7 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
                     $this->anything(),
                     $queryParams
                 );
+
         return $twitter;
     }
 
@@ -33,24 +34,24 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUsersWithScreenName()
     {
-        $twitter = $this->getTwitterExpecting('users/show', array(
-            'screen_name' => 'my_screen_name'
-        ));
+        $twitter = $this->getTwitterExpecting('users/show', [
+            'screen_name' => 'my_screen_name',
+        ]);
 
-        $twitter->getUsers(array(
-            'screen_name' => 'my_screen_name'
-        ));
+        $twitter->getUsers([
+            'screen_name' => 'my_screen_name',
+        ]);
     }
 
     public function testGetUsersWithId()
     {
-        $twitter = $this->getTwitterExpecting('users/show', array(
-            'user_id' => 1234567890
-        ));
+        $twitter = $this->getTwitterExpecting('users/show', [
+            'user_id' => 1234567890,
+        ]);
 
-        $twitter->getUsers(array(
-            'user_id' => 1234567890
-        ));
+        $twitter->getUsers([
+            'user_id' => 1234567890,
+        ]);
     }
 
     /**
@@ -60,31 +61,31 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
     {
         $twitter = $this->getTwitter();
 
-        $twitter->getUsers(array(
-            'include_entities' => true
-        ));
+        $twitter->getUsers([
+            'include_entities' => true,
+        ]);
     }
 
     public function testGetUsersLookupWithIds()
     {
-        $twitter = $this->getTwitterExpecting('users/lookup', array(
-            'user_id' => '1,2,3,4'
-        ));
+        $twitter = $this->getTwitterExpecting('users/lookup', [
+            'user_id' => '1,2,3,4',
+        ]);
 
-        $twitter->getUsersLookup(array(
-            'user_id' => implode(',', array(1, 2, 3, 4))
-        ));
+        $twitter->getUsersLookup([
+            'user_id' => implode(',', [1, 2, 3, 4]),
+        ]);
     }
 
     public function testGetUsersLookupWithScreenNames()
     {
-        $twitter = $this->getTwitterExpecting('users/lookup', array(
-            'screen_name' => 'me,you,everybody'
-        ));
+        $twitter = $this->getTwitterExpecting('users/lookup', [
+            'screen_name' => 'me,you,everybody',
+        ]);
 
-        $twitter->getUsersLookup(array(
-            'screen_name' => implode(',', array('me', 'you', 'everybody'))
-        ));
+        $twitter->getUsersLookup([
+            'screen_name' => implode(',', ['me', 'you', 'everybody']),
+        ]);
     }
 
     /**
@@ -94,17 +95,17 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
     {
         $twitter = $this->getTwitter();
 
-        $twitter->getUsersLookup(array(
-            'include_entities' => true
-        ));
+        $twitter->getUsersLookup([
+            'include_entities' => true,
+        ]);
     }
 
     /**
-    * getList can accept list_id, or slug and owner_screen_name, or slug and owner_id
-    *
-    * Use a Data Provider to test this method with different params without repeating our code
-    * @dataProvider providerGetList
-    */
+     * getList can accept list_id, or slug and owner_screen_name, or slug and owner_id.
+     *
+     * Use a Data Provider to test this method with different params without repeating our code
+     * @dataProvider providerGetList
+     */
     public function testGetList($params)
     {
         $this->paramTest('lists/show', 'getList', $params);
@@ -112,23 +113,22 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function providerGetList()
     {
-        return array(
-            array(
-                array('list_id'=>1),
-            ),
-            array(
-                array('slug'=>'sugar_to_kiss', 'owner_screen_name'=>'elwood')
-            ),
-            array(
-                array('slug'=>'sugar_to_kiss', 'owner_id'=>1)
-            )
-        );
+        return [
+            [
+                ['list_id' => 1],
+            ],
+            [
+                ['slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood'],
+            ],
+            [
+                ['slug' => 'sugar_to_kiss', 'owner_id' => 1],
+            ],
+        ];
     }
 
     /**
-    *
-    * @dataProvider providerGetListBad
-    */
+     * @dataProvider providerGetListBad
+     */
     public function testGetListFails($params)
     {
         $this->setExpectedException('Exception');
@@ -138,18 +138,18 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function providerGetListBad()
     {
-        return array(
-            array(
-                array('slug'=>1),
-            )
-        );
+        return [
+            [
+                ['slug' => 1],
+            ],
+        ];
     }
 
     /**
-    * getListMembers can accept list_id, or slug and owner_screen_name, or slug and owner_id
-    *
-    * @dataProvider providerGetListMembers
-    */
+     * getListMembers can accept list_id, or slug and owner_screen_name, or slug and owner_id.
+     *
+     * @dataProvider providerGetListMembers
+     */
     public function testGetListMembers($params)
     {
         $this->paramTest('lists/members', 'getListMembers', $params);
@@ -157,22 +157,22 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function providerGetListMembers()
     {
-        return array(
-            array(
-                array('list_id'=>1),
-            ),
-            array(
-                array('slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood'),
-            ),
-            array(
-                array('slug' => 'sugar_to_kiss', 'owner_id' => 1),
-            )
-        );
+        return [
+            [
+                ['list_id' => 1],
+            ],
+            [
+                ['slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood'],
+            ],
+            [
+                ['slug' => 'sugar_to_kiss', 'owner_id' => 1],
+            ],
+        ];
     }
 
     /**
-    * @dataProvider providerGetListMembersBad
-    */
+     * @dataProvider providerGetListMembersBad
+     */
     public function testGetListMembersFails($params)
     {
         $this->setExpectedException('Exception');
@@ -182,20 +182,20 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function providerGetListMembersBad()
     {
-        return array(
-            array(
-                array('slug' => 'sweetheart_to_miss')
-            )
-        );
+        return [
+            [
+                ['slug' => 'sweetheart_to_miss'],
+            ],
+        ];
     }
 
     /**
-    * getListMember can accept list_id and user_id, or list_id and screen_name,
-    * or slug and owner_screen_name and user_id, or slug and owner_screen_name and screen_name,
-    * or slug and owner_id and user_id, or slug and owner_id and screen_name
-    *
-    * @dataProvider providerGetListMember
-    */
+     * getListMember can accept list_id and user_id, or list_id and screen_name,
+     * or slug and owner_screen_name and user_id, or slug and owner_screen_name and screen_name,
+     * or slug and owner_id and user_id, or slug and owner_id and screen_name.
+     *
+     * @dataProvider providerGetListMember
+     */
     public function testGetListMember($params)
     {
         $this->paramTest('lists/members/show', 'getListMember', $params);
@@ -203,31 +203,31 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function providerGetListMember()
     {
-        return array(
-            array(
-                array('list_id' => 1, 'user_id' => 2)
-            ),
-            array(
-                array('list_id' => 1, 'screen_name' => 'jake')
-            ),
-            array(
-                array('slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood', 'user_id' => 2)
-            ),
-            array(
-                array('slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood', 'screen_name' => 'jake')
-            ),
-            array(
-                array('slug' => 'sugar_to_kiss', 'owner_id' => 1, 'screen_name' => 'jake')
-            ),
-            array(
-                array('slug' => 'sugar_to_kiss', 'owner_id' => 1, 'user_id' => 2)
-            )
-        );
+        return [
+            [
+                ['list_id' => 1, 'user_id' => 2],
+            ],
+            [
+                ['list_id' => 1, 'screen_name' => 'jake'],
+            ],
+            [
+                ['slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood', 'user_id' => 2],
+            ],
+            [
+                ['slug' => 'sugar_to_kiss', 'owner_screen_name' => 'elwood', 'screen_name' => 'jake'],
+            ],
+            [
+                ['slug' => 'sugar_to_kiss', 'owner_id' => 1, 'screen_name' => 'jake'],
+            ],
+            [
+                ['slug' => 'sugar_to_kiss', 'owner_id' => 1, 'user_id' => 2],
+            ],
+        ];
     }
 
     /**
-    * @dataProvider providerGetListMemberBad
-    */
+     * @dataProvider providerGetListMemberBad
+     */
     public function testGetListMemberFails($params)
     {
         $this->setExpectedException('Exception');
@@ -237,11 +237,10 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
 
     public function providerGetListMemberBad()
     {
-        return array(
-            array(
-                array('slug' => 'sweetheart_to_miss')
-            )
-        );
+        return [
+            [
+                ['slug' => 'sweetheart_to_miss'],
+            ],
+        ];
     }
-
 }

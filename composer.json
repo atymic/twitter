@@ -14,6 +14,9 @@
         "illuminate/support": "4.*|5.*",
         "themattharris/tmhoauth": "0.8.4"
     },
+    "require-dev": {
+        "phpunit/phpunit": "~4.0"
+    },
     "autoload": {
         "psr-0": {
             "Thujohn\\Twitter": "src/"
