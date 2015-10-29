@@ -9,15 +9,17 @@ You need to create an application and create your access token in the [Applicati
 
 ## Installation
 
-Add `thujohn/twitter` to `composer.json`.
-```
-"thujohn/twitter": "~2.0"
+Add `thujohn/twitter` to the require array in `composer.json`.
+```json
+"require": {
+    "thujohn/twitter": "~2.0"
+},
 ```
 
 Run `composer update` to pull down the latest version of Twitter.
 
 Or run
-```
+```bash
 composer require thujohn/twitter
 ```
 
@@ -40,7 +42,7 @@ Now add the alias.
 
 The package now requires PHP >= 5.4.0
 
-Facade has changed (Thujohn\Twitter\Facades\Twitter)
+Facade has changed to `Thujohn\Twitter\Facades\Twitter`.
 
 Config file has been updated (debug, UPLOAD_URL, ACCESS_TOKEN_URL, REQUEST_TOKEN_URL)
 
@@ -49,7 +51,7 @@ set_new_config() has been renamed reconfig()
 
 ## Configuration (Laravel 4)
 
-Run `php artisan config:publish thujohn/twitter` and modify the config file with your own informations.
+Run `php artisan config:publish thujohn/twitter` and modify the config file with your own information.
 ```
 /app/config/packages/thujohn/twitter/config.php
 ```
@@ -60,7 +62,7 @@ Also, make sure to remove the env in the config file and replace it with your in
 
 Run `php artisan vendor:publish` and modify the config file with your own information.
 ```
-/config/ttwitter.php
+/config/twitter.php
 ```
 With Laravel 5, it's simple to edit the config.php file - in fact you don't even need to touch it! Just add the following to your .env file and you'll be on your way:
 ```
@@ -81,7 +83,7 @@ format : object|json|array (default:object)
 ## Functions
 
 Linkify : Transforms URLs, @usernames, hashtags into links.
-The type of $tweet can be object, array or text.
+The type of `$tweet` can be object, array or text.
 By sending an object or an array the method will expand links (t.co) too.
 ```php
 Twitter::linkify($tweet);
@@ -105,7 +107,7 @@ Twitter::linkTweet($tweet);
 
 ## Examples
 
-Returns a collection of the most recent Tweets posted by the user indicated by the screen_name or user_id parameters.
+Returns a collection of the most recent Tweets posted by the user indicated by the `screen_name` or `user_id` parameters.
 ```php
 Route::get('/', function()
 {
@@ -113,7 +115,7 @@ Route::get('/', function()
 });
 ```
 
-Returns a collection of the most recent Tweets and retweets posted by the authenticating user and the users they follow.
+Returns a collection of the most recent Tweets and retweets posted by the authenticated user and the users they follow.
 ```php
 Route::get('/', function()
 {
@@ -121,7 +123,7 @@ Route::get('/', function()
 });
 ```
 
-Returns the X most recent mentions (tweets containing a users's @screen_name) for the authenticating user.
+Returns the X most recent mentions (tweets containing a users' @screen_name) for the authenticated user.
 ```php
 Route::get('/', function()
 {
@@ -129,7 +131,7 @@ Route::get('/', function()
 });
 ```
 
-Updates the authenticating user's current status, also known as tweeting.
+Posts a Tweet on the currently authenticated users' timeline.
 ```php
 Route::get('/', function()
 {
@@ -137,24 +139,26 @@ Route::get('/', function()
 });
 ```
 
-Updates the authenticating user's current status with media.
+Posts a Tweet with media on the authenticated users' timeline.
 ```php
 Route::get('/', function()
 {
 	$uploaded_media = Twitter::uploadMedia(['media' => File::get(public_path('filename.jpg'))]);
+	
 	return Twitter::postTweet(['status' => 'Laravel is beautiful', 'media_ids' => $uploaded_media->media_id_string]);
 });
 ```
 
 
-Sign in with twitter
+Sign in with Twitter.
 ```php
-Route::get('twitter/login', ['as' => 'twitter.login', function(){
-	// your SIGN IN WITH TWITTER  button should point to this route
+Route::get('twitter/login', ['as' => 'twitter.login', function()
+{
+	// Your 'SIGN IN WITH TWITTER' button should point to this route.
 	$sign_in_twitter = true;
 	$force_login = false;
 
-	// Make sure we make this request w/o tokens, overwrite the default values in case of login.
+	// Make sure we make this request without tokens, overwrite the default values in case of login.
 	Twitter::reconfig(['token' => '', 'secret' => '']);
 	$token = Twitter::getRequestToken(route('twitter.callback'));
 
@@ -172,7 +176,8 @@ Route::get('twitter/login', ['as' => 'twitter.login', function(){
 	return Redirect::route('twitter.error');
 }]);
 
-Route::get('twitter/callback', ['as' => 'twitter.callback', function() {
+Route::get('twitter/callback', ['as' => 'twitter.callback', function()
+{
 	// You should set this route on your Twitter Application settings as the callback
 	// https://apps.twitter.com/app/YOUR-APP-ID/settings
 	if (Session::has('oauth_request_token'))
@@ -220,11 +225,13 @@ Route::get('twitter/callback', ['as' => 'twitter.callback', function() {
 	}
 }]);
 
-Route::get('twitter/error', ['as' => 'twitter.error', function(){
+Route::get('twitter/error', ['as' => 'twitter.error', function()
+{
 	// Something went wrong, add your own error handling here
 }]);
 
-Route::get('twitter/logout', ['as' => 'twitter.logout', function(){
+Route::get('twitter/logout', ['as' => 'twitter.logout', function()
+{
 	Session::forget('access_token');
 	return Redirect::to('/')->with('flash_notice', 'You\'ve successfully logged out!');
 }]);
@@ -235,7 +242,7 @@ Route::get('twitter/logout', ['as' => 'twitter.logout', function(){
 
 First activate debug in the config file.
 
-Then you can access the logs() method.
+Then you can access the `logs()` method.
 
 ```php
 try
