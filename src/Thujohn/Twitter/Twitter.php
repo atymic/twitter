@@ -267,6 +267,10 @@ class Twitter extends tmhOAuth {
 			$this->log('ERROR_MSG : '.$response['error']);
 		}
 
+		if ($response['code'] === 503) {
+			throw new Exception('Service Unavailable', $response['code']);
+		}
+
 		if (isset($response['code']) && $response['code'] != 200)
 		{
 			$_response = $this->jsonDecode($response['response'], true);
