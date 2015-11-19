@@ -271,15 +271,23 @@ class Twitter extends tmhOAuth {
 		{
 			$_response = $this->jsonDecode($response['response'], true);
 
-			if (array_key_exists('errors', $_response))
+			if (is_array($_response))
 			{
-				$error_code = $_response['errors'][0]['code'];
-				$error_msg = $_response['errors'][0]['message'];
+				if (array_key_exists('errors', $_response))
+				{
+					$error_code = $_response['errors'][0]['code'];
+					$error_msg = $_response['errors'][0]['message'];
+				}
+				else
+				{
+					$error_code = $response['code'];
+					$error_msg = $_response['error'];
+				}
 			}
 			else
 			{
 				$error_code = $response['code'];
-				$error_msg = $_response['error'];
+				$error_msg = "Unknown error";
 			}
 
 			$this->log('ERROR_CODE : '.$error_code);
