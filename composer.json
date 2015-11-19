@@ -1,7 +1,7 @@
 {
-    "name": "thujohn/twitter",
+    "name": "orottier/twitter",
     "description": "Twitter API for Laravel",
-	"keywords": ["twitter", "laravel", "laravel4", "laravel5"],
+    "keywords": ["twitter", "laravel", "laravel4", "laravel5"],
     "license": "MIT",
     "authors": [
         {
