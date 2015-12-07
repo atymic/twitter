@@ -3,6 +3,7 @@
 use Exception;
 use Carbon\Carbon as Carbon;
 use Illuminate\Session\Store as SessionStore;
+use Illuminate\Config\Repository as Config;
 use tmhOAuth;
 
 use Thujohn\Twitter\Traits\AccountTrait;
@@ -51,15 +52,15 @@ class Twitter extends tmhOAuth {
 	private $debug;
 	private $log = [];
 
-	public function __construct($config = [], SessionStore $session)
+	public function __construct(Config $config, SessionStore $session)
 	{
-		if (is_array($config['ttwitter::config']))
+		if ($config->has('ttwitter::config'))
 		{
-			$this->tconfig = $config['ttwitter::config'];
+			$this->tconfig = $config->get('ttwitter::config');
 		}
-		else if (is_array($config['ttwitter']))
+		else if ($config->get('ttwitter'))
 		{
-			$this->tconfig = $config['ttwitter'];
+			$this->tconfig = $config->get('ttwitter');
 		}
 		else
 		{
