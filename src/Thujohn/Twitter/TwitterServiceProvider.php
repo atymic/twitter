@@ -46,10 +46,11 @@ class TwitterServiceProvider extends ServiceProvider {
 			$this->package('thujohn/twitter', 'ttwitter', __DIR__.'/../..');
 		}
 
-		$this->app['ttwitter'] = $this->app->share(function($app)
+		$this->app['Thujohn\Twitter\Twitter'] = $this->app->share(function($app)
 		{
 			return new Twitter($app['config'], $app['session.store']);
 		});
+		$this->app->bind('ttwitter', 'Thujohn\Twitter\Twitter');
 	}
 
 	/**
