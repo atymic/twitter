@@ -58,7 +58,7 @@ Also, make sure to remove the env in the config file and replace it with your in
 
 ## Configuration (Laravel 5)
 
-Run `php artisan vendor:publish` and modify the config file with your own information.
+Run `php artisan vendor:publish --provider="Thujohn\Twitter\TwitterServiceProvider"` and modify the config file with your own information.
 ```
 /config/ttwitter.php
 ```
