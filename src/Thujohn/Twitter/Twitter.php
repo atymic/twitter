@@ -279,10 +279,7 @@ class Twitter extends tmhOAuth {
 		 */
 		if (isset($response['code']) && $response['code'] >= 200 && $response['code'] <= 299)
 		{
-			/**
-			 * Merge commit: https://github.com/smate/twitter/commit/63eea1aeb70de339ac6ef46e93c0a2d9a1ade2c1
-			 */
-			$_response = (array)$this->jsonDecode($response['response'], true);
+			$_response = $this->jsonDecode($response['response'], true);
 
 			/**
 			 * Merge commit: https://github.com/orottier/twitter/commit/75aebc24ae799dbb3798d3ce4af9190f5141bd43
