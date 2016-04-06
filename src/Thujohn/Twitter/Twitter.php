@@ -267,19 +267,43 @@ class Twitter extends tmhOAuth {
 			$this->log('ERROR_MSG : '.$response['error']);
 		}
 
-		if (isset($response['code']) && $response['code'] != 200)
-		{
-			$_response = $this->jsonDecode($response['response'], true);
+		/**
+		 * Merge commit: https://github.com/cbtech/twitter/commit/7bcf12b48b5af473593dc3c70a381d6baa36f862
+		 */
+		if ($response['code'] === 503) {
+			throw new Exception('Service Unavailable', $response['code']);
+		}
 
-			if (array_key_exists('errors', $_response))
+		/**
+		 * Merge commit: https://github.com/juanvillegas/twitter/commit/4357014773f5b6c870fea268e526ae3dc3312183
+		 */
+		if (isset($response['code']) && $response['code'] >= 200 && $response['code'] <= 299)
+		{
+			/**
+			 * Merge commit: https://github.com/smate/twitter/commit/63eea1aeb70de339ac6ef46e93c0a2d9a1ade2c1
+			 */
+			$_response = (array)$this->jsonDecode($response['response'], true);
+
+			/**
+			 * Merge commit: https://github.com/orottier/twitter/commit/75aebc24ae799dbb3798d3ce4af9190f5141bd43
+			 */
+			if (is_array($_response))
 			{
-				$error_code = $_response['errors'][0]['code'];
-				$error_msg = $_response['errors'][0]['message'];
+				if (array_key_exists('errors', $_response))
+				{
+					$error_code = $_response['errors'][0]['code'];
+					$error_msg = $_response['errors'][0]['message'];
+				}
+				else
+				{
+					$error_code = $response['code'];
+					$error_msg = $_response['error'];
+				}
 			}
 			else
 			{
 				$error_code = $response['code'];
-				$error_msg = $_response['error'];
+				$error_msg = "Unknown error";
 			}
 
 			$this->log('ERROR_CODE : '.$error_code);
