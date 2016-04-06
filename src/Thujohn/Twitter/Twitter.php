@@ -277,7 +277,7 @@ class Twitter extends tmhOAuth {
 		/**
 		 * Merge commit: https://github.com/juanvillegas/twitter/commit/4357014773f5b6c870fea268e526ae3dc3312183
 		 */
-		if (isset($response['code']) && $response['code'] >= 200 && $response['code'] <= 299)
+		if (isset($response['code']) && ( $response['code'] < 200 || $response['code'] > 299 ) )
 		{
 			$_response = $this->jsonDecode($response['response'], true);
 
@@ -294,7 +294,7 @@ class Twitter extends tmhOAuth {
 				else
 				{
 					$error_code = $response['code'];
-					$error_msg = $_response['error'];
+					$error_msg = $response['error'];
 				}
 			}
 			else
