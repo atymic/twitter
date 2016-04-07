@@ -268,7 +268,7 @@ class Twitter extends tmhOAuth {
 			$this->log('ERROR_MSG : '.$response['error']);
 		}
 
-		if (isset($response['code']) && ($response['code'] < 200 || $response['code'] > 206))
+		if (isset($response['code']) && ($response['code'] < 200 || $response['code'] > 299))
 		{
 			$_response = $this->jsonDecode($response['response'], true);
 
@@ -282,7 +282,7 @@ class Twitter extends tmhOAuth {
 				else
 				{
 					$error_code = $response['code'];
-					$error_msg  = $_response['error'];
+					$error_msg  = $response['error'];
 				}
 			}
 			else

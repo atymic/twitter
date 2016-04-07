@@ -29,7 +29,6 @@ Trait MediaTrait {
 	/**
 	 * Upload media (video) to Twitter, to use in a Tweet or Twitter-hosted Card.
 	 * Upload is chunked into pieces to support big files.
-	 * Inspired by https://github.com/juanvillegas/twitter/blob/patch-1/src/Thujohn/Twitter/Traits/MediaTrait.php
 	 * Parameters :
 	 * - media_file (path to local file)
 	 *
