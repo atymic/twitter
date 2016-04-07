@@ -31,22 +31,41 @@ class TwitterServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		$app = $this->app ?: app();
-		$laravel_version = substr($app::VERSION, 0, strpos($app::VERSION, '.'));
 
-		if ($laravel_version == 5)
+		$laravelVersion = substr($app->version(), 0, strpos($app->version(), '.'));
+
+		$isLumen = false;
+
+		if (strpos(strtolower($laravelVersion), 'lumen') !== false)
+		{
+			$isLumen = true;
+
+			$laravelVersion = str_replace('Lumen (', '', $laravelVersion);
+		}
+
+		if ($laravelVersion == 5)
 		{
 			$this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'ttwitter');
 
-			$this->publishes([
-				__DIR__.'/../../config/config.php' => config_path('ttwitter.php'),
-			]);
+			if ($isLumen)
+			{
+				$this->publishes([
+					__DIR__ . '/../config/config.php' => base_path('config/ttwitter.php'),
+				]);
+			}
+			else
+			{
+				$this->publishes([
+					__DIR__.'/../../config/config.php' => config_path('ttwitter.php'),
+				]);
+			}
 		}
-		else if ($laravel_version == 4)
+		else if ($laravelVersion == 4)
 		{
 			$this->package('thujohn/twitter', 'ttwitter', __DIR__.'/../..');
 		}
 
-		$this->app['ttwitter'] = $this->app->share(function($app)
+		$this->app[Twitter::class] = $this->app->share(function($app)
 		{
 			return new Twitter($app['config'], $app['session.store']);
 		});

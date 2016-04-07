@@ -3,6 +3,7 @@
 use Exception;
 use Carbon\Carbon as Carbon;
 use Illuminate\Session\Store as SessionStore;
+use Illuminate\Config\Repository as Config;
 use tmhOAuth;
 
 use Thujohn\Twitter\Traits\AccountTrait;
@@ -51,15 +52,15 @@ class Twitter extends tmhOAuth {
 	private $debug;
 	private $log = [];
 
-	public function __construct($config = [], SessionStore $session)
+	public function __construct(Config $config, SessionStore $session)
 	{
-		if (is_array($config['ttwitter::config']))
+		if ($config->has('ttwitter::config'))
 		{
-			$this->tconfig = $config['ttwitter::config'];
+			$this->tconfig = $config->get('ttwitter::config');
 		}
-		else if (is_array($config['ttwitter']))
+		else if ($config->get('ttwitter'))
 		{
-			$this->tconfig = $config['ttwitter'];
+			$this->tconfig = $config->get('ttwitter');
 		}
 		else
 		{
@@ -267,40 +268,27 @@ class Twitter extends tmhOAuth {
 			$this->log('ERROR_MSG : '.$response['error']);
 		}
 
-		/**
-		 * Merge commit: https://github.com/cbtech/twitter/commit/7bcf12b48b5af473593dc3c70a381d6baa36f862
-		 */
-		if ($response['code'] === 503) {
-			throw new Exception('Service Unavailable', $response['code']);
-		}
-
-		/**
-		 * Merge commit: https://github.com/juanvillegas/twitter/commit/4357014773f5b6c870fea268e526ae3dc3312183
-		 */
-		if (isset($response['code']) && ( $response['code'] < 200 || $response['code'] > 299 ) )
+		if (isset($response['code']) && ($response['code'] < 200 || $response['code'] > 206))
 		{
 			$_response = $this->jsonDecode($response['response'], true);
 
-			/**
-			 * Merge commit: https://github.com/orottier/twitter/commit/75aebc24ae799dbb3798d3ce4af9190f5141bd43
-			 */
 			if (is_array($_response))
 			{
 				if (array_key_exists('errors', $_response))
 				{
 					$error_code = $_response['errors'][0]['code'];
-					$error_msg = $_response['errors'][0]['message'];
+					$error_msg  = $_response['errors'][0]['message'];
 				}
 				else
 				{
 					$error_code = $response['code'];
-					$error_msg = $response['error'];
+					$error_msg  = $_response['error'];
 				}
 			}
 			else
 			{
 				$error_code = $response['code'];
-				$error_msg = "Unknown error";
+				$error_msg  = ($error_code == 503) ? 'Service Unavailable' : 'Unknown error';
 			}
 
 			$this->log('ERROR_CODE : '.$error_code);
