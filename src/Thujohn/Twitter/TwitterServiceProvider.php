@@ -32,7 +32,9 @@ class TwitterServiceProvider extends ServiceProvider {
 	{
 		$app = $this->app ?: app();
 
-		$laravelVersion = substr($app->version(), 0, strpos($app->version(), '.'));
+		$appVersion = method_exists($app, 'version') ? $app->version() : $app::VERSION;
+
+		$laravelVersion = substr($appVersion, 0, strpos($appVersion, '.'));
 
 		$isLumen = false;
 
