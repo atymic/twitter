@@ -65,24 +65,24 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
         ));
     }
 
-    public function testGetUsersLookupWithIds()
+    public function testPostUsersLookupWithIds()
     {
         $twitter = $this->getTwitterExpecting('users/lookup', array(
             'user_id' => '1,2,3,4'
         ));
 
-        $twitter->getUsersLookup(array(
+        $twitter->postUsersLookup(array(
             'user_id' => implode(',', array(1, 2, 3, 4))
         ));
     }
 
-    public function testGetUsersLookupWithScreenNames()
+    public function testPostUsersLookupWithScreenNames()
     {
         $twitter = $this->getTwitterExpecting('users/lookup', array(
             'screen_name' => 'me,you,everybody'
         ));
 
-        $twitter->getUsersLookup(array(
+        $twitter->postUsersLookup(array(
             'screen_name' => implode(',', array('me', 'you', 'everybody'))
         ));
     }
@@ -90,11 +90,11 @@ class TwitterTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException Exception
      */
-    public function testGetUsersLookupInvalid()
+    public function testPostUsersLookupInvalid()
     {
         $twitter = $this->getTwitter();
 
-        $twitter->getUsersLookup(array(
+        $twitter->postUsersLookup(array(
             'include_entities' => true
         ));
     }

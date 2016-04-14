@@ -12,14 +12,14 @@ Trait UserTrait {
 	 * - screen_name
 	 * - include_entities (0|1)
 	 */
-	public function getUsersLookup($parameters = [])
+	public function postUsersLookup($parameters = [])
 	{
 		if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters))
 		{
 			throw new Exception("Parameter required missing : user_id or screen_name");
 		}
 
-		return $this->get('users/lookup', $parameters);
+		return $this->post('users/lookup', $parameters);
 	}
 
 	/**
