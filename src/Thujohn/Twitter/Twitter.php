@@ -224,13 +224,17 @@ class Twitter extends tmhOAuth {
 		}
 	}
 
-	public function query($name, $requestMethod = 'GET', $parameters = [], $multipart = false)
+	public function query($name, $requestMethod = 'GET', $parameters = [], $multipart = false, $host = '')
 	{
-		$this->config['host'] = $this->tconfig['API_URL'];
+		if ($host) {
+			$this->config['host'] = $host;
+		} else {
+			$this->config['host'] = $this->tconfig['API_URL'];
 
-		if ($multipart)
-		{
-			$this->config['host'] = $this->tconfig['UPLOAD_URL'];
+			if ($multipart)
+			{
+				$this->config['host'] = $this->tconfig['UPLOAD_URL'];
+			}
 		}
 
 		$url = parent::url($this->tconfig['API_VERSION'].'/'.$name);
@@ -311,14 +315,14 @@ class Twitter extends tmhOAuth {
 		return $response;
 	}
 
-	public function get($name, $parameters = [], $multipart = false)
+	public function get($name, $parameters = [], $multipart = false, $host = '')
 	{
-		return $this->query($name, 'GET', $parameters, $multipart);
+		return $this->query($name, 'GET', $parameters, $multipart, $host);
 	}
 
-	public function post($name, $parameters = [], $multipart = false)
+	public function post($name, $parameters = [], $multipart = false, $host = '')
 	{
-		return $this->query($name, 'POST', $parameters, $multipart);
+		return $this->query($name, 'POST', $parameters, $multipart, $host);
 	}
 
 	public function linkify($tweet)

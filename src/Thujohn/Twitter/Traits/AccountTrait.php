@@ -118,7 +118,7 @@ Trait AccountTrait {
 			throw new Exception('Parameter required missing : image');
 		}
 
-		return $this->post('account/update_profile_image', $parameters, true);
+		return $this->post('account/update_profile_image', $parameters, true, $this->tconfig['API_URL']);
 	}
 
 	/**
