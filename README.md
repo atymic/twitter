@@ -146,6 +146,16 @@ Route::get('/', function()
 });
 ```
 
+Get User Credentials with email.
+```
+$credentials = Twitter::getCredentials([
+    'email' => 'true',
+]);
+```
+> In the above, you need to pass true as a string, not as a boolean. The boolean will get converted to `1` which Twitter ignores.
+
+> This also is assuming you have your permissions setup correctly with Twitter. You have to choose 'Get user email' when you set up your Twitter app, passing the value alone will not be enough.
+
 
 Sign in with twitter
 ```php
