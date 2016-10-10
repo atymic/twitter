@@ -9,15 +9,9 @@ You need to create an application and create your access token in the [Applicati
 
 ## Installation
 
-Add `thujohn/twitter` to `composer.json`.
-```
-"thujohn/twitter": "~2.0"
-```
+Run
 
-Run `composer update` to pull down the latest version of Twitter.
-
-Or run
-```
+```bash
 composer require thujohn/twitter
 ```
 
