@@ -31,6 +31,24 @@ Trait SearchTrait {
 	}
 
 	/**
+	 * Returns a collection of relevant user matching a specified query.
+	 *
+	 * Parameters :
+	 * - q
+	 */
+
+
+	public function getSearchByUser($parameters = [])
+	{
+		if (!array_key_exists('q', $parameters))
+		{
+			throw new Exception('Parameter required missing : q');
+		}
+
+		return $this->get('users/search', $parameters);
+	}
+
+	/**
 	 * Returns the authenticated user’s saved search queries.
 	 */
 	public function getSavedSearches()
