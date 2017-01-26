@@ -61,16 +61,21 @@ class TwitterServiceProvider extends ServiceProvider {
 					__DIR__.'/../../config/config.php' => config_path('ttwitter.php'),
 				]);
 			}
+			
+			$this->app->singleton(Twitter::class, function($app)
+			{
+			    return new Twitter($app['config'], $app['session.store']);
+			});
 		}
 		else if ($laravelVersion == 4)
 		{
 			$this->package('thujohn/twitter', 'ttwitter', __DIR__.'/../..');
+			
+			$this->app[Twitter::class] = $this->app->share(function($app)
+			{
+			    return new Twitter($app['config'], $app['session.store']);
+			});
 		}
-
-		$this->app[Twitter::class] = $this->app->share(function($app)
-		{
-			return new Twitter($app['config'], $app['session.store']);
-		});
 	}
 
 	/**
