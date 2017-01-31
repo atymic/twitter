@@ -16,7 +16,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Alexvtua\\Twitter": "src/"
+            "alexvtua\\Twitter": "src/"
         }
     },
     "minimum-stability": "stable"
