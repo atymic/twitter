@@ -9,9 +9,9 @@ You need to create an application and create your access token in the [Applicati
 
 ## Installation
 
-Add `thujohn/twitter` to `composer.json`.
+Add `alexvtua/twitter` to `composer.json`.
 ```
-"thujohn/twitter": "~2.0"
+"alexvtua/twitter": "~2.0"
 ```
 
 Run `composer update` to pull down the latest version of Twitter.
@@ -31,7 +31,7 @@ Now open up `/config/app.php` and add the service provider to your `providers` a
 Now add the alias.
 ```php
 'aliases' => [
-	'Twitter' => 'Thujohn\Twitter\Facades\Twitter',
+	'Twitter' => 'Alexvtua\Twitter\Facades\Twitter',
 ]
 ```
 
@@ -40,7 +40,7 @@ Now add the alias.
 
 The package now requires PHP >= 5.4.0
 
-Facade has changed (Thujohn\Twitter\Facades\Twitter)
+Facade has changed (Alexvtua\Twitter\Facades\Twitter)
 
 Config file has been updated (debug, UPLOAD_URL, ACCESS_TOKEN_URL, REQUEST_TOKEN_URL)
 
@@ -49,9 +49,9 @@ set_new_config() has been renamed reconfig()
 
 ## Configuration (Laravel 4)
 
-Run `php artisan config:publish thujohn/twitter` and modify the config file with your own informations.
+Run `php artisan config:publish alexvtua/twitter` and modify the config file with your own informations.
 ```
-/app/config/packages/thujohn/twitter/config.php
+/app/config/packages/alexvtua/twitter/config.php
 ```
 Also, make sure to remove the env in the config file and replace it with your information.
 
