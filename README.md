@@ -149,7 +149,7 @@ Route::get('/', function()
 Get User Credentials with email.
 ```
 $credentials = Twitter::getCredentials([
-    'email' => 'true',
+    'include_email' => 'true',
 ]);
 ```
 > In the above, you need to pass true as a string, not as a boolean. The boolean will get converted to `1` which Twitter ignores.
