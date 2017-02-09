@@ -24,14 +24,14 @@ composer require thujohn/twitter
 Now open up `/config/app.php` and add the service provider to your `providers` array.
 ```php
 'providers' => [
-	'Thujohn\Twitter\TwitterServiceProvider',
+	'Thujohn\Twitter\TwitterServiceProvider::class',
 ]
 ```
 
 Now add the alias.
 ```php
 'aliases' => [
-	'Twitter' => 'Thujohn\Twitter\Facades\Twitter',
+	'Twitter' => 'Thujohn\Twitter\Facades\Twitter:class',
 ]
 ```
 
