@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait GeoTrait {
 
@@ -27,7 +27,7 @@ Trait GeoTrait {
 	{
 		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters))
 		{
-			throw new Exception('Parameter required missing : lat or long');
+			throw new BadMethodCallException('Parameter required missing : lat or long');
 		}
 
 		return $this->get('geo/reverse_geocode', $parameters);
@@ -68,7 +68,7 @@ Trait GeoTrait {
 	{
 		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters) || !array_key_exists('name', $parameters))
 		{
-			throw new Exception('Parameter required missing : lat, long or name');
+			throw new BadMethodCallException('Parameter required missing : lat, long or name');
 		}
 
 		return $this->get('geo/similar_places', $parameters);

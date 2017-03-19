@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter;
 
-use Exception;
+use RunTimeException;
 use Carbon\Carbon as Carbon;
 use Illuminate\Session\Store as SessionStore;
 use Illuminate\Config\Repository as Config;
@@ -64,7 +64,7 @@ class Twitter extends tmhOAuth {
 		}
 		else
 		{
-			throw new Exception('No config found');
+			throw new RunTimeException('No config found');
 		}
 
 		$this->debug = (isset($this->tconfig['debug']) && $this->tconfig['debug']) ? true : false;
@@ -158,7 +158,7 @@ class Twitter extends tmhOAuth {
 		}
 		else
 		{
-			throw new Exception($response['response'], $response['code']);
+			throw new RunTimeException($response['response'], $response['code']);
 		}
 	}
 
@@ -195,7 +195,7 @@ class Twitter extends tmhOAuth {
 			return $token;
 		}
 
-		throw new Exception($response['response'], $response['code']);
+		throw new RunTimeException($response['response'], $response['code']);
 	}
 
 	/**
@@ -294,7 +294,7 @@ class Twitter extends tmhOAuth {
 			$this->log('ERROR_CODE : '.$error_code);
 			$this->log('ERROR_MSG : '.$error_msg);
 
-			throw new Exception('['.$error_code.'] '.$error_msg, $response['code']);
+			throw new RunTimeException('['.$error_code.'] '.$error_msg, $response['code']);
 		}
 
 		switch ($format)

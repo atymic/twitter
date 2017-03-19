@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait StatusTrait {
 
@@ -128,7 +128,7 @@ Trait StatusTrait {
 	{
 		if (!array_key_exists('status', $parameters))
 		{
-			throw new Exception('Parameter required missing : status');
+			throw new BadMethodCallException('Parameter required missing : status');
 		}
 
 		return $this->post('statuses/update', $parameters);
@@ -163,7 +163,7 @@ Trait StatusTrait {
 	{
 		if (!array_key_exists('status', $parameters) || !array_key_exists('media[]', $parameters))
 		{
-			throw new Exception('Parameter required missing : status or media[]');
+			throw new BadMethodCallException('Parameter required missing : status or media[]');
 		}
 
 		return $this->post('statuses/update_with_media', $parameters, true);
@@ -186,7 +186,7 @@ Trait StatusTrait {
 	{
 		if (!array_key_exists('id', $parameters) && !array_key_exists('url', $parameters))
 		{
-			throw new Exception('Parameter required missing : id or url');
+			throw new BadMethodCallException('Parameter required missing : id or url');
 		}
 
 		return $this->get('statuses/oembed', $parameters);
@@ -204,7 +204,7 @@ Trait StatusTrait {
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->get('statuses/retweeters/ids', $parameters);
@@ -223,7 +223,7 @@ Trait StatusTrait {
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->get('statuses/lookup', $parameters);

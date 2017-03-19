@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait DirectMessageTrait {
 
@@ -29,7 +29,7 @@ Trait DirectMessageTrait {
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->get('direct_messages/show', $parameters);
@@ -61,7 +61,7 @@ Trait DirectMessageTrait {
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->post('direct_messages/destroy', $parameters);
@@ -79,7 +79,7 @@ Trait DirectMessageTrait {
 	{
 		if ((!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) || !array_key_exists('text', $parameters))
 		{
-			throw new Exception('Parameter required missing : user_id, screen_name or text');
+			throw new BadMethodCallException('Parameter required missing : user_id, screen_name or text');
 		}
 
 		return $this->post('direct_messages/new', $parameters);
