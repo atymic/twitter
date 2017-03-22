@@ -31,7 +31,7 @@ Trait ListTrait {
 	 * - include_entities (0|1)
 	 * - include_rts (0|1)
 	 */
-	public function getListsStatuses($parameters = [])
+	public function getListStatuses($parameters = [])
 	{
 		if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters))
 		{
