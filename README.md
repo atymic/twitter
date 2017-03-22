@@ -107,7 +107,7 @@ Twitter::linkTweet($tweet);
 
 Returns a collection of the most recent Tweets posted by the user indicated by the screen_name or user_id parameters.
 ```php
-Route::get('/', function()
+Route::get('/userTimeline', function()
 {
 	return Twitter::getUserTimeline(['screen_name' => 'thujohn', 'count' => 20, 'format' => 'json']);
 });
@@ -115,7 +115,7 @@ Route::get('/', function()
 
 Returns a collection of the most recent Tweets and retweets posted by the authenticating user and the users they follow.
 ```php
-Route::get('/', function()
+Route::get('/homeTimeline', function()
 {
 	return Twitter::getHomeTimeline(['count' => 20, 'format' => 'json']);
 });
@@ -123,7 +123,7 @@ Route::get('/', function()
 
 Returns the X most recent mentions (tweets containing a users's @screen_name) for the authenticating user.
 ```php
-Route::get('/', function()
+Route::get('/mentionsTimeline', function()
 {
 	return Twitter::getMentionsTimeline(['count' => 20, 'format' => 'json']);
 });
@@ -131,7 +131,7 @@ Route::get('/', function()
 
 Updates the authenticating user's current status, also known as tweeting.
 ```php
-Route::get('/', function()
+Route::get('/tweet', function()
 {
 	return Twitter::postTweet(['status' => 'Laravel is beautiful', 'format' => 'json']);
 });
@@ -139,7 +139,7 @@ Route::get('/', function()
 
 Updates the authenticating user's current status with media.
 ```php
-Route::get('/', function()
+Route::get('/tweetMedia', function()
 {
 	$uploaded_media = Twitter::uploadMedia(['media' => File::get(public_path('filename.jpg'))]);
 	return Twitter::postTweet(['status' => 'Laravel is beautiful', 'media_ids' => $uploaded_media->media_id_string]);
