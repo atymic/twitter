@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait UserTrait {
 
@@ -16,7 +16,7 @@ Trait UserTrait {
 	{
 		if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters))
 		{
-			throw new Exception("Parameter required missing : user_id or screen_name");
+			throw new BadMethodCallException("Parameter required missing : user_id or screen_name");
 		}
 
 		return $this->get('users/lookup', $parameters);
@@ -34,7 +34,7 @@ Trait UserTrait {
 	{
 		if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters))
 		{
-			throw new Exception('Parameter required missing : user_id or screen_name');
+			throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
 		}
 
 		return $this->get('users/show', $parameters);
@@ -53,7 +53,7 @@ Trait UserTrait {
 	{
 		if (!array_key_exists('q', $parameters))
 		{
-			throw new Exception('Parameter required missing : q');
+			throw new BadMethodCallException('Parameter required missing : q');
 		}
 
 		return $this->get('users/search', $parameters);
@@ -82,7 +82,7 @@ Trait UserTrait {
 	{
 		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
 		{
-			throw new Exception("Parameter required missing : screen_name or user_id");
+			throw new BadMethodCallException("Parameter required missing : screen_name or user_id");
 		}
 
 		return $this->post('mutes/users/create', $parameters);
@@ -99,7 +99,7 @@ Trait UserTrait {
 	{
 		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
 		{
-			throw new Exception("Parameter required missing : screen_name or user_id");
+			throw new BadMethodCallException("Parameter required missing : screen_name or user_id");
 		}
 
 		return $this->post('mutes/users/destroy', $parameters);

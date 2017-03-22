@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait FavoriteTrait {
 
@@ -31,7 +31,7 @@ Trait FavoriteTrait {
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->post('favorites/destroy', $parameters);
@@ -48,7 +48,7 @@ Trait FavoriteTrait {
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->post('favorites/create', $parameters);
