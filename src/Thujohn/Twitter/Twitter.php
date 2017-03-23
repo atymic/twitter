@@ -313,7 +313,7 @@ class Twitter extends tmhOAuth {
 
 	public function get($name, $parameters = [], $multipart = false)
 	{
-		return $this->query($name, 'GET', $parameters, $multipart);
+		return collect($this->query($name, 'GET', $parameters, $multipart));
 	}
 
 	public function post($name, $parameters = [], $multipart = false)
