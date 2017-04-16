@@ -224,7 +224,7 @@ class Twitter extends tmhOAuth {
 		}
 	}
 
-	public function query($name, $requestMethod = 'GET', $parameters = [], $multipart = false)
+	public function query($name, $requestMethod = 'GET', $parameters = [], $multipart = false, $extension = 'json')
 	{
 		$this->config['host'] = $this->tconfig['API_URL'];
 
@@ -233,7 +233,7 @@ class Twitter extends tmhOAuth {
 			$this->config['host'] = $this->tconfig['UPLOAD_URL'];
 		}
 
-		$url = parent::url($this->tconfig['API_VERSION'].'/'.$name);
+		$url = parent::url($this->tconfig['API_VERSION'].'/'.$name, $extension);
 
 		$this->log('METHOD : '.$requestMethod);
 		$this->log('QUERY : '.$name);
@@ -311,9 +311,9 @@ class Twitter extends tmhOAuth {
 		return $response;
 	}
 
-	public function get($name, $parameters = [], $multipart = false)
+	public function get($name, $parameters = [], $multipart = false, $extension = 'json')
 	{
-		return $this->query($name, 'GET', $parameters, $multipart);
+		return $this->query($name, 'GET', $parameters, $multipart, $extension);
 	}
 
 	public function post($name, $parameters = [], $multipart = false)
