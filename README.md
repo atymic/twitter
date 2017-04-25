@@ -24,14 +24,14 @@ composer require thujohn/twitter
 Now open up `/config/app.php` and add the service provider to your `providers` array.
 ```php
 'providers' => [
-	'Thujohn\Twitter\TwitterServiceProvider',
+	Thujohn\Twitter\TwitterServiceProvider::class,
 ]
 ```
 
 Now add the alias.
 ```php
 'aliases' => [
-	'Twitter' => 'Thujohn\Twitter\Facades\Twitter',
+	'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
 ]
 ```
 
@@ -64,10 +64,10 @@ Run `php artisan vendor:publish --provider="Thujohn\Twitter\TwitterServiceProvid
 ```
 With Laravel 5, it's simple to edit the config.php file - in fact you don't even need to touch it! Just add the following to your .env file and you'll be on your way:
 ```
-TWITTER_CONSUMER_KEY = 
-TWITTER_CONSUMER_SECRET = 
-TWITTER_ACCESS_TOKEN = 
-TWITTER_ACCESS_TOKEN_SECRET =
+TWITTER_CONSUMER_KEY=
+TWITTER_CONSUMER_SECRET=
+TWITTER_ACCESS_TOKEN=
+TWITTER_ACCESS_TOKEN_SECRET=
 ```
 
 
@@ -254,6 +254,7 @@ try
 }
 catch (Exception $e)
 {
+	// dd(Twitter::error());
 	dd(Twitter::logs());
 }
 
