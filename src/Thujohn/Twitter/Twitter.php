@@ -50,7 +50,10 @@ class Twitter extends tmhOAuth {
 	 * Only for debugging
 	 */
 	private $debug;
+
 	private $log = [];
+
+	private $error;
 
 	public function __construct(Config $config, SessionStore $session)
 	{
@@ -260,12 +263,14 @@ class Twitter extends tmhOAuth {
 
 		$this->log('FORMAT : '.$format);
 
-		$this->error = $response['error'];
+		$error = $response['error'];
 
-		if ($this->error)
+		if ($error)
 		{
 			$this->log('ERROR_CODE : '.$response['errno']);
 			$this->log('ERROR_MSG : '.$response['error']);
+
+			$this->setError($response['errno'], $response['error']);
 		}
 
 		if (isset($response['code']) && ($response['code'] < 200 || $response['code'] > 206))
@@ -293,6 +298,8 @@ class Twitter extends tmhOAuth {
 
 			$this->log('ERROR_CODE : '.$error_code);
 			$this->log('ERROR_MSG : '.$error_msg);
+
+			$this->setError($error_code, $error_msg);
 
 			throw new RunTimeException('['.$error_code.'] '.$error_msg, $response['code']);
 		}
@@ -442,6 +449,18 @@ class Twitter extends tmhOAuth {
 	public function linkReply($tweet)
 	{
 		return 'https://twitter.com/intent/tweet?in_reply_to=' . $tweet->id_str;
+	}
+	
+	public function error()
+	{
+		return $this->error;
+	}
+	
+	public function setError($code, $message)
+	{
+		$this->error = compact('code', 'message');
+
+		return $this;
 	}
 
 	private function jsonDecode($json, $assoc = false)
