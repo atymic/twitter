@@ -344,7 +344,7 @@ Route::get('twitter/callback', ['as' => 'twitter.callback', function() {
 
 		if (!isset($token['oauth_token_secret']))
 		{
-			return Redirect::route('twitter.login')->with('flash_error', 'We could not log you in on Twitter.');
+			return Redirect::route('twitter.error')->with('flash_error', 'We could not log you in on Twitter.');
 		}
 
 		$credentials = Twitter::getCredentials();
