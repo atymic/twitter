@@ -474,5 +474,4 @@ class Twitter extends tmhOAuth {
 			return json_decode($json, $assoc);
 		}
 	}
-
 }
