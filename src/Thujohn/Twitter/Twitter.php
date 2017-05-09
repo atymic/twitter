@@ -348,7 +348,7 @@ class Twitter extends tmhOAuth {
 		$patterns             = [];
 		$patterns['url']      = '(?xi)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))';
 		$patterns['mailto']   = '([_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3}))';
-		$patterns['user']     = ' +@([a-z0-9_]*)?';
+		$patterns['user']     = '(^| +)(\.)?@([a-z0-9_]*)?';
 		$patterns['hashtag']  = '(?:(?<=\s)|^)#(\w*[\p{L}-\d\p{Cyrillic}\d]+\w*)';
 		$patterns['long_url'] = '>(([[:alnum:]]+:\/\/)|www\.)?([^[:space:]]{12,22})([^[:space:]]*)([^[:space:]]{12,22})([[:alnum:]#?\/&=])<';
 
@@ -397,7 +397,7 @@ class Twitter extends tmhOAuth {
 		$text = preg_replace('/'.$patterns['mailto'].'/i', "<a href=\"mailto:\\1\">\\1</a>", $text);
 
 		// User
-		$text = preg_replace('/'.$patterns['user'].'/i', " <a href=\"https://twitter.com/\\1\" target=\"_blank\">@\\1</a>", $text);
+		$text = preg_replace('/'.$patterns['user'].'/i', "\\1\\2<a href=\"https://twitter.com/\\3\" target=\"_blank\">@\\3</a>", $text);
 
 		// Hashtag
 		$text = preg_replace('/'.$patterns['hashtag'].'/ui', "<a href=\"https://twitter.com/search?q=%23\\1\" target=\"_blank\">#\\1</a>", $text);
