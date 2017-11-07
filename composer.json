@@ -19,5 +19,12 @@
             "Thujohn\\Twitter": "src/"
         }
     },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Thujohn\\Twitter\\TwitterServiceProvider.php"
+      ]
+    }
+  },
     "minimum-stability": "stable"
 }
