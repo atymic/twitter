@@ -3,7 +3,7 @@
 // You can find the keys here : https://apps.twitter.com/
 
 return [
-	'debug'               => false,
+	'debug'               => function_exists('env') ? env('APP_DEBUG', false) : false,
 
 	'API_URL'             => 'api.twitter.com',
 	'UPLOAD_URL'          => 'upload.twitter.com',

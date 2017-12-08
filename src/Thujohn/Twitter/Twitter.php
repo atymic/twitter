@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter;
 
-use Exception;
+use RunTimeException;
 use Carbon\Carbon as Carbon;
 use Illuminate\Session\Store as SessionStore;
 use Illuminate\Config\Repository as Config;
@@ -50,7 +50,10 @@ class Twitter extends tmhOAuth {
 	 * Only for debugging
 	 */
 	private $debug;
+
 	private $log = [];
+
+	private $error;
 
 	public function __construct(Config $config, SessionStore $session)
 	{
@@ -64,7 +67,7 @@ class Twitter extends tmhOAuth {
 		}
 		else
 		{
-			throw new Exception('No config found');
+			throw new RunTimeException('No config found');
 		}
 
 		$this->debug = (isset($this->tconfig['debug']) && $this->tconfig['debug']) ? true : false;
@@ -158,7 +161,7 @@ class Twitter extends tmhOAuth {
 		}
 		else
 		{
-			throw new Exception($response['response'], $response['code']);
+			throw new RunTimeException($response['response'], $response['code']);
 		}
 	}
 
@@ -195,7 +198,7 @@ class Twitter extends tmhOAuth {
 			return $token;
 		}
 
-		throw new Exception($response['response'], $response['code']);
+		throw new RunTimeException($response['response'], $response['code']);
 	}
 
 	/**
@@ -224,7 +227,7 @@ class Twitter extends tmhOAuth {
 		}
 	}
 
-	public function query($name, $requestMethod = 'GET', $parameters = [], $multipart = false)
+	public function query($name, $requestMethod = 'GET', $parameters = [], $multipart = false, $extension = 'json')
 	{
 		$this->config['host'] = $this->tconfig['API_URL'];
 
@@ -233,7 +236,7 @@ class Twitter extends tmhOAuth {
 			$this->config['host'] = $this->tconfig['UPLOAD_URL'];
 		}
 
-		$url = parent::url($this->tconfig['API_VERSION'].'/'.$name);
+		$url = parent::url($this->tconfig['API_VERSION'].'/'.$name, $extension);
 
 		$this->log('METHOD : '.$requestMethod);
 		$this->log('QUERY : '.$name);
@@ -260,12 +263,14 @@ class Twitter extends tmhOAuth {
 
 		$this->log('FORMAT : '.$format);
 
-		$this->error = $response['error'];
+		$error = $response['error'];
 
-		if ($this->error)
+		if ($error)
 		{
 			$this->log('ERROR_CODE : '.$response['errno']);
 			$this->log('ERROR_MSG : '.$response['error']);
+
+			$this->setError($response['errno'], $response['error']);
 		}
 
 		if (isset($response['code']) && ($response['code'] < 200 || $response['code'] > 299))
@@ -294,7 +299,9 @@ class Twitter extends tmhOAuth {
 			$this->log('ERROR_CODE : '.$error_code);
 			$this->log('ERROR_MSG : '.$error_msg);
 
-			throw new Exception('['.$error_code.'] '.$error_msg, $response['code']);
+			$this->setError($error_code, $error_msg);
+
+			throw new RunTimeException('['.$error_code.'] '.$error_msg, $response['code']);
 		}
 
 		switch ($format)
@@ -311,9 +318,9 @@ class Twitter extends tmhOAuth {
 		return $response;
 	}
 
-	public function get($name, $parameters = [], $multipart = false)
+	public function get($name, $parameters = [], $multipart = false, $extension = 'json')
 	{
-		return $this->query($name, 'GET', $parameters, $multipart);
+		return $this->query($name, 'GET', $parameters, $multipart, $extension);
 	}
 
 	public function post($name, $parameters = [], $multipart = false)
@@ -443,6 +450,18 @@ class Twitter extends tmhOAuth {
 	{
 		return 'https://twitter.com/intent/tweet?in_reply_to=' . $tweet->id_str;
 	}
+	
+	public function error()
+	{
+		return $this->error;
+	}
+	
+	public function setError($code, $message)
+	{
+		$this->error = compact('code', 'message');
+
+		return $this;
+	}
 
 	private function jsonDecode($json, $assoc = false)
 	{
@@ -455,5 +474,4 @@ class Twitter extends tmhOAuth {
 			return json_decode($json, $assoc);
 		}
 	}
-
 }

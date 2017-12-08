@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait StatusTrait {
 
@@ -15,6 +15,7 @@ Trait StatusTrait {
 	 * - trim_user (0|1)
 	 * - contributor_details (0|1)
 	 * - include_entities (0|1)
+	 * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
 	 */
 	public function getMentionsTimeline($parameters = [])
 	{
@@ -22,7 +23,7 @@ Trait StatusTrait {
 	}
 
 	/**
-	 * Returns a collection of the most recent Tweets posted by the user indicated by the screen_name or user_id parameters.
+	 * Returns a collection of the most recent Tweets (truncated by default) posted by the user indicated by the screen_name or user_id parameters.
 	 *
 	 * Parameters :
 	 * - user_id
@@ -35,6 +36,7 @@ Trait StatusTrait {
 	 * - exclude_replies (0|1)
 	 * - contributor_details (0|1)
 	 * - include_entities (0|1)
+	 * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
 	 */
 	public function getUserTimeline($parameters = [])
 	{
@@ -42,7 +44,7 @@ Trait StatusTrait {
 	}
 
 	/**
-	 * Returns a collection of the most recent Tweets and retweets posted by the authenticating user and the users they follow. The home timeline is central to how most users interact with the Twitter service.
+	 * Returns a collection of the most recent Tweets (truncated by default) and retweets posted by the authenticating user and the users they follow. The home timeline is central to how most users interact with the Twitter service.
 	 *
 	 * Parameters :
 	 * - count (1-200)
@@ -52,6 +54,7 @@ Trait StatusTrait {
 	 * - exclude_replies (0|1)
 	 * - contributor_details (0|1)
 	 * - include_entities (0|1)
+	 * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
 	 */
 	public function getHomeTimeline($parameters = [])
 	{
@@ -68,6 +71,7 @@ Trait StatusTrait {
 	 * - trim_user (0|1)
 	 * - include_entities (0|1)
 	 * - include_user_entities (0|1)
+	 * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
 	 */
 	public function getRtsTimeline($parameters = [])
 	{
@@ -94,6 +98,7 @@ Trait StatusTrait {
 	 * - trim_user (0|1)
 	 * - include_my_retweet (0|1)
 	 * - include_entities (0|1)
+	 * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
 	 */
 	public function getTweet($id, $parameters = [])
 	{
@@ -128,7 +133,7 @@ Trait StatusTrait {
 	{
 		if (!array_key_exists('status', $parameters))
 		{
-			throw new Exception('Parameter required missing : status');
+			throw new BadMethodCallException('Parameter required missing : status');
 		}
 
 		return $this->post('statuses/update', $parameters);
@@ -163,17 +168,16 @@ Trait StatusTrait {
 	{
 		if (!array_key_exists('status', $parameters) || !array_key_exists('media[]', $parameters))
 		{
-			throw new Exception('Parameter required missing : status or media[]');
+			throw new BadMethodCallException('Parameter required missing : status or media[]');
 		}
 
 		return $this->post('statuses/update_with_media', $parameters, true);
 	}
 
 	/**
-	 * Returns a single Tweet, specified by either a Tweet web URL or the Tweet ID, in an oEmbed-compatible format. The returned HTML snippet will be automatically recognized as an Embedded Tweet when Twitter’s widget JavaScript is included on the page.
+	 * Returns a single Tweet, specified by a Tweet web URL, in an oEmbed-compatible format. The returned HTML snippet will be automatically recognized as an Embedded Tweet when Twitter’s widget JavaScript is included on the page.
 	 *
 	 * Parameters :
-	 * - id
 	 * - url
 	 * - maxwidth (250-550)
 	 * - hide_thread (0|1)
@@ -181,15 +185,21 @@ Trait StatusTrait {
 	 * - align (left|right|center|none)
 	 * - related (twitterapi|twittermedia|twitter)
 	 * - lang
+	 * - theme (dark|light)
+	 * - link_color (hex value)
+	 * - widget_type (video)
 	 */
 	public function getOembed($parameters = [])
 	{
-		if (!array_key_exists('id', $parameters) && !array_key_exists('url', $parameters))
+		if (!array_key_exists('url', $parameters))
 		{
-			throw new Exception('Parameter required missing : id or url');
+			throw new BadMethodCallException('Parameter required missing : url');
 		}
 
-		return $this->get('statuses/oembed', $parameters);
+		$this->tconfig['API_URL'] = 'publish.twitter.com';
+		$this->tconfig['API_VERSION'] = '';
+
+		return $this->get('oembed', $parameters, false, '');
 	}
 
 	/**
@@ -204,7 +214,7 @@ Trait StatusTrait {
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->get('statuses/retweeters/ids', $parameters);
@@ -218,12 +228,13 @@ Trait StatusTrait {
 	 * - include_entities (0|1)
 	 * - trim_user (0|1)
 	 * - map (0|1)
+	 * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
 	 */
 	public function getStatusesLookup($parameters = [])
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->get('statuses/lookup', $parameters);

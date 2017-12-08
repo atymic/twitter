@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait AccountTrait {
 
@@ -39,7 +39,7 @@ Trait AccountTrait {
 	{
 		if (empty($parameters))
 		{
-			throw new Exception('Parameter missing');
+			throw new BadMethodCallException('Parameter missing');
 		}
 
 		return $this->post('account/settings', $parameters);
@@ -56,7 +56,7 @@ Trait AccountTrait {
 	{
 		if (!array_key_exists('device', $parameters))
 		{
-			throw new Exception('Parameter required missing : device');
+			throw new BadMethodCallException('Parameter required missing : device');
 		}
 
 		return $this->post('account/update_delivery_device', $parameters);
@@ -77,7 +77,7 @@ Trait AccountTrait {
 	{
 		if (empty($parameters))
 		{
-			throw new Exception('Parameter missing');
+			throw new BadMethodCallException('Parameter missing');
 		}
 
 		return $this->post('account/update_profile', $parameters);
@@ -97,7 +97,7 @@ Trait AccountTrait {
 	{
 		if (!array_key_exists('image', $parameters) && !array_key_exists('tile', $parameters) && !array_key_exists('use', $parameters))
 		{
-			throw new Exception('Parameter required missing : image, tile or use');
+			throw new BadMethodCallException('Parameter required missing : image, tile or use');
 		}
 
 		return $this->post('account/update_profile_background_image', $parameters, true);
@@ -115,10 +115,10 @@ Trait AccountTrait {
 	{
 		if (!array_key_exists('image', $parameters))
 		{
-			throw new Exception('Parameter required missing : image');
+			throw new BadMethodCallException('Parameter required missing : image');
 		}
 
-		return $this->post('account/update_profile_image', $parameters, true);
+		return $this->post('account/update_profile_image', $parameters, false);
 	}
 
 	/**
@@ -142,7 +142,7 @@ Trait AccountTrait {
 	public function postUserBanner($parameters = [])
 	{
 		if (!array_key_exists('banner', $parameters)){
-			throw new Exception('Parameter required missing : banner');
+			throw new BadMethodCallException('Parameter required missing : banner');
 		}
 
 		return $this->post('account/update_profile_banner', $parameters);

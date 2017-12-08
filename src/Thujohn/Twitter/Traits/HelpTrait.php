@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait HelpTrait {
 
@@ -15,7 +15,7 @@ Trait HelpTrait {
 	{
 		if (empty($parameters))
 		{
-			throw new Exception('Parameter missing : screen_name or user_id');
+			throw new BadMethodCallException('Parameter missing : screen_name or user_id');
 		}
 
 		return $this->post('users/report_spam', $parameters);

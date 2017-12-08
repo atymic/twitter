@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait MediaTrait {
 
@@ -15,12 +15,12 @@ Trait MediaTrait {
 	{
 	        if (!array_key_exists('media', $parameters) && !array_key_exists('media_data', $parameters))
 	        {
-	            throw new Exception('Parameter required missing : media or media_data');
+	            throw new BadMethodCallException('Parameter required missing : media or media_data');
 	        }
 
 	        if (array_key_exists('media', $parameters) && array_key_exists('media_data', $parameters))
 	        {
-	            throw new Exception('You cannot use media and media_data at the same time');
+	            throw new BadMethodCallException('You cannot use media and media_data at the same time');
 	        }
 
 		return $this->post('media/upload', $parameters, true);

@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait SearchTrait {
 
@@ -24,7 +24,7 @@ Trait SearchTrait {
 	{
 		if (!array_key_exists('q', $parameters))
 		{
-			throw new Exception('Parameter required missing : q');
+			throw new BadMethodCallException('Parameter required missing : q');
 		}
 
 		return $this->get('search/tweets', $parameters);
@@ -56,7 +56,7 @@ Trait SearchTrait {
 	{
 		if (!array_key_exists('query', $parameters))
 		{
-			throw new Exception('Parameter required missing : query');
+			throw new BadMethodCallException('Parameter required missing : query');
 		}
 
 		return $this->post('saved_searches/create', $parameters);

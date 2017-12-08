@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait BlockTrait {
 
@@ -42,7 +42,7 @@ Trait BlockTrait {
 	{
 		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
 		{
-			throw new Exception('Parameter required missing : screen_name or user_id');
+			throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
 		}
 
 		return $this->post('blocks/create', $parameters);
@@ -61,7 +61,7 @@ Trait BlockTrait {
 	{
 		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
 		{
-			throw new Exception('Parameter required missing : screen_name or user_id');
+			throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
 		}
 
 		return $this->post('blocks/destroy', $parameters);

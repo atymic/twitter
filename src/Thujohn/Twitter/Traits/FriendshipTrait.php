@@ -1,6 +1,6 @@
 <?php namespace Thujohn\Twitter\Traits;
 
-use Exception;
+use BadMethodCallException;
 
 Trait FriendshipTrait {
 
@@ -81,7 +81,7 @@ Trait FriendshipTrait {
 	{
 		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
 		{
-			throw new Exception('Parameter required missing : screen_name or user_id');
+			throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
 		}
 
 		return $this->post('friendships/create', $parameters);
@@ -98,7 +98,7 @@ Trait FriendshipTrait {
 	{
 		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
 		{
-			throw new Exception('Parameter required missing : screen_name or user_id');
+			throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
 		}
 
 		return $this->post('friendships/destroy', $parameters);
@@ -117,7 +117,7 @@ Trait FriendshipTrait {
 	{
 		if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters))
 		{
-			throw new Exception('Parameter required missing : screen_name or user_id');
+			throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
 		}
 
 		return $this->post('friendships/update', $parameters);
@@ -136,7 +136,7 @@ Trait FriendshipTrait {
 	{
 		if (!array_key_exists('target_id', $parameters) && !array_key_exists('target_screen_name', $parameters))
 		{
-			throw new Exception('Parameter required missing : target_id or target_screen_name');
+			throw new BadMethodCallException('Parameter required missing : target_id or target_screen_name');
 		}
 
 		return $this->get('friendships/show', $parameters);

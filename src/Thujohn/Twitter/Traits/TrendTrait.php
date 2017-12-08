@@ -15,7 +15,7 @@ Trait TrendTrait {
 	{
 		if (!array_key_exists('id', $parameters))
 		{
-			throw new Exception('Parameter required missing : id');
+			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
 		return $this->get('trends/place', $parameters);
@@ -40,7 +40,7 @@ Trait TrendTrait {
 	{
 		if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters))
 		{
-			throw new Exception('Parameter required missing : lat or long');
+			throw new BadMethodCallException('Parameter required missing : lat or long');
 		}
 
 		return $this->get('trends/closest', $parameters);
