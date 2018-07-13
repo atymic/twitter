@@ -39,21 +39,21 @@ class Twitter extends tmhOAuth {
 	/**
 	 * Store the config values
 	 */
-	private $tconfig;
+	protected $tconfig;
 
 	/**
 	 * Store the config values for the parent class
 	 */
-	private $parent_config;
+	protected $parent_config;
 
 	/**
 	 * Only for debugging
 	 */
-	private $debug;
+	protected $debug;
 
-	private $log = [];
+	protected $log = [];
 
-	private $error;
+	protected $error;
 
 	public function __construct(Config $config, SessionStore $session)
 	{
@@ -114,7 +114,7 @@ class Twitter extends tmhOAuth {
 		return $this;
 	}
 
-	private function log($message)
+	protected function log($message)
 	{
 		if ($this->debug)
 		{
@@ -463,7 +463,7 @@ class Twitter extends tmhOAuth {
 		return $this;
 	}
 
-	private function jsonDecode($json, $assoc = false)
+	protected function jsonDecode($json, $assoc = false)
 	{
 		if (version_compare(PHP_VERSION, '5.4.0', '>=') && !(defined('JSON_C_VERSION') && PHP_INT_SIZE > 4))
 		{

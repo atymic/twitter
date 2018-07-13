@@ -1,10 +1,10 @@
-<?php 
+<?php
 
 namespace Thujohn\Twitter\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
-class Twitter extends Facade
+class TwitterPremium extends Facade
 {
 
     /**
@@ -13,8 +13,8 @@ class Twitter extends Facade
      * @return string
      */
     protected static function getFacadeAccessor()
-    {
-        return 'Thujohn\Twitter\Twitter';
+    { 
+        return 'Thujohn\Twitter\TwitterPremium';
     }
 
 }
