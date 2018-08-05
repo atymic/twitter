@@ -2,7 +2,7 @@
 
 namespace Thujohn\Twitter;
 
-use Thujohn\Twitter;
+use Thujohn\Twitter\Twitter;
 use RunTimeException;
 use Illuminate\Support\Facades\Log;
 
@@ -109,25 +109,11 @@ class TwitterPremium extends Twitter
 
         if (isset($response['code']) && ($response['code'] < 200 || $response['code'] > 206)) {
             $_response = $this->jsonDecode($response['response'], true);
-
-            if (is_array($_response)) {
-                if (array_key_exists('errors', $_response)) {
-                    $error_code = $_response['errors'][0]['code'];
-                    $error_msg  = $_response['errors'][0]['message'];
-                } else {
-                    $error_code = $response['code'];
-                    $error_msg  = $response['error'];
-                }
-            } else {
-                $error_code = $response['code'];
-                $error_msg  = ($error_code == 503) ? 'Service Unavailable' : 'Unknown error';
-            }
-
-            $this->log('ERROR_CODE : '.$error_code);
+            $error_msg =  $_response['error']['message'];
             $this->log('ERROR_MSG : '.$error_msg);
 
-            $this->setError($error_code, $error_msg);
-            throw new RunTimeException('['.$error_code.'] '.$error_msg, $response['code']);
+            $this->setError("", $error_msg);
+            throw new RunTimeException($error_msg);
         }
 
         switch ($format) {
