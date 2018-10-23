@@ -378,6 +378,38 @@ Route::get('twitter/logout', ['as' => 'twitter.logout', function(){
 ```
 
 
+## Using View Composers
+
+To display duplicate Twitter data on several views e.g. footer you can use view composers:
+
+```
+<?php
+
+namespace App\Http\Composers;
+
+use Illuminate\View\View;
+use Thujohn\Twitter\Facades\Twitter;
+
+class TweetComposer
+{
+    /**
+     * Bind data to the view.
+     *
+     * @param View $view
+     */
+    public function compose(View $view)
+    {
+        // Retrieve last 3 tweets
+        $tweets = Twitter::getUserTimeline([
+            'screen_name' => 'johndoe',
+            'count' => 3,
+            'format' => 'json|array',
+        ]);
+        $view->with('tweets', $tweets);
+    }
+}
+```
+
 ## Debug
 
 First activate debug in the config file.
