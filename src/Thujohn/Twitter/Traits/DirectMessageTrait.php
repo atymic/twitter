@@ -32,7 +32,7 @@ Trait DirectMessageTrait {
 			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
-		return $this->get('direct_messages/show', $parameters);
+		return $this->get('direct_messages/events/show', $parameters);
 	}
 
 	/**
@@ -47,7 +47,7 @@ Trait DirectMessageTrait {
 	 */
 	public function getDmsIn($parameters = [])
 	{
-		return $this->get('direct_messages', $parameters);
+		return $this->get('direct_messages/events/list', $parameters);
 	}
 
 	/**
@@ -64,7 +64,7 @@ Trait DirectMessageTrait {
 			throw new BadMethodCallException('Parameter required missing : id');
 		}
 
-		return $this->post('direct_messages/destroy', $parameters);
+		return $this->post('direct_messages/events/destroy', $parameters);
 	}
 
 	/**
@@ -82,7 +82,7 @@ Trait DirectMessageTrait {
 			throw new BadMethodCallException('Parameter required missing : user_id, screen_name or text');
 		}
 
-		return $this->post('direct_messages/new', $parameters);
+		return $this->post('direct_messages/events/new', $parameters);
 	}
 
 }
