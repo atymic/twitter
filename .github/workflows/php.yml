@@ -1,0 +1,31 @@
+name: PHP
+
+on: [push]
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 15
+      matrix:
+        laravel-version: ['5.8.*', '^6.0']
+        stabilty: ['stable', 'lowest']
+        php-versions: ['7.2', '7.3']
+    name: PHP ${{ matrix.php-versions }}  on ${{ matrix.laravel-version }} (${{ matrix.stabilty }})
+    steps:
+    - name: Checkout
+      uses: actions/checkout@master
+    - name: Setup PHP
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: ${{ matrix.php-versions }}
+        extension-csv: mbstring, xdebug
+        coverage: xdebug
+    - name: Install dependencies
+      run: |
+        composer require --no-update --no-interaction "illuminate/support:${{ matrix.laravel-version }}"
+        composer update --prefer-${{ matrix.stabilty }} --no-interaction --prefer-dist --no-suggest
+    - name: Lint composer.json
+      run: composer validate
+    - name: Run Tests
+      run: composer test:ci
