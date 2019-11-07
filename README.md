@@ -1,70 +1,25 @@
-# Twitter
+# Laravel Twitter
 
-Twitter API for Laravel 4/5
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Build Status](https://img.shields.io/travis/atymic/twitter/master.svg?style=flat-square)](https://travis-ci.org/atymic/twitter)
+[![StyleCI](https://styleci.io/repos/11009743/shield)](https://styleci.io/repos/11009743)
+[![Total Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter)
+
+Twitter API for Laravel 5.5+ & 6.x
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
-[![Build Status](https://travis-ci.org/thujohn/twitter.png?branch=master)](https://travis-ci.org/thujohn/twitter)
-
-
 ## Installation
 
-Add `thujohn/twitter` to `composer.json`.
-```
-"thujohn/twitter": "~2.0"
-```
-
-Run `composer update` to pull down the latest version of Twitter.
-
-Or run
 ```
 composer require thujohn/twitter
 ```
 
-Now open up `/config/app.php` and add the service provider to your `providers` array.
-```php
-'providers' => [
-	Thujohn\Twitter\TwitterServiceProvider::class,
-]
-```
-
-Now add the alias.
-```php
-'aliases' => [
-	'Twitter' => Thujohn\Twitter\Facades\Twitter::class,
-]
-```
-
-
-## Upgrading from 1.x.x
-
-The package now requires PHP >= 5.4.0
-
-Facade has changed (Thujohn\Twitter\Facades\Twitter)
-
-Config file has been updated (debug, UPLOAD_URL, ACCESS_TOKEN_URL, REQUEST_TOKEN_URL)
-
-set_new_config() has been renamed reconfig()
-
-
 ## Configuration 
 
-### Laravel 4
+Just set the below environment variables in your `.env`. 
 
-Run `php artisan config:publish thujohn/twitter` and modify the config file with your own informations.
-```
-/app/config/packages/thujohn/twitter/config.php
-```
-Also, make sure to remove the env in the config file and replace it with your information.
-
-
-### Laravel 5
-
-Run `php artisan vendor:publish --provider="Thujohn\Twitter\TwitterServiceProvider"` and modify the config file with your own information.
-```
-/config/ttwitter.php
-```
-With Laravel 5, it's simple to edit the config.php file - in fact you don't even need to touch it! Just add the following to your .env file and you'll be on your way:
 ```
 TWITTER_CONSUMER_KEY=
 TWITTER_CONSUMER_SECRET=
@@ -72,8 +27,39 @@ TWITTER_ACCESS_TOKEN=
 TWITTER_ACCESS_TOKEN_SECRET=
 ```
 
+### Advanced configuration
 
-## Special parameter
+Run `php artisan vendor:publish --provider="Thujohn\Twitter\TwitterServiceProvider"`
+```
+/config/ttwitter.php
+```
+
+# Roadmap
+
+### 2.x 
+
+2.x is in maintenance mode, so we'll continue to add support for new versions, bug fixes, etc but won't be adding new features.
+We'll keep the original package namespace & not break backward compatibility. 
+
+### 3.x 
+
+3.x will be a new major version and will not be backward compatible with 2.x
+The main goals of 3.x are
+
+- Removing our dependency on `tmhoauth` which is extremely outdated
+- Switching to PSR based modules where possible (PSR7 for requests, PSR3 for logging, etc)
+- Take advantage of the newer PHP language features such as typing to make the package more robust
+- Decouple the package from Laravel, as there isn't that much logic specific to the framework and it would be good to
+be able to use it in other frameworks.
+
+We'll release a detailed migration guide to make switching as easy as possible.
+
+# Usage
+
+## Output format
+
+You can choose between three different output formats. By default responses will be returned as objects. To change this,
+use the `format` option in the parameters you pass to any method. 
 
 ```
 format : object|json|array (default:object)
