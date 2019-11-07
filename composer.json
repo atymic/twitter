@@ -27,6 +27,10 @@
             "Thujohn\\Twitter": "src/"
         }
     },
+    "scripts": {
+        "test": "phpunit",
+        "test:ci": "phpunit --verbose --coverage-clover=coverage.xml"
+    },
     "extra": {
         "laravel": {
             "providers": [
