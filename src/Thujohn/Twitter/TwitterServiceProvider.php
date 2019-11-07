@@ -3,7 +3,6 @@
 namespace Thujohn\Twitter;
 
 use Illuminate\Support\ServiceProvider;
-use Thujohn\Twitter\Twitter;
 
 class TwitterServiceProvider extends ServiceProvider
 {
