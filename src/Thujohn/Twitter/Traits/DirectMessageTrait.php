@@ -7,7 +7,7 @@ use BadMethodCallException;
 trait DirectMessageTrait
 {
     /**
-     * Returns a single direct message eveny, specified by an id parameter.
+     * Returns a single direct message event, specified by an id parameter.
      *
      * Parameters :
      * - id

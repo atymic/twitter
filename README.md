@@ -88,11 +88,10 @@ format : object|json|array (default:object)
 
 ### DirectMessage
 
-* `getDmsOut()` - Returns the 20 most recent direct messages sent by the authenticating user. Includes detailed information about the sender and recipient user. You can request up to 200 direct messages per call, up to a maximum of 800 outgoing DMs.
-* `getDm()` - Returns a single direct message, specified by an id parameter. Like the /1.1/direct_messages.format request, this method will include the user objects of the sender and recipient.
-* `getDmsIn()` - Returns the 20 most recent direct messages sent to the authenticating user. Includes detailed information about the sender and recipient user. You can request up to 200 direct messages per call, and only the most recent 200 DMs will be available using this endpoint.
+* `getDm()` - Returns a single direct message event, specified by an id parameter.
+* `getDms()` - Returns all Direct Message events (both sent and received) within the last 30 days. Sorted in reverse-chronological order.
 * `destroyDm()` - Destroys the direct message specified in the required ID parameter. The authenticating user must be the recipient of the specified direct message.
-* `postDm()` - Sends a new direct message to the specified user from the authenticating user. Requires both the user and text parameters and must be a POST. Returns the sent message in the requested format if successful.
+* `postDm()` - Publishes a new message_create event resulting in a Direct Message sent to a specified user from the authenticating user. Returns an event if successful. Supports publishing Direct Messages with optional Quick Reply and media attachment.
 
 ### Favorite
 
