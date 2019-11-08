@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -35,7 +35,7 @@ trait ListTrait
      */
     public function getListStatuses($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
@@ -55,11 +55,11 @@ trait ListTrait
      */
     public function destroyListMember($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -95,7 +95,7 @@ trait ListTrait
      */
     public function getListsSubscribers($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
@@ -113,11 +113,11 @@ trait ListTrait
      */
     public function postListSubscriber($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -139,11 +139,11 @@ trait ListTrait
      */
     public function getListSubscriber($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -161,7 +161,7 @@ trait ListTrait
      */
     public function destroyListSubscriber($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
@@ -181,7 +181,7 @@ trait ListTrait
      */
     public function postListCreateAll($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
@@ -203,15 +203,15 @@ trait ListTrait
      */
     public function getListMember($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
+        if (! array_key_exists('user_id', $parameters) && ! array_key_exists('screen_name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -232,11 +232,11 @@ trait ListTrait
      */
     public function getListMembers($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -256,11 +256,11 @@ trait ListTrait
      */
     public function postListMember($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -278,11 +278,11 @@ trait ListTrait
      */
     public function destroyList($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -303,11 +303,11 @@ trait ListTrait
      */
     public function postListUpdate($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -324,7 +324,7 @@ trait ListTrait
      */
     public function postList($parameters = [])
     {
-        if (!array_key_exists('name', $parameters)) {
+        if (! array_key_exists('name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : name');
         }
 
@@ -342,11 +342,11 @@ trait ListTrait
      */
     public function getList($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 
@@ -380,11 +380,11 @@ trait ListTrait
      */
     public function destroyListMembers($parameters = [])
     {
-        if (!array_key_exists('list_id', $parameters) && !array_key_exists('slug', $parameters)) {
+        if (! array_key_exists('list_id', $parameters) && ! array_key_exists('slug', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : list_id or slug');
         }
 
-        if (array_key_exists('slug', $parameters) && (!array_key_exists('owner_screen_name', $parameters) && !array_key_exists('owner_id', $parameters))) {
+        if (array_key_exists('slug', $parameters) && (! array_key_exists('owner_screen_name', $parameters) && ! array_key_exists('owner_id', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : owner_screen_name or owner_id');
         }
 

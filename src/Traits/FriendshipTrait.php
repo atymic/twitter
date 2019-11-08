@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -81,7 +81,7 @@ trait FriendshipTrait
      */
     public function postFollow($parameters = [])
     {
-        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
+        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -97,7 +97,7 @@ trait FriendshipTrait
      */
     public function postUnfollow($parameters = [])
     {
-        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
+        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -115,7 +115,7 @@ trait FriendshipTrait
      */
     public function postFollowUpdate($parameters = [])
     {
-        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
+        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -133,7 +133,7 @@ trait FriendshipTrait
      */
     public function getFriendships($parameters = [])
     {
-        if (!array_key_exists('target_id', $parameters) && !array_key_exists('target_screen_name', $parameters)) {
+        if (! array_key_exists('target_id', $parameters) && ! array_key_exists('target_screen_name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : target_id or target_screen_name');
         }
 

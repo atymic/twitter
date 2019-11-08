@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -24,7 +24,7 @@ trait SearchTrait
      */
     public function getSearch($parameters = [])
     {
-        if (!array_key_exists('q', $parameters)) {
+        if (! array_key_exists('q', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : q');
         }
 
@@ -55,7 +55,7 @@ trait SearchTrait
      */
     public function postSavedSearch($parameters = [])
     {
-        if (!array_key_exists('query', $parameters)) {
+        if (! array_key_exists('query', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : query');
         }
 

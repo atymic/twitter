@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -42,7 +42,7 @@ trait BlockTrait
      */
     public function postBlock($parameters = [])
     {
-        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
+        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -60,7 +60,7 @@ trait BlockTrait
      */
     public function destroyBlock($parameters = [])
     {
-        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
+        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 

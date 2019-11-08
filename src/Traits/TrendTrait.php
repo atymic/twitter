@@ -1,6 +1,8 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
+
+use Exception;
 
 trait TrendTrait
 {
@@ -13,7 +15,7 @@ trait TrendTrait
      */
     public function getTrendsPlace($parameters = [])
     {
-        if (!array_key_exists('id', $parameters)) {
+        if (! array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -37,7 +39,7 @@ trait TrendTrait
      */
     public function getTrendsClosest($parameters = [])
     {
-        if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters)) {
+        if (! array_key_exists('lat', $parameters) || ! array_key_exists('long', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : lat or long');
         }
 

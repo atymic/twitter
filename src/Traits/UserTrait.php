@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -16,7 +16,7 @@ trait UserTrait
      */
     public function getUsersLookup($parameters = [])
     {
-        if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
+        if (! array_key_exists('user_id', $parameters) && ! array_key_exists('screen_name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
         }
 
@@ -33,7 +33,7 @@ trait UserTrait
      */
     public function getUsers($parameters = [])
     {
-        if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
+        if (! array_key_exists('user_id', $parameters) && ! array_key_exists('screen_name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
         }
 
@@ -51,7 +51,7 @@ trait UserTrait
      */
     public function getUsersSearch($parameters = [])
     {
-        if (!array_key_exists('q', $parameters)) {
+        if (! array_key_exists('q', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : q');
         }
 
@@ -79,7 +79,7 @@ trait UserTrait
      */
     public function muteUser($parameters = [])
     {
-        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
+        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -95,7 +95,7 @@ trait UserTrait
      */
     public function unmuteUser($parameters = [])
     {
-        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
+        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 

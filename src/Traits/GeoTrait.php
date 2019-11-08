@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -27,7 +27,7 @@ trait GeoTrait
      */
     public function getGeoReverse($parameters = [])
     {
-        if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters)) {
+        if (! array_key_exists('lat', $parameters) || ! array_key_exists('long', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : lat or long');
         }
 
@@ -67,7 +67,7 @@ trait GeoTrait
      */
     public function getGeoSimilar($parameters = [])
     {
-        if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters) || !array_key_exists('name', $parameters)) {
+        if (! array_key_exists('lat', $parameters) || ! array_key_exists('long', $parameters) || ! array_key_exists('name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : lat, long or name');
         }
 

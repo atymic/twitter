@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -29,7 +29,7 @@ trait DirectMessageTrait
      */
     public function getDm($parameters = [])
     {
-        if (!array_key_exists('id', $parameters)) {
+        if (! array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -60,7 +60,7 @@ trait DirectMessageTrait
      */
     public function destroyDm($parameters = [])
     {
-        if (!array_key_exists('id', $parameters)) {
+        if (! array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -77,7 +77,7 @@ trait DirectMessageTrait
      */
     public function postDm($parameters = [])
     {
-        if ((!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) || !array_key_exists('text', $parameters)) {
+        if ((! array_key_exists('user_id', $parameters) && ! array_key_exists('screen_name', $parameters)) || ! array_key_exists('text', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : user_id, screen_name or text');
         }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -133,7 +133,7 @@ trait StatusTrait
      */
     public function postTweet($parameters = [])
     {
-        if (!array_key_exists('status', $parameters)) {
+        if (! array_key_exists('status', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : status');
         }
 
@@ -167,7 +167,7 @@ trait StatusTrait
      */
     public function postTweetMedia($parameters = [])
     {
-        if (!array_key_exists('status', $parameters) || !array_key_exists('media[]', $parameters)) {
+        if (! array_key_exists('status', $parameters) || ! array_key_exists('media[]', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : status or media[]');
         }
 
@@ -191,7 +191,7 @@ trait StatusTrait
      */
     public function getOembed($parameters = [])
     {
-        if (!array_key_exists('url', $parameters)) {
+        if (! array_key_exists('url', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : url');
         }
 
@@ -211,7 +211,7 @@ trait StatusTrait
      */
     public function getRters($parameters = [])
     {
-        if (!array_key_exists('id', $parameters)) {
+        if (! array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -230,7 +230,7 @@ trait StatusTrait
      */
     public function getStatusesLookup($parameters = [])
     {
-        if (!array_key_exists('id', $parameters)) {
+        if (! array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 

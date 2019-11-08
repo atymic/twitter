@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -31,7 +31,7 @@ trait FavoriteTrait
      */
     public function destroyFavorite($parameters = [])
     {
-        if (!array_key_exists('id', $parameters)) {
+        if (! array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -47,7 +47,7 @@ trait FavoriteTrait
      */
     public function postFavorite($parameters = [])
     {
-        if (!array_key_exists('id', $parameters)) {
+        if (! array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 

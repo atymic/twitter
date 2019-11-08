@@ -1,6 +1,6 @@
 <?php
 
-namespace Thujohn\Twitter\Traits;
+namespace Atymic\Twitter\Traits;
 
 use BadMethodCallException;
 
@@ -55,7 +55,7 @@ trait AccountTrait
      */
     public function postSettingsDevice($parameters = [])
     {
-        if (!array_key_exists('device', $parameters)) {
+        if (! array_key_exists('device', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : device');
         }
 
@@ -94,7 +94,7 @@ trait AccountTrait
      */
     public function postBackground($parameters = [])
     {
-        if (!array_key_exists('image', $parameters) && !array_key_exists('tile', $parameters) && !array_key_exists('use', $parameters)) {
+        if (! array_key_exists('image', $parameters) && ! array_key_exists('tile', $parameters) && ! array_key_exists('use', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : image, tile or use');
         }
 
@@ -111,7 +111,7 @@ trait AccountTrait
      */
     public function postProfileImage($parameters = [])
     {
-        if (!array_key_exists('image', $parameters)) {
+        if (! array_key_exists('image', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : image');
         }
 
@@ -138,7 +138,7 @@ trait AccountTrait
      */
     public function postUserBanner($parameters = [])
     {
-        if (!array_key_exists('banner', $parameters)) {
+        if (! array_key_exists('banner', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : banner');
         }
 
