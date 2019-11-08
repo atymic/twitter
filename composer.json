@@ -21,7 +21,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "^8.3",
-        "orchestra/testbench": " ~4.0.0"
+        "orchestra/testbench": "~3.8.0 || ~4.0.0"
     },
     "autoload": {
         "psr-4": {
@@ -35,6 +35,10 @@
         "files": [
             "vendor/phpunit/phpunit/src/Framework/Assert/Functions.php"
         ]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:ci": "phpunit --verbose --coverage-clover=coverage.xml"
     },
     "extra": {
         "laravel": {
