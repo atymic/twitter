@@ -58,7 +58,7 @@ class Twitter
 
     protected $error;
 
-    public function __construct(Configuration $config, ?Client $httpClient = null, ?LoggerInterface $logger = null)
+    public function __construct(Configuration $config, ?LoggerInterface $logger = null, ?Client $httpClient = null)
     {
         if ($httpClient === null) {
             $client = new Client();
@@ -69,6 +69,7 @@ class Twitter
         // Todo session abstraction
 
         $this->config = $config;
+        $this->logger = $logger;
         $this->httpClient = $httpClient;
     }
 

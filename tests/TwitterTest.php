@@ -2,14 +2,10 @@
 
 declare(strict_types=1);
 
+use Atymic\Twitter\Tests\TestCase;
+use Atymic\Twitter\Twitter;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
-use Thujohn\Twitter\Twitter;
 
-/**
- * @internal
- * @coversDefaultClass \ReliqArts\Thujohn\Twitter\Twitter
- */
 final class TwitterTest extends TestCase
 {
     /**

@@ -3,7 +3,7 @@
 namespace Atymic\Twitter;
 
 use Illuminate\Support\ServiceProvider;
-use Atymic\Twitter\Twitter;
+use Psr\Log\LoggerInterface;
 
 class TwitterServiceProvider extends ServiceProvider
 {
@@ -31,10 +31,9 @@ class TwitterServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        // TODO can we kill this logic?
         $app = $this->app ?: app();
-
         $appVersion = method_exists($app, 'version') ? $app->version() : $app::VERSION;
-
         $laravelVersion = substr($appVersion, 0, strpos($appVersion, '.'));
 
         $isLumen = false;
@@ -43,20 +42,23 @@ class TwitterServiceProvider extends ServiceProvider
             $isLumen = true;
         }
 
-        $this->mergeConfigFrom(__DIR__.'/../../config/config.php', 'ttwitter');
+        $this->mergeConfigFrom(__DIR__ . '/config/twitter.php', 'twitter');
 
         if ($isLumen) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => base_path('config/ttwitter.php'),
+                __DIR__ . '/config/twitter.php' => base_path('config/twitter.php'),
             ]);
         } else {
             $this->publishes([
-                __DIR__.'/../../config/config.php' => config_path('ttwitter.php'),
+                __DIR__ . '/config/twitter.php' => config_path('twitter.php'),
             ]);
         }
 
-        $this->app->singleton(Twitter::class, function () use ($app) {
-            return new Twitter($app['config'], $app['session.store']);
+        $this->app->bind(Twitter::class, function () {
+            return new Twitter(
+                Configuration::fromLaravelConfiguration(config('twitter')),
+                app(LoggerInterface::class)
+            );
         });
     }
 

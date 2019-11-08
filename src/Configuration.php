@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter;
 
+use Atymic\Twitter\Exception\InvalidConfigException;
+
 class Configuration
 {
     /** @var string */
@@ -61,6 +63,24 @@ class Configuration
         $this->userAgent = $userAgent === null
             ? sprintf('atymic/twitter v%s php v%s', Twitter::VERSION, phpversion())
             : $userAgent;
+    }
+
+    public static function fromLaravelConfiguration(array $config)
+    {
+        if (!isset($config['api_url'], $config['upload_url'], $config['api_version'])) {
+            throw new InvalidConfigException('Required configuration options missing');
+        }
+
+        return new self(
+            $config['api_url'],
+            $config['upload_url'],
+            $config['api_version'],
+            $config['consumer_key'],
+            $config['consumer_secret'],
+            $config['access_token'],
+            $config['access_token_secret'],
+            $config['debug']
+        );
     }
 
     /**
