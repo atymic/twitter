@@ -292,9 +292,14 @@ class Twitter extends tmhOAuth
         return $this->query($name, 'GET', $parameters, $multipart, $extension);
     }
 
-    public function post($name, $parameters = [], $multipart = false)
+    public function post($name, $parameters = [], $multipart = false, $extension = 'json')
     {
-        return $this->query($name, 'POST', $parameters, $multipart);
+        return $this->query($name, 'POST', $parameters, $multipart, $extension);
+    }
+
+    public function delete($name, $parameters = [], $multipart = false, $extension = 'json')
+    {
+        return $this->query($name, 'DELETE', $parameters, $multipart, $extension);
     }
 
     public function linkify($tweet)
