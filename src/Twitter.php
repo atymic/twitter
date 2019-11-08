@@ -2,6 +2,14 @@
 
 namespace Atymic\Twitter;
 
+use Atymic\Twitter\Exception\Request\BadRequestException;
+use Atymic\Twitter\Exception\Request\ForbiddenRequestException;
+use Atymic\Twitter\Exception\Request\NotFoundException;
+use Atymic\Twitter\Exception\Request\RateLimitedException;
+use Atymic\Twitter\Exception\Request\RequestFailureException;
+use Atymic\Twitter\Exception\Request\ServerErrorException;
+use Atymic\Twitter\Exception\Request\TwitterRequestException;
+use Atymic\Twitter\Exception\Request\UnauthorizedRequestException;
 use Atymic\Twitter\Traits\AccountTrait;
 use Atymic\Twitter\Traits\BlockTrait;
 use Atymic\Twitter\Traits\DirectMessageTrait;
@@ -16,7 +24,6 @@ use Atymic\Twitter\Traits\SearchTrait;
 use Atymic\Twitter\Traits\StatusTrait;
 use Atymic\Twitter\Traits\TrendTrait;
 use Atymic\Twitter\Traits\UserTrait;
-use Carbon\Carbon;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
@@ -24,7 +31,6 @@ use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
-use RunTimeException;
 
 class Twitter
 {
@@ -61,7 +67,7 @@ class Twitter
     public function __construct(Configuration $config, ?LoggerInterface $logger = null, ?Client $httpClient = null)
     {
         if ($httpClient === null) {
-            $client = new Client();
+            $httpClient = new Client();
         }
 
         $this->debug = $config->isDebugMode();
@@ -73,9 +79,22 @@ class Twitter
         $this->httpClient = $httpClient;
     }
 
-    public function reconfigure($config)
+    public function usingCredentials(string $accessToken, string $accessTokenSecret): self
     {
-        // TODO implement
+        return new self(
+            $this->config->withOauthCredentials($accessToken, $accessTokenSecret),
+            $this->logger,
+            $this->httpClient
+        );
+    }
+
+    public function usingConfiguration(Configuration $configuration): self
+    {
+        return new self(
+            $configuration,
+            $this->logger,
+            $this->httpClient
+        );
     }
 
     public function log(string $message, array $context = [], string $logLevel = LogLevel::DEBUG): void
@@ -91,94 +110,6 @@ class Twitter
         $this->logger->log($logLevel, $message, $context);
     }
 
-    /**
-     * Get a request_token from Twitter.
-     *
-     * @param string $oauth_callback [Optional] The callback provided for Twitter's API. The user will be redirected
-     *                               there after authorizing your app on Twitter.
-     *
-     * @return array|bool a key/value array containing oauth_token and oauth_token_secret in case of success
-     */
-    public function getRequestToken($oauth_callback = null)
-    {
-        $parameters = [];
-
-        if (!empty($oauth_callback)) {
-            $parameters['oauth_callback'] = $oauth_callback;
-        }
-
-        parent::request('GET', parent::url($this->tconfig['REQUEST_TOKEN_URL'], ''), $parameters);
-
-        $response = $this->response;
-
-        if (isset($response['code']) && $response['code'] == 200 && !empty($response)) {
-            $get_parameters = $response['response'];
-            $token = [];
-            parse_str($get_parameters, $token);
-        }
-
-        // Return the token if it was properly retrieved
-        if (isset($token['oauth_token'], $token['oauth_token_secret'])) {
-            return $token;
-        } else {
-            throw new RunTimeException($response['response'], $response['code']);
-        }
-    }
-
-    /**
-     * Get an access token for a logged in user.
-     *
-     * @return array|bool key/value array containing the token in case of success
-     */
-    public function getAccessToken($oauth_verifier = null)
-    {
-        $parameters = [];
-
-        if (!empty($oauth_verifier)) {
-            $parameters['oauth_verifier'] = $oauth_verifier;
-        }
-
-        parent::request('GET', parent::url($this->tconfig['ACCESS_TOKEN_URL'], ''), $parameters);
-
-        $response = $this->response;
-
-        if (isset($response['code']) && $response['code'] == 200 && !empty($response)) {
-            $get_parameters = $response['response'];
-            $token = [];
-            parse_str($get_parameters, $token);
-
-            // Reconfigure the tmhOAuth class with the new tokens
-            $this->reconfig([
-                'token' => $token['oauth_token'],
-                'secret' => $token['oauth_token_secret'],
-            ]);
-
-            return $token;
-        }
-
-        throw new RunTimeException($response['response'], $response['code']);
-    }
-
-    /**
-     * Get the authorize URL.
-     *
-     * @returns string
-     */
-    public function getAuthorizeURL($token, $sign_in_with_twitter = true, $force_login = false)
-    {
-        if (is_array($token)) {
-            $token = $token['oauth_token'];
-        }
-
-        if ($force_login) {
-            return $this->tconfig['AUTHENTICATE_URL'] . "?oauth_token={$token}&force_login=true";
-        } elseif (empty($sign_in_with_twitter)) {
-            return $this->tconfig['AUTHORIZE_URL'] . "?oauth_token={$token}";
-        } else {
-            return $this->tconfig['AUTHENTICATE_URL'] . "?oauth_token={$token}";
-        }
-    }
-
     public function buildUrl(string $host, string $version, string $name, string $extension): string
     {
         return sprintf('https://%s/%s/%s.%s', $host, $version, $name, $extension);
@@ -191,7 +122,7 @@ class Twitter
         bool $multipart = false,
         string $extension = 'json'
     ) {
-        $host = $multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
+        $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
         $url = $this->buildUrl($host, $this->config->getApiVersion(), $name, $extension);
         $format = 'array'; // todo const
 
@@ -223,17 +154,32 @@ class Twitter
         try {
             $response = $this->httpClient->request($requestMethod, $url, $requestOptions);
         } catch (ClientException $exception) {
-            // todo handle this
-            throw $exception;
+            throw $this->handleClientException($exception);
         } catch (ServerException $exception) {
-            // todo handle this
-            throw $exception;
+            throw new ServerErrorException($exception->getResponse());
         } catch (RequestException $exception) {
-            // todo handle this
-            throw $exception;
+            throw new RequestFailureException($exception->getMessage(), $exception->getCode(), $exception);
         }
 
         return $this->getResponseAs($response, $format);
+    }
+
+    public function handleClientException(ClientException $exception): TwitterRequestException
+    {
+        switch ($exception->getResponse()->getStatusCode()) {
+            case 400;
+                return new BadRequestException($exception->getResponse());
+            case 401;
+                return new UnauthorizedRequestException($exception->getResponse());
+            case 403;
+                return new ForbiddenRequestException($exception->getResponse());
+            case 404;
+                return new NotFoundException($exception->getResponse());
+            case 420;
+                return new RateLimitedException($exception->getResponse());
+            default;
+                return new TwitterRequestException($exception->getResponse());
+        }
     }
 
     public function getResponseAs(Response $response, string $format)
@@ -262,20 +208,9 @@ class Twitter
         return $this->query($name, 'POST', $parameters, $multipart);
     }
 
-    public function error()
-    {
-        return $this->error;
-    }
-
-    public function setError($code, $message)
-    {
-        $this->error = compact('code', 'message');
-
-        return $this;
-    }
-
     private function jsonDecode($json, $assoc = false)
     {
+        // todo is this still needed?
         if (version_compare(PHP_VERSION, '5.4.0', '>=') && !(defined('JSON_C_VERSION') && PHP_INT_SIZE > 4)) {
             return json_decode($json, $assoc, 512, JSON_BIGINT_AS_STRING);
         } else {

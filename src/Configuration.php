@@ -83,6 +83,15 @@ class Configuration
         );
     }
 
+    public function withOauthCredentials(string $accessToken, string $accessTokenSecret): self
+    {
+        $config = clone $this;
+        $config->accessToken = $accessToken;
+        $config->accessTokenSecret = $accessTokenSecret;
+
+        return $config;
+    }
+
     /**
      * @return string
      */
