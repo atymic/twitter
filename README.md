@@ -1,10 +1,11 @@
 # Laravel Twitter
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
-[![Build Status](https://img.shields.io/travis/atymic/twitter/master.svg?style=flat-square)](https://travis-ci.org/atymic/twitter)
-[![StyleCI](https://styleci.io/repos/11009743/shield)](https://styleci.io/repos/11009743)
-[![Total Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md) 
+[![Build Status](https://img.shields.io/travis/atymic/twitter/master.svg?style=flat-square)](https://travis-ci.org/atymic/twitter) 
+[![StyleCI](https://styleci.io/repos/11009743/shield)](https://styleci.io/repos/11009743) 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter) 
+[![Total Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter) 
+![GitHub Release Date](https://img.shields.io/github/release-date/atymic/twitter?label=latest%20release)
 
 Twitter API for Laravel 5.5+ & 6.x
 
