@@ -167,24 +167,24 @@ class Twitter
     public function handleClientException(ClientException $exception): TwitterRequestException
     {
         switch ($exception->getResponse()->getStatusCode()) {
-            case 400;
+            case 400:
                 return new BadRequestException($exception->getResponse());
-            case 401;
+            case 401:
                 return new UnauthorizedRequestException($exception->getResponse());
-            case 403;
+            case 403:
                 return new ForbiddenRequestException($exception->getResponse());
-            case 404;
+            case 404:
                 return new NotFoundException($exception->getResponse());
-            case 420;
+            case 420:
                 return new RateLimitedException($exception->getResponse());
-            default;
+            default:
                 return new TwitterRequestException($exception->getResponse());
         }
     }
 
     public function getResponseAs(Response $response, string $format)
     {
-        $body = (string) $response->getBody();
+        $body = (string)$response->getBody();
 
         // todo const these
         switch ($format) {
@@ -193,7 +193,6 @@ class Twitter
             case 'json':
                 return $body;
             default:
-            case 'array':
                 return $this->jsonDecode($body, true);
         }
     }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Atymic\Twitter\Exception\Request;
 
 use Atymic\Twitter\Exception\TwitterException;
-use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface as Response;
 
 class TwitterRequestException extends TwitterException
 {
@@ -21,7 +21,7 @@ class TwitterRequestException extends TwitterException
         $responseData = json_decode((string) $response->getBody(), true);
 
         if (!$responseData['errors'][0]) {
-            $this->message = 'An unknown error occured';
+            $this->message = 'An unknown error occurred';
             $this->code = $response->getStatusCode();
             return;
         }
