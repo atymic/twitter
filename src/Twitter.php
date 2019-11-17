@@ -27,7 +27,8 @@ use Atymic\Twitter\Traits\UserTrait;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
-use Psr\Log\InvalidArgumentException;
+use InvalidArgumentException;
+use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
@@ -84,10 +85,14 @@ class Twitter
     protected $debug;
 
     /**
-     * @var
+     * Twitter constructor.
+     *
+     * @param Configuration        $config
+     * @param LoggerInterface|null $logger
+     * @param Client|null          $httpClient
+     *
+     * @throws InvalidArgumentException
      */
-    protected $error;
-
     public function __construct(Configuration $config, ?LoggerInterface $logger = null, ?Client $httpClient = null)
     {
         if ($httpClient === null) {
@@ -103,6 +108,13 @@ class Twitter
         $this->httpClient = $httpClient;
     }
 
+    /**
+     * @param string $accessToken
+     * @param string $accessTokenSecret
+     *
+     * @throws InvalidArgumentException
+     * @return self
+     */
     public function usingCredentials(string $accessToken, string $accessTokenSecret): self
     {
         return new self(
@@ -115,6 +127,7 @@ class Twitter
     /**
      * @param Configuration $configuration
      *
+     * @throws InvalidArgumentException
      * @return self
      */
     public function usingConfiguration(Configuration $configuration): self
@@ -294,7 +307,7 @@ class Twitter
 
         try {
             $this->logger->log($logLevel, $message, $context);
-        } catch (InvalidArgumentException $exception) {
+        } catch (InvalidLogArgumentException $exception) {
             return;
         }
     }

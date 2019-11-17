@@ -25,5 +25,9 @@
         <env name="DB_DATABASE" value="test"/>
         <env name="DB_USERNAME" value="testing"/>
         <env name="DB_PASSWORD" value="testing"/>
+        <env name="TWITTER_CONSUMER_KEY" value=""/>
+        <env name="TWITTER_CONSUMER_SECRET" value=""/>
+        <env name="TWITTER_ACCESS_TOKEN" value=""/>
+        <env name="TWITTER_ACCESS_TOKEN_SECRET" value=""/>
     </php>
 </phpunit>

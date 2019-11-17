@@ -7,4 +7,5 @@ composer.lock
 *.cache
 .idea
 .phpunit.result.cache
+phpunit.xml
 temp/

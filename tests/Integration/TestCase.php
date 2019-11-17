@@ -8,16 +8,22 @@ use Atymic\Twitter\Twitter;
 use Atymic\Twitter\TwitterServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
+use Mockery\Exception\NoMatchingExpectationException;
 use Orchestra\Testbench\TestCase as Orchestra;
 
 abstract class TestCase extends Orchestra
 {
+    private const KEY_CONFIG = 'config';
+
+    /**
+     * @throws NoMatchingExpectationException
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->initializeDirectory($this->getTempDirectory());
-        $this->setUpDatabase($this->app);
+        $this->setUpDatabase();
     }
 
     protected function getPackageProviders($app): array
@@ -37,18 +43,23 @@ abstract class TestCase extends Orchestra
      */
     protected function getEnvironmentSetUp($app): void
     {
-        $app['config']->set('mail.driver', 'log');
+        $app[self::KEY_CONFIG]->set('mail.driver', 'log');
 
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections.sqlite', [
+        $app[self::KEY_CONFIG]->set('database.default', 'sqlite');
+        $app[self::KEY_CONFIG]->set('database.connections.sqlite', [
             'driver' => 'sqlite',
             'database' => $this->getTempDirectory() . '/database.sqlite',
             'prefix' => '',
         ]);
 
-        $app['config']->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
+        $app[self::KEY_CONFIG]->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
     }
 
+    /**
+     * @param string $suffix
+     *
+     * @return string
+     */
     private function getTempDirectory($suffix = ''): string
     {
         return __DIR__ . DIRECTORY_SEPARATOR . 'temp' . ($suffix === '' ? '' : DIRECTORY_SEPARATOR . $suffix);
@@ -69,9 +80,9 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param Application $app
+     * @throws NoMatchingExpectationException
      */
-    private function setUpDatabase($app): void
+    private function setUpDatabase(): void
     {
         file_put_contents($this->getTempDirectory() . '/database.sqlite', null);
 
