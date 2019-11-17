@@ -36,12 +36,12 @@ final class TwitterTest extends TestCase
     /**
      * @throws Exception
      */
-    public function testGetUserTimeline(): void
+    public function testRequestExecution(): void
     {
         if (env('CI_TESTING')) {
             $this->markTestSkipped(
                 'Valid Twitter oauth secrets are required for this test.'
-                . ' Not a good idea to add these to source control. :)'
+                . ' We can revisit later with {ci secrets} :)'
             );
         }
 
