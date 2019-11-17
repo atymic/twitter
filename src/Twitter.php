@@ -24,9 +24,11 @@ use Atymic\Twitter\Traits\SearchTrait;
 use Atymic\Twitter\Traits\StatusTrait;
 use Atymic\Twitter\Traits\TrendTrait;
 use Atymic\Twitter\Traits\UserTrait;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use InvalidArgumentException;
 use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
 use Psr\Log\LoggerInterface;
@@ -50,14 +52,18 @@ class Twitter
         UserTrait;
 
     public const VERSION = '3.x-dev';
-
     public const RESPONSE_FORMAT_ARRAY = 'array';
     public const RESPONSE_FORMAT_OBJECT = 'object';
     public const RESPONSE_FORMAT_JSON = 'json';
 
+    private const DEFAULT_EXTENSION = 'json';
     private const REQUEST_METHOD_GET = 'GET';
     private const REQUEST_METHOD_POST = 'POST';
     private const URL_FORMAT = 'https://%s/%s/%s.%s';
+    private const KEY_FORM_PARAMS = 'form_params';
+    private const KEY_QUERY = 'query';
+    private const KEY_FORMAT = 'format';
+
     private const RESPONSE_CODE_400 = 400;
     private const RESPONSE_CODE_401 = 401;
     private const RESPONSE_CODE_403 = 403;
@@ -70,7 +76,7 @@ class Twitter
     protected $config;
 
     /**
-     * @var Client
+     * @var HttpClient
      */
     protected $httpClient;
 
@@ -88,24 +94,16 @@ class Twitter
      * Twitter constructor.
      *
      * @param Configuration        $config
-     * @param LoggerInterface|null $logger
-     * @param Client|null          $httpClient
+     * @param null|LoggerInterface $logger
      *
      * @throws InvalidArgumentException
      */
-    public function __construct(Configuration $config, ?LoggerInterface $logger = null, ?Client $httpClient = null)
+    public function __construct(Configuration $config, ?LoggerInterface $logger = null)
     {
-        if ($httpClient === null) {
-            $httpClient = new Client();
-        }
-
-        $this->debug = $config->isDebugMode();
-
-        // Todo session abstraction
-
         $this->config = $config;
         $this->logger = $logger;
-        $this->httpClient = $httpClient;
+        $this->debug = $config->isDebugMode();
+        $this->httpClient = $this->getHttpClient($config);
     }
 
     /**
@@ -113,30 +111,24 @@ class Twitter
      * @param string $accessTokenSecret
      *
      * @throws InvalidArgumentException
+     *
      * @return self
      */
     public function usingCredentials(string $accessToken, string $accessTokenSecret): self
     {
-        return new self(
-            $this->config->withOauthCredentials($accessToken, $accessTokenSecret),
-            $this->logger,
-            $this->httpClient
-        );
+        return new self($this->config->withOauthCredentials($accessToken, $accessTokenSecret), $this->logger);
     }
 
     /**
      * @param Configuration $configuration
      *
      * @throws InvalidArgumentException
+     *
      * @return self
      */
     public function usingConfiguration(Configuration $configuration): self
     {
-        return new self(
-            $configuration,
-            $this->logger,
-            $this->httpClient
-        );
+        return new self($configuration, $this->logger);
     }
 
     /**
@@ -155,30 +147,18 @@ class Twitter
         string $requestMethod = self::REQUEST_METHOD_GET,
         array $parameters = [],
         bool $multipart = false,
-        string $extension = 'json'
+        string $extension = self::DEFAULT_EXTENSION
     ) {
         try {
-            $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
-            $url = $this->buildUrl($host, $this->config->getApiVersion(), $name, $extension);
-            $format = $parameters['format'] ?? self::RESPONSE_FORMAT_ARRAY;
-            $requestOptions = [];
-            $requestParams = $parameters;
-
-            unset($requestParams['format']);
-
             $this->logRequest($name, $requestMethod, $parameters, $multipart);
 
-            if ($requestMethod === self::REQUEST_METHOD_GET) {
-                $requestOptions['query'] = $requestParams;
-            }
-
-            if ($requestMethod === self::REQUEST_METHOD_POST) {
-                $requestOptions['form_params'] = $requestParams;
-            }
-
+            $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
+            $url = $this->buildUrl($host, $this->config->getApiVersion(), $name, $extension);
+            $format = $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
+            $requestOptions = $this->getRequestOptions($parameters, $requestMethod);
             $response = $this->httpClient->request($requestMethod, $url, $requestOptions);
 
-            return $this->getResponseAs($response, $format);
+            return $this->formatResponse($response, $format);
         } catch (GuzzleException $exception) {
             throw $this->transformClientException($exception);
         }
@@ -194,7 +174,7 @@ class Twitter
      *
      * @return mixed|string
      */
-    public function get($name, $parameters = [], $multipart = false, $extension = 'json')
+    public function get($name, $parameters = [], $multipart = false, $extension = self::DEFAULT_EXTENSION)
     {
         return $this->query($name, self::REQUEST_METHOD_GET, $parameters, $multipart, $extension);
     }
@@ -211,6 +191,47 @@ class Twitter
     public function post($name, $parameters = [], $multipart = false)
     {
         return $this->query($name, self::REQUEST_METHOD_POST, $parameters, $multipart);
+    }
+
+    /**
+     * @param Configuration $config
+     *
+     * @throws InvalidArgumentException
+     *
+     * @return HttpClient
+     */
+    private function getHttpClient(Configuration $config): HttpClient
+    {
+        $stack = HandlerStack::create();
+        $middleware = new Oauth1([
+            'consumer_key' => $config->getConsumerKey(),
+            'consumer_secret' => $config->getConsumerSecret(),
+            'token' => $config->getAccessToken(),
+            'token_secret' => $config->getAccessTokenSecret(),
+        ]);
+        $stack->push($middleware);
+
+        return new HttpClient([
+            'handler' => $stack,
+            'auth' => 'oauth',
+        ]);
+    }
+
+    /**
+     * @param array  $params
+     * @param string $requestMethod
+     *
+     * @return array
+     */
+    private function getRequestOptions(array $params, string $requestMethod): array
+    {
+        unset($params[self::KEY_FORMAT]);
+
+        $paramsKey = $requestMethod === self::REQUEST_METHOD_POST ? self::KEY_FORM_PARAMS : self::KEY_QUERY;
+
+        return [
+            $paramsKey => $params,
+        ];
     }
 
     /**
@@ -259,18 +280,18 @@ class Twitter
      *
      * @return mixed|string
      */
-    private function getResponseAs(Response $response, string $format = self::RESPONSE_FORMAT_ARRAY)
+    private function formatResponse(Response $response, string $format)
     {
         $body = (string)$response->getBody();
 
         switch ($format) {
             case self::RESPONSE_FORMAT_JSON:
                 return $body;
-            case self::RESPONSE_FORMAT_OBJECT:
-                return json_decode($body, false);
             case self::RESPONSE_FORMAT_ARRAY:
-            default:
                 return json_decode($body, true);
+            case self::RESPONSE_FORMAT_OBJECT:
+            default:
+                return json_decode($body, false);
         }
     }
 
@@ -291,7 +312,7 @@ class Twitter
         $message = 'Making Request';
         $context = [
             'method' => $requestMethod,
-            'query' => $name,
+            self::KEY_QUERY => $name,
             'url' => $name,
             'params' => http_build_query($parameters),
             'multipart' => $multipart,

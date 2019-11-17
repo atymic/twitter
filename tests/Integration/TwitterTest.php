@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atymic\Twitter\Tests\Integration;
 
 use Atymic\Twitter\Twitter;
+use Exception;
 
 /**
  * @internal
@@ -12,20 +13,50 @@ use Atymic\Twitter\Twitter;
  */
 final class TwitterTest extends TestCase
 {
-    public function testTwitterResolution(): void
-    {
-        $twitter = app(Twitter::class);
+    /**
+     * @var Twitter
+     */
+    private $subject;
 
-        $this->assertInstanceOf(Twitter::class, $twitter);
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->subject = app(Twitter::class);
     }
 
-    public function testActualRequest(): void
+    /**
+     * @throws Exception
+     */
+    public function testTwitterResolution(): void
     {
-        $this->markTestSkipped('For future reference.');
+        $this->assertInstanceOf(Twitter::class, $this->subject);
+    }
 
-        /** @var Twitter $twitter */
-        $twitter = app(Twitter::class);
+    /**
+     * @throws Exception
+     */
+    public function testGetUserTimeline(): void
+    {
+        if (env('CI_TESTING')) {
+            $this->markTestSkipped(
+                'Valid Twitter oauth secrets are required for this test.'
+                . ' Not a good idea to add these to source control. :)'
+            );
+        }
 
-        $twitter->getSettings();
+        $expectedCount = 1;
+        $screenName = 'IAmReliq';
+        $tweets = $this->subject->getUserTimeline(['screen_name' => $screenName, 'count' => $expectedCount]);
+
+        $this->assertCount($expectedCount, $tweets);
+
+        foreach ($tweets as $tweet) {
+            $this->assertIsObject($tweet);
+
+            $htmlTweet = $this->subject->linkify($tweet->text);
+
+            $this->assertIsString($htmlTweet);
+        }
     }
 }

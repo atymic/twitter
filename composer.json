@@ -1,6 +1,6 @@
 {
     "name": "atymic/twitter",
-    "description": "Twitter API for PHP & Larave",
+    "description": "Twitter API for PHP & Laravel",
 	"keywords": ["twitter", "laravel", "laravel5", "laravel6"],
     "license": "MIT",
     "type": "library",
@@ -17,7 +17,8 @@
         "illuminate/support": "~5.5 || ~6.0",
         "guzzlehttp/guzzle": "^6.4",
         "psr/log": "^1.1",
-        "nesbot/carbon": "^2.26"
+        "nesbot/carbon": "^2.26",
+        "guzzlehttp/oauth-subscriber": "^0.3.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.3",

@@ -11,7 +11,11 @@ use Throwable;
 
 class RequestException extends RuntimeException implements TwitterException
 {
-    private const DEFAULT_ERROR_MESSAGE = 'An unknown error occurred';
+    private const DEFAULT_ERROR_MESSAGE = 'An unknown request error occurred. See previous messages.';
+    private const KEY_ERRORS = 'errors';
+    private const KEY_CODE = 'code';
+    private const KEY_MESSAGE = 'message';
+    private const MESSAGE_FORMAT = '[%d] %s';
 
     /**
      * @var Response
@@ -30,20 +34,20 @@ class RequestException extends RuntimeException implements TwitterException
     ): TwitterException {
         $responseStatusCode = $response->getStatusCode();
         $responseData = json_decode((string)$response->getBody(), true);
-        $self = new static(self::DEFAULT_ERROR_MESSAGE, $response->getStatusCode(), $previousException);
+        $instance = new static(self::DEFAULT_ERROR_MESSAGE, $response->getStatusCode(), $previousException);
 
-        if (empty($responseData['errors'])) {
-            return $self;
+        if (empty($responseData[self::KEY_ERRORS])) {
+            return $instance;
         }
 
-        $error = $responseData['errors'][0];
-        $errorCode = $error['code'] ?? $responseStatusCode;
-        $errorMessage = $error['message'] ?? self::DEFAULT_ERROR_MESSAGE;
+        $error = $responseData[self::KEY_ERRORS][0];
+        $errorCode = $error[self::KEY_CODE] ?? $responseStatusCode;
+        $errorMessage = $error[self::KEY_MESSAGE] ?? self::DEFAULT_ERROR_MESSAGE;
 
-        $self->message = sprintf('[%d] %s', $errorCode, $errorMessage);
-        $self->code = $error['code'] ?? $response->getStatusCode();
+        $instance->message = sprintf(self::MESSAGE_FORMAT, $errorCode, $errorMessage);
+        $instance->code = $error[self::KEY_CODE] ?? $response->getStatusCode();
 
-        return $self;
+        return $instance;
     }
 
     /**

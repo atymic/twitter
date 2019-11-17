@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace Atymic\Twitter\Tests\Unit;
 
 use Atymic\Twitter\Twitter;
+use BadMethodCallException;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\RuntimeException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,6 +20,10 @@ use PHPUnit\Framework\TestCase;
  */
 final class TwitterTest extends TestCase
 {
+    /**
+     * @throws BadMethodCallException
+     * @throws RuntimeException
+     */
     public function testGetUsersWithScreenName(): void
     {
         $twitter = $this->getTwitterExpecting('users/show', [
@@ -29,6 +35,10 @@ final class TwitterTest extends TestCase
         ]);
     }
 
+    /**
+     * @throws BadMethodCallException
+     * @throws RuntimeException
+     */
     public function testGetUsersWithId(): void
     {
         $twitter = $this->getTwitterExpecting('users/show', [
@@ -40,6 +50,10 @@ final class TwitterTest extends TestCase
         ]);
     }
 
+    /**
+     * @throws BadMethodCallException
+     * @throws RuntimeException
+     */
     public function testGetUsersInvalid(): void
     {
         $this->expectException(Exception::class);
@@ -51,6 +65,10 @@ final class TwitterTest extends TestCase
         ]);
     }
 
+    /**
+     * @throws BadMethodCallException
+     * @throws RuntimeException
+     */
     public function testGetUsersLookupWithIds(): void
     {
         $twitter = $this->getTwitterExpecting('users/lookup', [
@@ -62,6 +80,10 @@ final class TwitterTest extends TestCase
         ]);
     }
 
+    /**
+     * @throws BadMethodCallException
+     * @throws RuntimeException
+     */
     public function testGetUsersLookupWithScreenNames(): void
     {
         $twitter = $this->getTwitterExpecting('users/lookup', [
@@ -73,6 +95,10 @@ final class TwitterTest extends TestCase
         ]);
     }
 
+    /**
+     * @throws BadMethodCallException
+     * @throws RuntimeException
+     */
     public function testGetUsersLookupInvalid(): void
     {
         $this->expectException(Exception::class);
@@ -92,6 +118,8 @@ final class TwitterTest extends TestCase
      * @dataProvider providerGetList
      *
      * @param array $params
+     *
+     * @throws RuntimeException
      */
     public function testGetList(array $params): void
     {
@@ -120,6 +148,9 @@ final class TwitterTest extends TestCase
      * @dataProvider providerGetListBad
      *
      * @param array $params
+     *
+     * @throws BadMethodCallException
+     * @throws RuntimeException
      */
     public function testGetListFails(array $params): void
     {
@@ -148,6 +179,8 @@ final class TwitterTest extends TestCase
      * @dataProvider providerGetListMembers
      *
      * @param array $params
+     *
+     * @throws RuntimeException
      */
     public function testGetListMembers(array $params): void
     {
@@ -176,6 +209,9 @@ final class TwitterTest extends TestCase
      * @dataProvider providerGetListMembersBad
      *
      * @param array $params
+     *
+     * @throws BadMethodCallException
+     * @throws RuntimeException
      */
     public function testGetListMembersFails(array $params): void
     {
@@ -206,6 +242,8 @@ final class TwitterTest extends TestCase
      * @dataProvider providerGetListMember
      *
      * @param array $params
+     *
+     * @throws RuntimeException
      */
     public function testGetListMember(array $params): void
     {
@@ -243,6 +281,9 @@ final class TwitterTest extends TestCase
      * @dataProvider providerGetListMemberBad
      *
      * @param array $params
+     *
+     * @throws BadMethodCallException
+     * @throws RuntimeException
      */
     public function testGetListMemberFails(array $params): void
     {
@@ -265,6 +306,8 @@ final class TwitterTest extends TestCase
     }
 
     /**
+     * @throws RuntimeException
+     *
      * @return MockObject|Twitter
      */
     protected function getTwitter(): MockObject
@@ -278,6 +321,8 @@ final class TwitterTest extends TestCase
     /**
      * @param string $endpoint
      * @param array  $queryParams
+     *
+     * @throws RuntimeException
      *
      * @return MockObject|Twitter
      */
@@ -299,6 +344,8 @@ final class TwitterTest extends TestCase
      * @param string $endpoint
      * @param string $testedMethod
      * @param array  $params
+     *
+     * @throws RuntimeException
      */
     private function paramTest(string $endpoint, string $testedMethod, array $params)
     {
