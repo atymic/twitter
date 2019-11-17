@@ -9,6 +9,11 @@
             "name": "atymic",
             "email": "atymicq@gmail.com",
             "homepage": "https://atymic.dev"
+        },
+        {
+            "name": "reliq",
+            "email": "reliq@reliqarts.com",
+            "homepage": "https://iamreliq.com"
         }
     ],
     "require": {
@@ -45,7 +50,10 @@
         "laravel": {
             "providers": [
                 "Atymic\\Twitter\\TwitterServiceProvider"
-            ]
+            ],
+            "aliases": {
+                "Twitter": "Atymic\\Twitter\\Facades\\Twitter"
+            }
         }
     },
     "minimum-stability": "stable"
