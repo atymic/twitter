@@ -31,7 +31,7 @@ jobs:
     - name: Run Tests
       run: composer test:ci
       env:
-        - CI_TESTING: 'github-actions'
+        CI_TESTING: 'github-actions'
     - name: Upload code coverage
       uses: codecov/codecov-action@v1.0.3
       with:
