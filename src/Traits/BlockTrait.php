@@ -13,6 +13,8 @@ trait BlockTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      * - cursor
+     *
+     * @param mixed $parameters
      */
     public function getBlocks($parameters = [])
     {
@@ -25,6 +27,8 @@ trait BlockTrait
      * Parameters :
      * - stringify_ids (0|1)
      * - cursor
+     *
+     * @param mixed $parameters
      */
     public function getBlocksIds($parameters = [])
     {
@@ -39,10 +43,12 @@ trait BlockTrait
      * - user_id
      * - include_entities (0|1)
      * - skip_status (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postBlock($parameters = [])
     {
-        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
+        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -57,10 +63,12 @@ trait BlockTrait
      * - user_id
      * - include_entities (0|1)
      * - skip_status (0|1)
+     *
+     * @param mixed $parameters
      */
     public function destroyBlock($parameters = [])
     {
-        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
+        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 

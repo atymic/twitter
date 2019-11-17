@@ -8,6 +8,8 @@ trait AccountTrait
 {
     /**
      * Returns settings (including current trend, geo and sleep time information) for the authenticating user.
+     *
+     * @param mixed $parameters
      */
     public function getSettings($parameters = [])
     {
@@ -15,11 +17,15 @@ trait AccountTrait
     }
 
     /**
-     * Returns an HTTP 200 OK response code and a representation of the requesting user if authentication was successful; returns a 401 status code and an error message if not. Use this method to test if supplied user credentials are valid.
+     * Returns an HTTP 200 OK response code and a representation of the requesting user if authentication was
+     * successful; returns a 401 status code and an error message if not.
+     * Use this method to test if supplied user credentials are valid.
      *
      * Parameters :
      * - include_entities (0|1)
      * - skip_status (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getCredentials($parameters = [])
     {
@@ -36,6 +42,8 @@ trait AccountTrait
      * - end_sleep_time
      * - time_zone
      * - lang
+     *
+     * @param mixed $parameters
      */
     public function postSettings($parameters = [])
     {
@@ -47,15 +55,18 @@ trait AccountTrait
     }
 
     /**
-     * Sets which device Twitter delivers updates to for the authenticating user. Sending none as the device parameter will disable SMS updates.
+     * Sets which device Twitter delivers updates to for the authenticating user.
+     * Sending none as the device parameter will disable SMS updates.
      *
      * Parameters :
      * - device (sms|none)
      * - include_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postSettingsDevice($parameters = [])
     {
-        if (! array_key_exists('device', $parameters)) {
+        if (!array_key_exists('device', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : device');
         }
 
@@ -72,6 +83,8 @@ trait AccountTrait
      * - description (0-160)
      * - include_entities (0|1)
      * - skip_status (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postProfile($parameters = [])
     {
@@ -91,10 +104,12 @@ trait AccountTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      * - use (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postBackground($parameters = [])
     {
-        if (! array_key_exists('image', $parameters) && ! array_key_exists('tile', $parameters) && ! array_key_exists('use', $parameters)) {
+        if (!array_key_exists('image', $parameters) && !array_key_exists('tile', $parameters) && !array_key_exists('use', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : image, tile or use');
         }
 
@@ -108,10 +123,12 @@ trait AccountTrait
      * - image
      * - include_entities (0|1)
      * - skip_status (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postProfileImage($parameters = [])
     {
-        if (! array_key_exists('image', $parameters)) {
+        if (!array_key_exists('image', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : image');
         }
 
@@ -120,6 +137,8 @@ trait AccountTrait
 
     /**
      * Removes the uploaded profile banner for the authenticating user. Returns HTTP 200 upon success.
+     *
+     * @param mixed $parameters
      */
     public function destroyUserBanner($parameters = [])
     {
@@ -135,10 +154,12 @@ trait AccountTrait
      * - height
      * - offset_left
      * - offset_top
+     *
+     * @param mixed $parameters
      */
     public function postUserBanner($parameters = [])
     {
-        if (! array_key_exists('banner', $parameters)) {
+        if (!array_key_exists('banner', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : banner');
         }
 

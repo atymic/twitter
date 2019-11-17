@@ -8,10 +8,12 @@ trait GeoTrait
 {
     /**
      * Returns all the information about a known place.
+     *
+     * @param mixed $id
      */
     public function getGeo($id)
     {
-        return $this->get('geo/id/'.$id);
+        return $this->get('geo/id/' . $id);
     }
 
     /**
@@ -24,10 +26,12 @@ trait GeoTrait
      * - granularity (poi|neighborhood|city|admin|country)
      * - max_results
      * - callback
+     *
+     * @param mixed $parameters
      */
     public function getGeoReverse($parameters = [])
     {
-        if (! array_key_exists('lat', $parameters) || ! array_key_exists('long', $parameters)) {
+        if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : lat or long');
         }
 
@@ -48,6 +52,8 @@ trait GeoTrait
      * - contained_within
      * - attribute:street_address
      * - callback
+     *
+     * @param mixed $parameters
      */
     public function getGeoSearch($parameters = [])
     {
@@ -64,10 +70,12 @@ trait GeoTrait
      * - contained_within
      * - attribute:street_address
      * - callback
+     *
+     * @param mixed $parameters
      */
     public function getGeoSimilar($parameters = [])
     {
-        if (! array_key_exists('lat', $parameters) || ! array_key_exists('long', $parameters) || ! array_key_exists('name', $parameters)) {
+        if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters) || !array_key_exists('name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : lat, long or name');
         }
 

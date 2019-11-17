@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Atymic\Twitter\Exception\Request;
 
-use Atymic\Twitter\Exception\TwitterException;
+use Atymic\Twitter\Exception\RequestException;
 
-class RequestFailureException extends TwitterException
+final class RequestFailureException extends RequestException
 {
 }

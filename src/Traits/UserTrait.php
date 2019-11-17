@@ -13,10 +13,12 @@ trait UserTrait
      * - user_id
      * - screen_name
      * - include_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getUsersLookup($parameters = [])
     {
-        if (! array_key_exists('user_id', $parameters) && ! array_key_exists('screen_name', $parameters)) {
+        if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
         }
 
@@ -30,10 +32,12 @@ trait UserTrait
      * - user_id
      * - screen_name
      * - include_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getUsers($parameters = [])
     {
-        if (! array_key_exists('user_id', $parameters) && ! array_key_exists('screen_name', $parameters)) {
+        if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
         }
 
@@ -48,10 +52,12 @@ trait UserTrait
      * - page
      * - count
      * - include_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getUsersSearch($parameters = [])
     {
-        if (! array_key_exists('q', $parameters)) {
+        if (!array_key_exists('q', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : q');
         }
 
@@ -64,6 +70,8 @@ trait UserTrait
      * Parameters :
      * - user_id
      * - screen_name
+     *
+     * @param mixed $parameters
      */
     public function getUserBanner($parameters = [])
     {
@@ -76,10 +84,12 @@ trait UserTrait
      *  Parameters :
      * - screen_name
      * - user_id
+     *
+     * @param mixed $parameters
      */
     public function muteUser($parameters = [])
     {
-        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
+        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -92,10 +102,12 @@ trait UserTrait
      *  Parameters :
      * - screen_name
      * - user_id
+     *
+     * @param mixed $parameters
      */
     public function unmuteUser($parameters = [])
     {
-        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
+        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -107,6 +119,8 @@ trait UserTrait
      *
      *  Parameters :
      * - cursor
+     *
+     * @param mixed $parameters
      */
     public function mutedUserIds($parameters = [])
     {
@@ -120,6 +134,8 @@ trait UserTrait
      * - cursor
      * - include_entities
      * - skip_status
+     *
+     * @param mixed $parameters
      */
     public function mutedUsers($parameters = [])
     {
@@ -131,10 +147,13 @@ trait UserTrait
      *
      * Parameters :
      * - lang
+     *
+     * @param mixed $slug
+     * @param mixed $parameters
      */
     public function getSuggesteds($slug, $parameters = [])
     {
-        return $this->get('users/suggestions/'.$slug, $parameters);
+        return $this->get('users/suggestions/' . $slug, $parameters);
     }
 
     /**
@@ -142,6 +161,8 @@ trait UserTrait
      *
      * Parameters :
      * - lang
+     *
+     * @param mixed $parameters
      */
     public function getSuggestions($parameters = [])
     {
@@ -150,9 +171,12 @@ trait UserTrait
 
     /**
      * Access the users in a given category of the Twitter suggested user list and return their most recent status if they are not a protected user.
+     *
+     * @param mixed $slug
+     * @param mixed $parameters
      */
     public function getSuggestedsMembers($slug, $parameters = [])
     {
-        return $this->get('users/suggestions/'.$slug.'/members', $parameters);
+        return $this->get('users/suggestions/' . $slug . '/members', $parameters);
     }
 }

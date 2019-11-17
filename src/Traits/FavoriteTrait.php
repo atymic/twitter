@@ -16,6 +16,8 @@ trait FavoriteTrait
      * - since_id
      * - max_id
      * - include_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getFavorites($parameters = [])
     {
@@ -28,10 +30,12 @@ trait FavoriteTrait
      * Parameters :
      * - id
      * - include_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function destroyFavorite($parameters = [])
     {
-        if (! array_key_exists('id', $parameters)) {
+        if (!array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -44,10 +48,12 @@ trait FavoriteTrait
      * Parameters :
      * - id
      * - include_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postFavorite($parameters = [])
     {
-        if (! array_key_exists('id', $parameters)) {
+        if (!array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 

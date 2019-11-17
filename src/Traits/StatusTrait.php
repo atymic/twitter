@@ -18,6 +18,8 @@ trait StatusTrait
      * - contributor_details (0|1)
      * - include_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
+     *
+     * @param mixed $parameters
      */
     public function getMentionsTimeline($parameters = [])
     {
@@ -39,6 +41,8 @@ trait StatusTrait
      * - contributor_details (0|1)
      * - include_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
+     *
+     * @param mixed $parameters
      */
     public function getUserTimeline($parameters = [])
     {
@@ -57,6 +61,8 @@ trait StatusTrait
      * - contributor_details (0|1)
      * - include_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
+     *
+     * @param mixed $parameters
      */
     public function getHomeTimeline($parameters = [])
     {
@@ -74,6 +80,8 @@ trait StatusTrait
      * - include_entities (0|1)
      * - include_user_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
+     *
+     * @param mixed $parameters
      */
     public function getRtsTimeline($parameters = [])
     {
@@ -86,10 +94,13 @@ trait StatusTrait
      * Parameters :
      * - count (1-200)
      * - trim_user (0|1)
+     *
+     * @param mixed $id
+     * @param mixed $parameters
      */
     public function getRts($id, $parameters = [])
     {
-        return $this->get('statuses/retweets/'.$id, $parameters);
+        return $this->get('statuses/retweets/' . $id, $parameters);
     }
 
     /**
@@ -101,10 +112,13 @@ trait StatusTrait
      * - include_my_retweet (0|1)
      * - include_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
+     *
+     * @param mixed $id
+     * @param mixed $parameters
      */
     public function getTweet($id, $parameters = [])
     {
-        return $this->get('statuses/show/'.$id, $parameters);
+        return $this->get('statuses/show/' . $id, $parameters);
     }
 
     /**
@@ -112,10 +126,13 @@ trait StatusTrait
      *
      * Parameters :
      * - trim_user (0|1)
+     *
+     * @param mixed $id
+     * @param mixed $parameters
      */
     public function destroyTweet($id, $parameters = [])
     {
-        return $this->post('statuses/destroy/'.$id, $parameters);
+        return $this->post('statuses/destroy/' . $id, $parameters);
     }
 
     /**
@@ -130,10 +147,12 @@ trait StatusTrait
      * - display_coordinates (0|1)
      * - trim_user (0|1)
      * - media_ids
+     *
+     * @param mixed $parameters
      */
     public function postTweet($parameters = [])
     {
-        if (! array_key_exists('status', $parameters)) {
+        if (!array_key_exists('status', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : status');
         }
 
@@ -145,10 +164,13 @@ trait StatusTrait
      *
      * Parameters :
      * - trim_user (0|1)
+     *
+     * @param mixed $id
+     * @param mixed $parameters
      */
     public function postRt($id, $parameters = [])
     {
-        return $this->post('statuses/retweet/'.$id, $parameters);
+        return $this->post('statuses/retweet/' . $id, $parameters);
     }
 
     /**
@@ -164,10 +186,12 @@ trait StatusTrait
      * - long
      * - place_id
      * - display_coordinates (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postTweetMedia($parameters = [])
     {
-        if (! array_key_exists('status', $parameters) || ! array_key_exists('media[]', $parameters)) {
+        if (!array_key_exists('status', $parameters) || !array_key_exists('media[]', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : status or media[]');
         }
 
@@ -188,10 +212,12 @@ trait StatusTrait
      * - theme (dark|light)
      * - link_color (hex value)
      * - widget_type (video)
+     *
+     * @param mixed $parameters
      */
     public function getOembed($parameters = [])
     {
-        if (! array_key_exists('url', $parameters)) {
+        if (!array_key_exists('url', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : url');
         }
 
@@ -208,10 +234,12 @@ trait StatusTrait
      * - id
      * - cursor
      * - stringify_ids (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getRters($parameters = [])
     {
-        if (! array_key_exists('id', $parameters)) {
+        if (!array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -227,10 +255,12 @@ trait StatusTrait
      * - trim_user (0|1)
      * - map (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
+     *
+     * @param mixed $parameters
      */
     public function getStatusesLookup($parameters = [])
     {
-        if (! array_key_exists('id', $parameters)) {
+        if (!array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 

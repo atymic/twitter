@@ -1,15 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Atymic\Twitter;
 
 use Atymic\Twitter\Exception\Request\BadRequestException;
 use Atymic\Twitter\Exception\Request\ForbiddenRequestException;
 use Atymic\Twitter\Exception\Request\NotFoundException;
 use Atymic\Twitter\Exception\Request\RateLimitedException;
-use Atymic\Twitter\Exception\Request\RequestFailureException;
-use Atymic\Twitter\Exception\Request\ServerErrorException;
-use Atymic\Twitter\Exception\Request\TwitterRequestException;
 use Atymic\Twitter\Exception\Request\UnauthorizedRequestException;
+use Atymic\Twitter\Exception\RequestException as TwitterRequestException;
 use Atymic\Twitter\Traits\AccountTrait;
 use Atymic\Twitter\Traits\BlockTrait;
 use Atymic\Twitter\Traits\DirectMessageTrait;
@@ -25,17 +25,14 @@ use Atymic\Twitter\Traits\StatusTrait;
 use Atymic\Twitter\Traits\TrendTrait;
 use Atymic\Twitter\Traits\UserTrait;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Psr7\Response;
+use Psr\Log\InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 
 class Twitter
 {
-    const VERSION = '3.x-dev';
-
     use FormattingHelpers,
         AccountTrait,
         BlockTrait,
@@ -51,17 +48,44 @@ class Twitter
         TrendTrait,
         UserTrait;
 
+    public const VERSION = '3.x-dev';
 
-    /** @var Configuration */
+    public const RESPONSE_FORMAT_ARRAY = 'array';
+    public const RESPONSE_FORMAT_OBJECT = 'object';
+    public const RESPONSE_FORMAT_JSON = 'json';
+
+    private const REQUEST_METHOD_GET = 'GET';
+    private const REQUEST_METHOD_POST = 'POST';
+    private const URL_FORMAT = 'https://%s/%s/%s.%s';
+    private const RESPONSE_CODE_400 = 400;
+    private const RESPONSE_CODE_401 = 401;
+    private const RESPONSE_CODE_403 = 403;
+    private const RESPONSE_CODE_404 = 404;
+    private const RESPONSE_CODE_420 = 420;
+
+    /**
+     * @var Configuration
+     */
     protected $config;
-    /** @var Client */
+
+    /**
+     * @var Client
+     */
     protected $httpClient;
-    /** @var LoggerInterface|null */
+
+    /**
+     * @var null|LoggerInterface
+     */
     protected $logger;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     protected $debug;
 
+    /**
+     * @var
+     */
     protected $error;
 
     public function __construct(Configuration $config, ?LoggerInterface $logger = null, ?Client $httpClient = null)
@@ -88,6 +112,11 @@ class Twitter
         );
     }
 
+    /**
+     * @param Configuration $configuration
+     *
+     * @return self
+     */
     public function usingConfiguration(Configuration $configuration): self
     {
         return new self(
@@ -97,123 +126,176 @@ class Twitter
         );
     }
 
-    public function log(string $message, array $context = [], string $logLevel = LogLevel::DEBUG): void
-    {
-        if ($this->logger === null) {
-            return;
-        }
-
-        if (!$this->debug && $logLevel = LogLevel::DEBUG) {
-            return;
-        }
-
-        $this->logger->log($logLevel, $message, $context);
-    }
-
-    public function buildUrl(string $host, string $version, string $name, string $extension): string
-    {
-        return sprintf('https://%s/%s/%s.%s', $host, $version, $name, $extension);
-    }
-
+    /**
+     * @param string $name
+     * @param string $requestMethod
+     * @param array  $parameters
+     * @param bool   $multipart
+     * @param string $extension
+     *
+     * @throws TwitterRequestException
+     *
+     * @return mixed|string
+     */
     public function query(
         string $name,
-        string $requestMethod = 'GET',
+        string $requestMethod = self::REQUEST_METHOD_GET,
         array $parameters = [],
         bool $multipart = false,
         string $extension = 'json'
     ) {
-        $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
-        $url = $this->buildUrl($host, $this->config->getApiVersion(), $name, $extension);
-        $format = 'array'; // todo const
+        try {
+            $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
+            $url = $this->buildUrl($host, $this->config->getApiVersion(), $name, $extension);
+            $format = $parameters['format'] ?? self::RESPONSE_FORMAT_ARRAY;
+            $requestOptions = [];
+            $requestParams = $parameters;
 
-        if (isset($parameters['format'])) {
-            $format = $parameters['format'];
-            unset($parameters['format']);
+            unset($requestParams['format']);
+
+            $this->logRequest($name, $requestMethod, $parameters, $multipart);
+
+            if ($requestMethod === self::REQUEST_METHOD_GET) {
+                $requestOptions['query'] = $requestParams;
+            }
+
+            if ($requestMethod === self::REQUEST_METHOD_POST) {
+                $requestOptions['form_params'] = $requestParams;
+            }
+
+            $response = $this->httpClient->request($requestMethod, $url, $requestOptions);
+
+            return $this->getResponseAs($response, $format);
+        } catch (GuzzleException $exception) {
+            throw $this->transformClientException($exception);
         }
+    }
 
-        $this->log('Making Request', [
+    /**
+     * @param        $name
+     * @param array  $parameters
+     * @param bool   $multipart
+     * @param string $extension
+     *
+     * @throws TwitterRequestException
+     *
+     * @return mixed|string
+     */
+    public function get($name, $parameters = [], $multipart = false, $extension = 'json')
+    {
+        return $this->query($name, self::REQUEST_METHOD_GET, $parameters, $multipart, $extension);
+    }
+
+    /**
+     * @param       $name
+     * @param array $parameters
+     * @param bool  $multipart
+     *
+     * @throws TwitterRequestException
+     *
+     * @return mixed|string
+     */
+    public function post($name, $parameters = [], $multipart = false)
+    {
+        return $this->query($name, self::REQUEST_METHOD_POST, $parameters, $multipart);
+    }
+
+    /**
+     * @param string $host
+     * @param string $version
+     * @param string $name
+     * @param string $extension
+     *
+     * @return string
+     */
+    private function buildUrl(string $host, string $version, string $name, string $extension): string
+    {
+        return sprintf(self::URL_FORMAT, $host, $version, $name, $extension);
+    }
+
+    /**
+     * @param GuzzleException $exception
+     *
+     * @return TwitterRequestException
+     */
+    private function transformClientException(GuzzleException $exception): TwitterRequestException
+    {
+        /** @var null|Response $response */
+        $response = method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
+        $responseCode = !empty($response) ? $response->getStatusCode() : null;
+
+        switch ($responseCode) {
+            case self::RESPONSE_CODE_400:
+                return BadRequestException::fromClientResponse($response, $exception);
+            case self::RESPONSE_CODE_401:
+                return UnauthorizedRequestException::fromClientResponse($response, $exception);
+            case self::RESPONSE_CODE_403:
+                return ForbiddenRequestException::fromClientResponse($response, $exception);
+            case self::RESPONSE_CODE_404:
+                return NotFoundException::fromClientResponse($response, $exception);
+            case self::RESPONSE_CODE_420:
+                return RateLimitedException::fromClientResponse($response, $exception);
+            default:
+                return TwitterRequestException::fromClientResponse($response, $exception);
+        }
+    }
+
+    /**
+     * @param Response $response
+     * @param string   $format
+     *
+     * @return mixed|string
+     */
+    private function getResponseAs(Response $response, string $format = self::RESPONSE_FORMAT_ARRAY)
+    {
+        $body = (string)$response->getBody();
+
+        switch ($format) {
+            case self::RESPONSE_FORMAT_JSON:
+                return $body;
+            case self::RESPONSE_FORMAT_OBJECT:
+                return json_decode($body, false);
+            case self::RESPONSE_FORMAT_ARRAY:
+            default:
+                return json_decode($body, true);
+        }
+    }
+
+    /**
+     * @param string $name
+     * @param string $requestMethod
+     * @param array  $parameters
+     * @param bool   $multipart
+     * @param string $logLevel
+     */
+    private function logRequest(
+        string $name,
+        string $requestMethod,
+        array $parameters,
+        bool $multipart,
+        string $logLevel = LogLevel::DEBUG
+    ): void {
+        $message = 'Making Request';
+        $context = [
             'method' => $requestMethod,
             'query' => $name,
             'url' => $name,
             'params' => http_build_query($parameters),
             'multipart' => $multipart,
-            'format' => $format,
-        ]);
+        ];
 
-
-        $requestOptions = [];
-
-        if ($requestMethod === 'GET') {
-            $requestOptions['query'] = $parameters;
+        if ($this->logger === null) {
+            return;
         }
 
-        if ($requestMethod === 'POST') {
-            $requestOptions['form_params'] = $parameters;
+        if (!$this->debug && $logLevel === LogLevel::DEBUG) {
+            return;
         }
 
         try {
-            $response = $this->httpClient->request($requestMethod, $url, $requestOptions);
-        } catch (ClientException $exception) {
-            throw $this->handleClientException($exception);
-        } catch (ServerException $exception) {
-            throw new ServerErrorException($exception->getResponse());
-        } catch (RequestException $exception) {
-            throw new RequestFailureException($exception->getMessage(), $exception->getCode(), $exception);
-        }
-
-        return $this->getResponseAs($response, $format);
-    }
-
-    public function handleClientException(ClientException $exception): TwitterRequestException
-    {
-        switch ($exception->getResponse()->getStatusCode()) {
-            case 400:
-                return new BadRequestException($exception->getResponse());
-            case 401:
-                return new UnauthorizedRequestException($exception->getResponse());
-            case 403:
-                return new ForbiddenRequestException($exception->getResponse());
-            case 404:
-                return new NotFoundException($exception->getResponse());
-            case 420:
-                return new RateLimitedException($exception->getResponse());
-            default:
-                return new TwitterRequestException($exception->getResponse());
-        }
-    }
-
-    public function getResponseAs(Response $response, string $format)
-    {
-        $body = (string)$response->getBody();
-
-        // todo const these
-        switch ($format) {
-            case 'object':
-                return $this->jsonDecode($body, false);
-            case 'json':
-                return $body;
-            default:
-                return $this->jsonDecode($body, true);
-        }
-    }
-
-    public function get($name, $parameters = [], $multipart = false, $extension = 'json')
-    {
-        return $this->query($name, 'GET', $parameters, $multipart, $extension);
-    }
-
-    public function post($name, $parameters = [], $multipart = false)
-    {
-        return $this->query($name, 'POST', $parameters, $multipart);
-    }
-
-    private function jsonDecode($json, $assoc = false)
-    {
-        // todo is this still needed?
-        if (version_compare(PHP_VERSION, '5.4.0', '>=') && !(defined('JSON_C_VERSION') && PHP_INT_SIZE > 4)) {
-            return json_decode($json, $assoc, 512, JSON_BIGINT_AS_STRING);
-        } else {
-            return json_decode($json, $assoc);
+            $this->logger->log($logLevel, $message, $context);
+        } catch (InvalidArgumentException $exception) {
+            return;
         }
     }
 }

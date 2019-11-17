@@ -21,10 +21,12 @@ trait SearchTrait
      * - max_id
      * - include_entities (0|1)
      * - callback
+     *
+     * @param mixed $parameters
      */
     public function getSearch($parameters = [])
     {
-        if (! array_key_exists('q', $parameters)) {
+        if (!array_key_exists('q', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : q');
         }
 
@@ -41,10 +43,12 @@ trait SearchTrait
 
     /**
      * Retrieve the information for the saved search represented by the given id. The authenticating user must be the owner of saved search ID being requested.
+     *
+     * @param mixed $id
      */
     public function getSavedSearch($id)
     {
-        return $this->get('saved_searches/show/'.$id);
+        return $this->get('saved_searches/show/' . $id);
     }
 
     /**
@@ -52,10 +56,12 @@ trait SearchTrait
      *
      * Parameters :
      * - query
+     *
+     * @param mixed $parameters
      */
     public function postSavedSearch($parameters = [])
     {
-        if (! array_key_exists('query', $parameters)) {
+        if (!array_key_exists('query', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : query');
         }
 
@@ -64,9 +70,12 @@ trait SearchTrait
 
     /**
      * Destroys a saved search for the authenticating user. The authenticating user must be the owner of saved search id being destroyed.
+     *
+     * @param mixed $id
+     * @param mixed $parameters
      */
     public function destroySavedSearch($id, $parameters = [])
     {
-        return $this->post('saved_searches/destroy/'.$id, $parameters);
+        return $this->post('saved_searches/destroy/' . $id, $parameters);
     }
 }

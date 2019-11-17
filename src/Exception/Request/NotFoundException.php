@@ -1,8 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Atymic\Twitter\Exception\Request;
 
-class NotFoundException extends TwitterRequestException
+use Atymic\Twitter\Exception\RequestException;
+
+final class NotFoundException extends RequestException
 {
 }

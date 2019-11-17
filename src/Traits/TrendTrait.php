@@ -2,8 +2,6 @@
 
 namespace Atymic\Twitter\Traits;
 
-use Exception;
-
 trait TrendTrait
 {
     /**
@@ -12,10 +10,12 @@ trait TrendTrait
      * Parameters :
      * - id
      * - exclude
+     *
+     * @param mixed $parameters
      */
     public function getTrendsPlace($parameters = [])
     {
-        if (! array_key_exists('id', $parameters)) {
+        if (!array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -24,6 +24,8 @@ trait TrendTrait
 
     /**
      * Returns the locations that Twitter has trending topic information for.
+     *
+     * @param mixed $parameters
      */
     public function getTrendsAvailable($parameters = [])
     {
@@ -36,10 +38,12 @@ trait TrendTrait
      * Parameters :
      * - lat
      * - long
+     *
+     * @param mixed $parameters
      */
     public function getTrendsClosest($parameters = [])
     {
-        if (! array_key_exists('lat', $parameters) || ! array_key_exists('long', $parameters)) {
+        if (!array_key_exists('lat', $parameters) || !array_key_exists('long', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : lat or long');
         }
 

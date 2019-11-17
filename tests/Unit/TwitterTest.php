@@ -2,15 +2,22 @@
 
 declare(strict_types=1);
 
-use Atymic\Twitter\Tests\TestCase;
-use Atymic\Twitter\Twitter;
-use PHPUnit\Framework\MockObject\MockObject;
+namespace Atymic\Twitter\Tests\Unit;
 
-final class TwitterMockTest extends TestCase
+use Atymic\Twitter\Twitter;
+use Exception;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Class TwitterTest.
+ *
+ * @coversDefaultClass \Atymic\Twitter\Twitter
+ *
+ * @internal
+ */
+final class TwitterTest extends TestCase
 {
-    /**
-     * @covers ::getUsers
-     */
     public function testGetUsersWithScreenName(): void
     {
         $twitter = $this->getTwitterExpecting('users/show', [
@@ -22,9 +29,6 @@ final class TwitterMockTest extends TestCase
         ]);
     }
 
-    /**
-     * @covers ::getUsers
-     */
     public function testGetUsersWithId(): void
     {
         $twitter = $this->getTwitterExpecting('users/show', [
@@ -36,9 +40,6 @@ final class TwitterMockTest extends TestCase
         ]);
     }
 
-    /**
-     * @covers ::getUsers
-     */
     public function testGetUsersInvalid(): void
     {
         $this->expectException(Exception::class);
@@ -50,9 +51,6 @@ final class TwitterMockTest extends TestCase
         ]);
     }
 
-    /**
-     * @covers ::getUsersLookup
-     */
     public function testGetUsersLookupWithIds(): void
     {
         $twitter = $this->getTwitterExpecting('users/lookup', [
@@ -64,9 +62,6 @@ final class TwitterMockTest extends TestCase
         ]);
     }
 
-    /**
-     * @covers ::getUsersLookup
-     */
     public function testGetUsersLookupWithScreenNames(): void
     {
         $twitter = $this->getTwitterExpecting('users/lookup', [
@@ -78,9 +73,6 @@ final class TwitterMockTest extends TestCase
         ]);
     }
 
-    /**
-     * @covers ::getUsersLookup
-     */
     public function testGetUsersLookupInvalid(): void
     {
         $this->expectException(Exception::class);
@@ -97,7 +89,6 @@ final class TwitterMockTest extends TestCase
      *
      * Use a Data Provider to test this method with different params without repeating our code
      *
-     * @covers ::getList
      * @dataProvider providerGetList
      *
      * @param array $params
@@ -126,7 +117,6 @@ final class TwitterMockTest extends TestCase
     }
 
     /**
-     * @covers ::getList
      * @dataProvider providerGetListBad
      *
      * @param array $params
@@ -155,7 +145,6 @@ final class TwitterMockTest extends TestCase
     /**
      * getListMembers can accept list_id, or slug and owner_screen_name, or slug and owner_id.
      *
-     * @covers ::getListMembers
      * @dataProvider providerGetListMembers
      *
      * @param array $params
@@ -184,7 +173,6 @@ final class TwitterMockTest extends TestCase
     }
 
     /**
-     * @covers ::getListMembers
      * @dataProvider providerGetListMembersBad
      *
      * @param array $params
@@ -215,7 +203,6 @@ final class TwitterMockTest extends TestCase
      * or slug and owner_screen_name and user_id, or slug and owner_screen_name and screen_name,
      * or slug and owner_id and user_id, or slug and owner_id and screen_name.
      *
-     * @covers ::getListMember
      * @dataProvider providerGetListMember
      *
      * @param array $params
@@ -253,7 +240,6 @@ final class TwitterMockTest extends TestCase
     }
 
     /**
-     * @covers ::getListMember
      * @dataProvider providerGetListMemberBad
      *
      * @param array $params

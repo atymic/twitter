@@ -12,10 +12,12 @@ trait MediaTrait
      * Parameters :
      * - media
      * - media_data
+     *
+     * @param mixed $parameters
      */
     public function uploadMedia($parameters = [])
     {
-        if (! array_key_exists('media', $parameters) && ! array_key_exists('media_data', $parameters)) {
+        if (!array_key_exists('media', $parameters) && !array_key_exists('media_data', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : media or media_data');
         }
 

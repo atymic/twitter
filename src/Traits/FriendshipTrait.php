@@ -11,6 +11,8 @@ trait FriendshipTrait
      *
      * Parameters :
      * - stringify_ids (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getNoRters($parameters = [])
     {
@@ -26,6 +28,8 @@ trait FriendshipTrait
      * - cursor
      * - stringify_ids (0|1)
      * - count (1-5000)
+     *
+     * @param mixed $parameters
      */
     public function getFriendsIds($parameters = [])
     {
@@ -41,6 +45,8 @@ trait FriendshipTrait
      * - cursor
      * - stringify_ids (0|1)
      * - count (1-5000)
+     *
+     * @param mixed $parameters
      */
     public function getFollowersIds($parameters = [])
     {
@@ -53,6 +59,8 @@ trait FriendshipTrait
      * Parameters :
      * - cursor
      * - stringify_ids (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getFriendshipsIn($parameters = [])
     {
@@ -65,6 +73,8 @@ trait FriendshipTrait
      * Parameters :
      * - cursor
      * - stringify_ids (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getFriendshipsOut($parameters = [])
     {
@@ -78,10 +88,12 @@ trait FriendshipTrait
      * - screen_name
      * - user_id
      * - follow (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postFollow($parameters = [])
     {
-        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
+        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -94,10 +106,12 @@ trait FriendshipTrait
      * Parameters :
      * - screen_name
      * - user_id
+     *
+     * @param mixed $parameters
      */
     public function postUnfollow($parameters = [])
     {
-        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
+        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -112,10 +126,12 @@ trait FriendshipTrait
      * - user_id
      * - device (0|1)
      * - retweets (0|1)
+     *
+     * @param mixed $parameters
      */
     public function postFollowUpdate($parameters = [])
     {
-        if (! array_key_exists('screen_name', $parameters) && ! array_key_exists('user_id', $parameters)) {
+        if (!array_key_exists('screen_name', $parameters) && !array_key_exists('user_id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : screen_name or user_id');
         }
 
@@ -130,10 +146,12 @@ trait FriendshipTrait
      * - source_screen_name
      * - target_id
      * - target_screen_name
+     *
+     * @param mixed $parameters
      */
     public function getFriendships($parameters = [])
     {
-        if (! array_key_exists('target_id', $parameters) && ! array_key_exists('target_screen_name', $parameters)) {
+        if (!array_key_exists('target_id', $parameters) && !array_key_exists('target_screen_name', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : target_id or target_screen_name');
         }
 
@@ -149,6 +167,8 @@ trait FriendshipTrait
      * - cursor
      * - skip_status (0|1)
      * - include_user_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getFriends($parameters = [])
     {
@@ -164,6 +184,8 @@ trait FriendshipTrait
      * - cursor
      * - skip_status (0|1)
      * - include_user_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getFollowers($parameters = [])
     {
@@ -176,6 +198,8 @@ trait FriendshipTrait
      * Parameters :
      * - screen_name
      * - user_id
+     *
+     * @param mixed $parameters
      */
     public function getFriendshipsLookup($parameters = [])
     {

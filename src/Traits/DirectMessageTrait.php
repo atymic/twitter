@@ -15,6 +15,8 @@ trait DirectMessageTrait
      * - count (1-200)
      * - page
      * - include_entities (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getDmsOut($parameters = [])
     {
@@ -26,10 +28,12 @@ trait DirectMessageTrait
      *
      * Parameters :
      * - id
+     *
+     * @param mixed $parameters
      */
     public function getDm($parameters = [])
     {
-        if (! array_key_exists('id', $parameters)) {
+        if (!array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -45,6 +49,8 @@ trait DirectMessageTrait
      * - count (1-200)
      * - include_entities (0|1)
      * - skip_status (0|1)
+     *
+     * @param mixed $parameters
      */
     public function getDmsIn($parameters = [])
     {
@@ -57,10 +63,12 @@ trait DirectMessageTrait
      * Parameters :
      * - id
      * - include_entities
+     *
+     * @param mixed $parameters
      */
     public function destroyDm($parameters = [])
     {
-        if (! array_key_exists('id', $parameters)) {
+        if (!array_key_exists('id', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : id');
         }
 
@@ -74,10 +82,12 @@ trait DirectMessageTrait
      * - user_id
      * - screen_name
      * - text
+     *
+     * @param mixed $parameters
      */
     public function postDm($parameters = [])
     {
-        if ((! array_key_exists('user_id', $parameters) && ! array_key_exists('screen_name', $parameters)) || ! array_key_exists('text', $parameters)) {
+        if ((!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) || !array_key_exists('text', $parameters)) {
             throw new BadMethodCallException('Parameter required missing : user_id, screen_name or text');
         }
 

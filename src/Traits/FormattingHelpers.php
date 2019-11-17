@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Atymic\Twitter\Traits;
@@ -12,7 +13,7 @@ trait FormattingHelpers
         //todo fix this logic
         if (is_object($tweet)) {
             $type = 'object';
-            $tweet = $this->jsonDecode(json_encode($tweet), true);
+            $tweet = json_decode(json_encode($tweet), true);
         } elseif (is_array($tweet)) {
             $type = 'array';
         } else {
@@ -27,14 +28,14 @@ trait FormattingHelpers
         $patterns['hashtag'] = '(?:(?<=\s)|^)#(\w*[\p{L}\-\d\p{Cyrillic}\d]+\w*)';
         $patterns['long_url'] = '>(([[:alnum:]]+:\/\/)|www\.)?([^[:space:]]{12,22})([^[:space:]]*)([^[:space:]]{12,22})([[:alnum:]#?\/&=])<';
 
-        if ($type == 'text') {
+        if ($type === 'text') {
             // URL
             $pattern = '(?xi)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))';
             $text = preg_replace_callback('#' . $patterns['url'] . '#i', function ($matches) {
                 $input = $matches[0];
-                $url = preg_match('!^https?://!i', $input) ? $input : "http://$input";
+                $url = preg_match('!^https?://!i', $input) ? $input : "http://${input}";
 
-                return '<a href="' . $url . '" target="_blank" rel="nofollow">' . "$input</a>";
+                return '<a href="' . $url . '" target="_blank" rel="nofollow">' . "${input}</a>";
             }, $text);
         } else {
             $text = $tweet['text'];
@@ -81,7 +82,7 @@ trait FormattingHelpers
     // todo figure out how this is used and refactor
     public function ago($timestamp): string
     {
-        if (is_numeric($timestamp) && (int) $timestamp == $timestamp) {
+        if (is_numeric($timestamp) && (int)$timestamp === $timestamp) {
             $carbon = Carbon::createFromTimeStamp($timestamp);
         } else {
             $dt = new \DateTime($timestamp);
@@ -90,7 +91,6 @@ trait FormattingHelpers
 
         return $carbon->diffForHumans();
     }
-
 
     // todo redo these helpers
     public function linkUser($user): string

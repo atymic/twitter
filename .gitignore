@@ -4,6 +4,7 @@
 composer.phar
 composer.lock
 .DS_Store
+*.cache
 .idea
 .phpunit.result.cache
 temp/

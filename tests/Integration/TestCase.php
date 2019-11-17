@@ -2,16 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Atymic\Twitter\Tests;
+namespace Atymic\Twitter\Tests\Integration;
 
 use Atymic\Twitter\Twitter;
 use Atymic\Twitter\TwitterServiceProvider;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\File;
 use Orchestra\Testbench\TestCase as Orchestra;
-use File;
 
-class TestCase extends Orchestra
+abstract class TestCase extends Orchestra
 {
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -19,35 +20,22 @@ class TestCase extends Orchestra
         $this->setUpDatabase($this->app);
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [TwitterServiceProvider::class];
     }
 
-    protected function getPackageAliases($app)
+    protected function getPackageAliases($app): array
     {
         return [
             'twitter' => Twitter::class,
         ];
     }
 
-    public function getTempDirectory($suffix = '')
-    {
-        return __DIR__ . DIRECTORY_SEPARATOR . 'temp' . ($suffix == '' ? '' : DIRECTORY_SEPARATOR . $suffix);
-    }
-
-    protected function initializeDirectory($directory)
-    {
-        if (File::isDirectory($directory)) {
-            File::deleteDirectory($directory);
-        }
-        File::makeDirectory($directory);
-    }
-
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param Application $app
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('mail.driver', 'log');
 
@@ -61,10 +49,29 @@ class TestCase extends Orchestra
         $app['config']->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
     }
 
+    private function getTempDirectory($suffix = ''): string
+    {
+        return __DIR__ . DIRECTORY_SEPARATOR . 'temp' . ($suffix === '' ? '' : DIRECTORY_SEPARATOR . $suffix);
+    }
+
     /**
-     * @param \Illuminate\Foundation\Application $app
+     * @param string $directory
+     *
+     * @return bool
      */
-    protected function setUpDatabase($app)
+    private function initializeDirectory(string $directory): bool
+    {
+        if (File::isDirectory($directory)) {
+            return File::cleanDirectory($directory);
+        }
+
+        return File::makeDirectory($directory);
+    }
+
+    /**
+     * @param Application $app
+     */
+    private function setUpDatabase($app): void
     {
         file_put_contents($this->getTempDirectory() . '/database.sqlite', null);
 
