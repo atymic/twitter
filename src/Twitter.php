@@ -28,6 +28,7 @@ use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
+use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use InvalidArgumentException;
 use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
@@ -52,6 +53,7 @@ class Twitter
         UserTrait;
 
     public const VERSION = '3.x-dev';
+
     public const RESPONSE_FORMAT_ARRAY = 'array';
     public const RESPONSE_FORMAT_OBJECT = 'object';
     public const RESPONSE_FORMAT_JSON = 'json';
@@ -60,15 +62,7 @@ class Twitter
     private const REQUEST_METHOD_GET = 'GET';
     private const REQUEST_METHOD_POST = 'POST';
     private const URL_FORMAT = 'https://%s/%s/%s.%s';
-    private const KEY_FORM_PARAMS = 'form_params';
-    private const KEY_QUERY = 'query';
     private const KEY_FORMAT = 'format';
-
-    private const RESPONSE_CODE_400 = 400;
-    private const RESPONSE_CODE_401 = 401;
-    private const RESPONSE_CODE_403 = 403;
-    private const RESPONSE_CODE_404 = 404;
-    private const RESPONSE_CODE_420 = 420;
 
     /**
      * @var Configuration
@@ -227,7 +221,7 @@ class Twitter
     {
         unset($params[self::KEY_FORMAT]);
 
-        $paramsKey = $requestMethod === self::REQUEST_METHOD_POST ? self::KEY_FORM_PARAMS : self::KEY_QUERY;
+        $paramsKey = $requestMethod === self::REQUEST_METHOD_POST ? RequestOptions::FORM_PARAMS : RequestOptions::QUERY;
 
         return [
             $paramsKey => $params,
@@ -259,15 +253,15 @@ class Twitter
         $responseCode = !empty($response) ? $response->getStatusCode() : null;
 
         switch ($responseCode) {
-            case self::RESPONSE_CODE_400:
+            case 400:
                 return BadRequestException::fromClientResponse($response, $exception);
-            case self::RESPONSE_CODE_401:
+            case 401:
                 return UnauthorizedRequestException::fromClientResponse($response, $exception);
-            case self::RESPONSE_CODE_403:
+            case 403:
                 return ForbiddenRequestException::fromClientResponse($response, $exception);
-            case self::RESPONSE_CODE_404:
+            case 404:
                 return NotFoundException::fromClientResponse($response, $exception);
-            case self::RESPONSE_CODE_420:
+            case 420:
                 return RateLimitedException::fromClientResponse($response, $exception);
             default:
                 return TwitterRequestException::fromClientResponse($response, $exception);
@@ -312,7 +306,7 @@ class Twitter
         $message = 'Making Request';
         $context = [
             'method' => $requestMethod,
-            self::KEY_QUERY => $name,
+            'query' => $name,
             'url' => $name,
             'params' => http_build_query($parameters),
             'multipart' => $multipart,
