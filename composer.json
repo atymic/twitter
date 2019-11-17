@@ -1,31 +1,46 @@
 {
-    "name": "thujohn/twitter",
-    "description": "Twitter API for Laravel",
-	"keywords": ["twitter", "laravel", "laravel4", "laravel5"],
+    "name": "atymic/twitter",
+    "description": "Twitter API for PHP & Laravel",
+	"keywords": ["twitter", "laravel", "laravel5", "laravel6"],
     "license": "MIT",
+    "type": "library",
     "authors": [
-        {
-            "name": "thujohn",
-            "email": "jonathan.thuau@gmail.com"
-        },
         {
             "name": "atymic",
             "email": "atymicq@gmail.com",
             "homepage": "https://atymic.dev"
+        },
+        {
+            "name": "reliq",
+            "email": "reliq@reliqarts.com",
+            "homepage": "https://iamreliq.com"
         }
     ],
     "require": {
-        "php": ">7.0",
+        "php": ">7.2",
+        "ext-json": "*",
         "illuminate/support": "~5.5 || ~6.0",
-        "themattharris/tmhoauth": "0.8.4"
+        "guzzlehttp/guzzle": "^6.4",
+        "psr/log": "^1.1",
+        "nesbot/carbon": "^2.26",
+        "guzzlehttp/oauth-subscriber": "^0.3.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.3"
+        "phpunit/phpunit": "^8.3",
+        "orchestra/testbench": "~3.8.0 || ~4.0.0"
     },
     "autoload": {
-        "psr-0": {
-            "Thujohn\\Twitter": "src/"
+        "psr-4": {
+            "Atymic\\Twitter\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Atymic\\Twitter\\Tests\\": "tests"
+        },
+        "files": [
+            "vendor/phpunit/phpunit/src/Framework/Assert/Functions.php"
+        ]
     },
     "scripts": {
         "test": "phpunit",
@@ -34,10 +49,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Thujohn\\Twitter\\TwitterServiceProvider"
+                "Atymic\\Twitter\\TwitterServiceProvider"
             ],
             "aliases": {
-                "Twitter": "Thujohn\\Twitter\\Facades\\Twitter"
+                "Twitter": "Atymic\\Twitter\\Facades\\Twitter"
             }
         }
     },
