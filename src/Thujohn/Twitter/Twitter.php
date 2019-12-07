@@ -6,6 +6,7 @@ use Carbon\Carbon as Carbon;
 use Illuminate\Config\Repository as Config;
 use Illuminate\Session\Store as SessionStore;
 use RunTimeException;
+use Thujohn\Twitter\Traits\AccountActivityTrait;
 use Thujohn\Twitter\Traits\AccountTrait;
 use Thujohn\Twitter\Traits\BlockTrait;
 use Thujohn\Twitter\Traits\DirectMessageTrait;
@@ -23,7 +24,8 @@ use tmhOAuth;
 
 class Twitter extends tmhOAuth
 {
-    use AccountTrait,
+	use AccountActivityTrait,
+		AccountTrait,
         BlockTrait,
         DirectMessageTrait,
         FavoriteTrait,
