@@ -103,18 +103,16 @@ trait AccountActivityTrait
 	}
 
 	/**
-	 * NOT WORKING AT THE MOMENT; NEEDS APPLICATION-ONLY BEARER TOKEN
 	 * Returns the count of subscriptions that are currently active on your account for all activities.
 	 *
 	 * @return void
 	 */
 	public function getSubscriptionsCount()
 	{
-		// return $this->get("account_activity/all/subscriptions/count");
+		return $this->get("account_activity/all/subscriptions/count", [], false, 'json', true);
 	}
 
 	/**
-	 * NOT WORKING AT THE MOMENT; NEEDS APPLICATION-ONLY BEARER TOKEN
 	 * Returns a list of the current All Activity type subscriptions.
 	 *
 	 * @param  mixed $env
@@ -123,11 +121,10 @@ trait AccountActivityTrait
 	 */
 	public function getSubscriptionsList($env)
 	{
-		// return $this->get("account_activity/all/{$env}/subscriptions/list");
+		return $this->get("account_activity/all/{$env}/subscriptions/list", [], false, 'json', true);
 	}
 
 	/**
-	 * NOT WORKING AT THE MOMENT; NEEDS APPLICATION-ONLY BEARER TOKEN
 	 * Deactivates subscription for the specified user id from the environment.
 	 * After deactivation, all events for the requesting user will no longer be sent to the webhook URL.
 	 *
@@ -138,7 +135,7 @@ trait AccountActivityTrait
 	 */
 	public function destroyUserSubscriptions($env, $userId)
 	{
-		// return $this->delete("account_activity/all/{$env}/subscriptions/{$userId}");
+		return $this->delete("account_activity/all/{$env}/subscriptions/{$userId}", [], false, 'json', true);
 	}
 
 }
