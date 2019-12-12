@@ -57,7 +57,9 @@ trait AccountActivityTrait
 	 */
 	public function updateWebhooks($env, $webhookId)
 	{
-		return $this->query("account_activity/all/{$env}/webhooks/{$webhookId}", "PUT");
+		$this->query("account_activity/all/{$env}/webhooks/{$webhookId}", "PUT");
+
+		return "HTTP {$this->response['code']} {$this->response['response']}";
 	}
 
 	/**
@@ -71,7 +73,9 @@ trait AccountActivityTrait
 	 */
 	public function destroyWebhook($env, $webhookId)
 	{
-		return $this->delete("account_activity/all/{$env}/webhooks/{$webhookId}");
+		$this->delete("account_activity/all/{$env}/webhooks/{$webhookId}");
+
+		return "HTTP {$this->response['code']} {$this->response['response']}";
 	}
 
 	/**
@@ -84,7 +88,9 @@ trait AccountActivityTrait
 	 */
 	public function setSubscriptions($env)
 	{
-		return $this->post("account_activity/all/{$env}/subscriptions");
+		$this->post("account_activity/all/{$env}/subscriptions");
+
+		return "HTTP {$this->response['code']} {$this->response['response']}";
 	}
 
 	/**
@@ -99,7 +105,9 @@ trait AccountActivityTrait
 	 */
 	public function getSubscriptions($env)
 	{
-		return $this->get("account_activity/all/{$env}/subscriptions");
+		$this->get("account_activity/all/{$env}/subscriptions");
+
+		return "HTTP {$this->response['code']} {$this->response['response']}";
 	}
 
 	/**
@@ -135,7 +143,9 @@ trait AccountActivityTrait
 	 */
 	public function destroyUserSubscriptions($env, $userId)
 	{
-		return $this->delete("account_activity/all/{$env}/subscriptions/{$userId}", [], false, 'json', true);
+		$this->delete("account_activity/all/{$env}/subscriptions/{$userId}", [], false, 'json', true);
+
+		return "HTTP {$this->response['code']} {$this->response['response']}";
 	}
 
 }
