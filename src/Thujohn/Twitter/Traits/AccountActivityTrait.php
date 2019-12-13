@@ -22,7 +22,7 @@ trait AccountActivityTrait
 	}
 	
 	/**
-	 * Registers a webhook $url for all event types.
+	 * Registers a webhook $url for all event types in the given environment.
 	 *
 	 * @param  mixed $env
 	 * @param  mixed $url
@@ -35,7 +35,7 @@ trait AccountActivityTrait
 	}
 
 	/**
-	 * Returns webhook URLs for the given environment (or all, if none provided) and their statuses for the authenticating app. 
+	 * Returns webhook URLs for the given environment (or all environments if none provided), and their statuses for the authenticating app. 
 	 *
 	 * @param  mixed $env
 	 *
@@ -79,7 +79,8 @@ trait AccountActivityTrait
 	}
 
 	/**
-	 * Subscribes the provided application to all events for the provided environment for all message types. 
+	 * Subscribes the provided application to all events for the provided environment for all message types.
+	 * Returns HTTP 204 on success.
 	 * After activation, all events for the requesting user will be sent to the application’s webhook via POST request.
 	 *
 	 * @param  mixed $env
@@ -97,7 +98,8 @@ trait AccountActivityTrait
 	 * Provides a way to determine if a webhook configuration is subscribed to the provided user’s events.
 	 * If the provided user context has an active subscription with provided application, returns 204 OK.
 	 * If the response code is not 204, then the user does not have an active subscription.
-	 * See HTTP Response code and error messages below for details.
+	 * See HTTP Response code and error messages for details:
+	 * https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/api-reference/aaa-premium#get-account-activity-all-env-name-subscriptions
 	 *
 	 * @param  mixed $env
 	 *
