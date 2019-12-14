@@ -14,7 +14,7 @@ trait AccountActivityTrait
 	 *
 	 * @return void
 	 */
-	public function CrcHash($crcToken)
+	public function crcHash($crcToken)
 	{
 		$hash = hash_hmac('sha256', $crcToken, $this->tconfig['CONSUMER_SECRET'], true);
 
@@ -59,7 +59,7 @@ trait AccountActivityTrait
 	{
 		$this->query("account_activity/all/{$env}/webhooks/{$webhookId}", "PUT");
 
-		return "HTTP {$this->response['code']} {$this->response['response']}";
+		return $this->response['code'] == 204 ? true : false;
 	}
 
 	/**
@@ -75,7 +75,7 @@ trait AccountActivityTrait
 	{
 		$this->delete("account_activity/all/{$env}/webhooks/{$webhookId}");
 
-		return "HTTP {$this->response['code']} {$this->response['response']}";
+		return $this->response['code'] == 204 ? true : false;
 	}
 
 	/**
@@ -91,7 +91,7 @@ trait AccountActivityTrait
 	{
 		$this->post("account_activity/all/{$env}/subscriptions");
 
-		return "HTTP {$this->response['code']} {$this->response['response']}";
+		return $this->response['code'] == 204 ? true : false;
 	}
 
 	/**
@@ -109,7 +109,7 @@ trait AccountActivityTrait
 	{
 		$this->get("account_activity/all/{$env}/subscriptions");
 
-		return "HTTP {$this->response['code']} {$this->response['response']}";
+		return $this->response['code'] == 204 ? true : false;
 	}
 
 	/**
@@ -147,7 +147,7 @@ trait AccountActivityTrait
 	{
 		$this->delete("account_activity/all/{$env}/subscriptions/{$userId}", [], false, 'json', true);
 
-		return "HTTP {$this->response['code']} {$this->response['response']}";
+		return $this->response['code'] == 204 ? true : false;
 	}
 
 }

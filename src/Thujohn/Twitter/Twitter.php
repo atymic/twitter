@@ -258,7 +258,7 @@ class Twitter extends tmhOAuth
         $this->log('PARAMETERS : '.http_build_query($parameters));
         $this->log('MULTIPART : '.($multipart ? 'true' : 'false'));
 
-		if ($appOnly) // Application-only request
+		if ($appOnly)
 		{
 			if (!$this->session->has('bearer')) // If bearer not in session, get bearer token
 				$this->getBearerToken();
