@@ -24,8 +24,8 @@ use tmhOAuth;
 
 class Twitter extends tmhOAuth
 {
-	use AccountActivityTrait,
-		AccountTrait,
+    use AccountActivityTrait,
+        AccountTrait,
         BlockTrait,
         DirectMessageTrait,
         FavoriteTrait,
@@ -47,9 +47,9 @@ class Twitter extends tmhOAuth
     /**
      * Store the config values for the parent class.
      */
-	private $parent_config;
-	
-	private $session;
+    private $parent_config;
+
+    private $session;
 
     /**
      * Only for debugging.
@@ -70,8 +70,8 @@ class Twitter extends tmhOAuth
             throw new RunTimeException('No config found');
         }
 
-		$this->debug = (isset($this->tconfig['debug']) && $this->tconfig['debug']) ? true : false;
-		$this->session = $session;
+        $this->debug = (isset($this->tconfig['debug']) && $this->tconfig['debug']) ? true : false;
+        $this->session = $session;
 
         $this->parent_config = [];
         $this->parent_config['consumer_key'] = $this->tconfig['CONSUMER_KEY'];
@@ -86,10 +86,11 @@ class Twitter extends tmhOAuth
                 $this->parent_config['token'] = $access_token['oauth_token'];
                 $this->parent_config['secret'] = $access_token['oauth_token_secret'];
             }
-		}
-		
-		if ($session->has('bearer'))
-			$this->parent_config['bearer'] = $session->get('bearer');
+        }
+
+        if ($session->has('bearer')) {
+            $this->parent_config['bearer'] = $session->get('bearer');
+        }
 
         $this->parent_config['use_ssl'] = $this->tconfig['USE_SSL'];
         $this->parent_config['user_agent'] = 'LTTW '.parent::VERSION;
@@ -193,34 +194,32 @@ class Twitter extends tmhOAuth
         }
 
         throw new RunTimeException($response['response'], $response['code']);
-	}
-	
-	/**
-	 * Get application-only bearer token.
-	 * https://developer.twitter.com/en/docs/basics/authentication/overview/application-only
-	 *
-	 * @return void
-	 */
-	public function getBearerToken()
-	{
-		$bearer = $this->bearer_token_credentials(); // Encoded consumer_key and consumer_secret for Basic Auth credentials
-		$this->request('POST', $this->url('/oauth2/token', null), ['grant_type' => 'client_credentials'], false, false, ['Authorization' => 'Basic '.$bearer]);
-		$response = $this->response;
+    }
 
-		if (isset($response['code']) && $response['code'] == 200 && !empty($response))
-		{
-			$data = json_decode($response['response']);
-			if (isset($data->token_type) && strcasecmp($data->token_type, 'bearer') === 0)
-			{
-				$this->reconfig(['bearer'  => $data->access_token]);
-				$this->session->put('bearer', $data->access_token); // Save into session for future use
-	
-				return $data->access_token;
-			}
-		}
+    /**
+     * Get application-only bearer token.
+     * https://developer.twitter.com/en/docs/basics/authentication/overview/application-only.
+     *
+     * @return void
+     */
+    public function getBearerToken()
+    {
+        $bearer = $this->bearer_token_credentials(); // Encoded consumer_key and consumer_secret for Basic Auth credentials
+        $this->request('POST', $this->url('/oauth2/token', null), ['grant_type' => 'client_credentials'], false, false, ['Authorization' => 'Basic '.$bearer]);
+        $response = $this->response;
 
-		throw new RunTimeException($response['response'], $response['code']);
-	}
+        if (isset($response['code']) && $response['code'] == 200 && !empty($response)) {
+            $data = json_decode($response['response']);
+            if (isset($data->token_type) && strcasecmp($data->token_type, 'bearer') === 0) {
+                $this->reconfig(['bearer'  => $data->access_token]);
+                $this->session->put('bearer', $data->access_token); // Save into session for future use
+
+                return $data->access_token;
+            }
+        }
+
+        throw new RunTimeException($response['response'], $response['code']);
+    }
 
     /**
      * Get the authorize URL.
@@ -258,23 +257,21 @@ class Twitter extends tmhOAuth
         $this->log('PARAMETERS : '.http_build_query($parameters));
         $this->log('MULTIPART : '.($multipart ? 'true' : 'false'));
 
-		if ($appOnly)
-		{
-			if (!$this->session->has('bearer')) // If bearer not in session, get bearer token
-				$this->getBearerToken();
-			
-			parent::apponly_request(['method' => $requestMethod, 'url' => $url]);
-		}
-		else
-		{
-			parent::user_request([
-				'method'    => $requestMethod,
-				'host'      => $name,
-				'url'       => $url,
-				'params'    => $parameters,
-				'multipart' => $multipart,
-			]);
-		}
+        if ($appOnly) {
+            if (!$this->session->has('bearer')) { // If bearer not in session, get bearer token
+                $this->getBearerToken();
+            }
+
+            parent::apponly_request(['method' => $requestMethod, 'url' => $url]);
+        } else {
+            parent::user_request([
+                'method'    => $requestMethod,
+                'host'      => $name,
+                'url'       => $url,
+                'params'    => $parameters,
+                'multipart' => $multipart,
+            ]);
+        }
 
         $response = $this->response;
 
