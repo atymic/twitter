@@ -10,26 +10,64 @@ class Configuration
 {
     private const PACKAGE_NAME = 'atymic/twitter';
 
-    /** @var string */
+    /**
+     * @var string
+     */
     protected $apiUrl;
-    /** @var string */
+
+    /**
+     * @var string
+     */
     protected $uploadUrl;
-    /** @var string */
+
+    /**
+     * @var string
+     */
     protected $apiVersion;
 
-    /** @var null|string */
+    /**
+     * @var null|string
+     */
     protected $consumerKey;
-    /** @var null|string */
+
+    /**
+     * @var null|string
+     */
     protected $consumerSecret;
-    /** @var null|string */
+
+    /**
+     * @var null|string
+     */
     protected $accessToken;
-    /** @var null|string */
+
+    /**
+     * @var null|string
+     */
     protected $accessTokenSecret;
 
-    /** @var bool */
+    /**
+     * @var bool
+     */
     protected $debugMode = false;
-    /** @var null|string */
+
+    /**
+     * @var null|string
+     */
     protected $userAgent;
+    /**
+     * @var string|null
+     */
+    private $authenticateUrl;
+
+    /**
+     * @var string|null
+     */
+    private $accessTokenUrl;
+
+    /**
+     * @var string|null
+     */
+    private $requestTokenUrl;
 
     /**
      * @param string      $apiUrl
@@ -39,6 +77,9 @@ class Configuration
      * @param null|string $consumerSecret
      * @param null|string $accessToken
      * @param null|string $accessTokenSecret
+     * @param string|null $authenticateUrl
+     * @param string|null $accessTokenUrl
+     * @param string|null $requestTokenUrl
      * @param bool        $debugMode
      * @param null|string $userAgent
      */
@@ -50,6 +91,9 @@ class Configuration
         ?string $consumerSecret,
         ?string $accessToken = null,
         ?string $accessTokenSecret = null,
+        ?string $authenticateUrl = null,
+        ?string $accessTokenUrl = null,
+        ?string $requestTokenUrl = null,
         bool $debugMode = false,
         ?string $userAgent = null
     ) {
@@ -62,10 +106,12 @@ class Configuration
         $this->accessToken = $accessToken;
         $this->accessTokenSecret = $accessTokenSecret;
 
+        $this->authenticateUrl = $authenticateUrl;
+        $this->accessTokenUrl = $accessTokenUrl;
+        $this->requestTokenUrl = $requestTokenUrl;
+
         $this->debugMode = $debugMode;
-        $this->userAgent = $userAgent === null
-            ? sprintf('%s v%s php v%s', self::PACKAGE_NAME, Twitter::VERSION, PHP_VERSION)
-            : $userAgent;
+        $this->userAgent = $userAgent ?? sprintf('%s v%s php v%s', self::PACKAGE_NAME, Twitter::VERSION, PHP_VERSION);
     }
 
     /**
@@ -89,6 +135,9 @@ class Configuration
             $config['consumer_secret'],
             $config['access_token'],
             $config['access_token_secret'],
+            $config['authenticate_url'],
+            $config['access_token_url'],
+            $config['request_token_url'],
             $config['debug']
         );
     }
@@ -162,6 +211,30 @@ class Configuration
     public function getAccessTokenSecret(): ?string
     {
         return $this->accessTokenSecret;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAuthenticateUrl(): ?string
+    {
+        return $this->authenticateUrl;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getAccessTokenUrl(): ?string
+    {
+        return $this->accessTokenUrl;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getRequestTokenUrl(): ?string
+    {
+        return $this->requestTokenUrl;
     }
 
     /**
