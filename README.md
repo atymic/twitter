@@ -286,12 +286,10 @@ Sign in with twitter
 use Atymic\Twitter\Facades\Twitter;
 
 Route::get('twitter/login', ['as' => 'twitter.login', static function () {
-    // Make sure we make this request w/o tokens, overwrite the default values in case of login.
-    $twitter = Twitter::usingCredentials('', '');
-    $token = $twitter->getRequestToken(route('twitter.callback'));
+    $token = Twitter::getRequestToken(route('twitter.callback'));
 
     if (isset($token['oauth_token_secret'])) {
-        $url = Twitter::getAuthenticateUrl($token);
+        $url = Twitter::getAuthenticateUrl($token['oauth_token']);
 
         Session::put('oauth_state', 'start');
         Session::put('oauth_request_token', $token['oauth_token']);

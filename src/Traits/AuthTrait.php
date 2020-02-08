@@ -19,9 +19,11 @@ trait AuthTrait
      */
     public function getRequestToken(string $callbackUrl): array
     {
-        $tokenEndpoint = $this->config->getRequestTokenUrl() ?? '';
-        $responseBody = $this->get(
+        $config = $this->config->withoutOauthCredentials();
+        $tokenEndpoint = $config->getRequestTokenUrl() ?? '';
+        $responseBody = $this->directQuery(
             $tokenEndpoint,
+            self::REQUEST_METHOD_GET,
             [
                 Twitter::KEY_OAUTH_CALLBACK => $callbackUrl,
                 Twitter::KEY_FORMAT => self::RESPONSE_FORMAT_JSON,
@@ -38,14 +40,12 @@ trait AuthTrait
     }
 
     /**
-     * @param array $requestToken
+     * @param string $oauthToken
      *
      * @return string
      */
-    public function getAuthenticateUrl(array $requestToken): string
+    public function getAuthenticateUrl(string $oauthToken): string
     {
-        $oauthToken = $requestToken[Twitter::KEY_OAUTH_TOKEN];
-
         return sprintf('%s?%s=%s', $this->config->getAuthenticateUrl(), Twitter::KEY_OAUTH_TOKEN, $oauthToken);
     }
 
@@ -60,8 +60,9 @@ trait AuthTrait
     public function getAccessToken(string $oauthVerifier): array
     {
         $accessTokenEndpoint = $this->config->getAccessTokenUrl();
-        $responseBody = $this->get(
+        $responseBody = $this->directQuery(
             $accessTokenEndpoint,
+            self::REQUEST_METHOD_GET,
             [
                 Twitter::KEY_OAUTH_VERIFIER => $oauthVerifier,
                 Twitter::KEY_FORMAT => self::RESPONSE_FORMAT_JSON,

@@ -158,6 +158,18 @@ class Configuration
     }
 
     /**
+     * @return self
+     */
+    public function withoutOauthCredentials(): self
+    {
+        $config = clone $this;
+        $config->accessToken = '';
+        $config->accessTokenSecret = '';
+
+        return $config;
+    }
+
+    /**
      * @return string
      */
     public function getApiUrl(): string

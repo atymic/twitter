@@ -155,14 +155,32 @@ class Twitter
             $this->logRequest($endpoint, $requestMethod, $parameters, $multipart);
 
             $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
-            $url = isset($parameters[self::KEY_PREBUILT_ENDPOINT]) && $parameters[self::KEY_PREBUILT_ENDPOINT]
-                ? $endpoint
-                : $this->buildUrl($host, $this->config->getApiVersion(), $endpoint, $extension);
-            $format = $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
-            $requestOptions = $this->getRequestOptions($parameters, $requestMethod);
-            $response = $this->httpClient->request($requestMethod, $url, $requestOptions);
+            $url = $this->buildUrl($host, $this->config->getApiVersion(), $endpoint, $extension);
 
-            return $this->formatResponse($response, $format);
+            return $this->request($url, $parameters, $requestMethod);
+        } catch (GuzzleException $exception) {
+            throw $this->transformClientException($exception);
+        }
+    }
+
+    /**
+     * @param string $url
+     * @param string $requestMethod
+     * @param array  $parameters
+     *
+     * @throws TwitterRequestException
+     *
+     * @return mixed|string
+     */
+    public function directQuery(
+        string $url,
+        string $requestMethod = self::REQUEST_METHOD_GET,
+        array $parameters = []
+    ) {
+        try {
+            $this->logRequest($url, $requestMethod, $parameters);
+
+            return $this->request($url, $parameters, $requestMethod);
         } catch (GuzzleException $exception) {
             throw $this->transformClientException($exception);
         }
@@ -300,6 +318,23 @@ class Twitter
     }
 
     /**
+     * @param string $url
+     * @param array  $parameters
+     * @param string $method
+     *
+     * @throws GuzzleException
+     * @return mixed|string
+     */
+    private function request(string $url, array $parameters, string $method)
+    {
+        $format = $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
+        $requestOptions = $this->getRequestOptions($parameters, $method);
+        $response = $this->httpClient->request($method, $url, $requestOptions);
+
+        return $this->formatResponse($response, $format);
+    }
+
+    /**
      * @param string $name
      * @param string $requestMethod
      * @param array  $parameters
@@ -310,7 +345,7 @@ class Twitter
         string $name,
         string $requestMethod,
         array $parameters,
-        bool $multipart,
+        bool $multipart = false,
         string $logLevel = LogLevel::DEBUG
     ): void {
         $message = 'Making Request';
