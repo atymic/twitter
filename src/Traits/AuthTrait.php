@@ -27,7 +27,6 @@ trait AuthTrait
             [
                 Twitter::KEY_OAUTH_CALLBACK => $callbackUrl,
                 Twitter::KEY_FORMAT => self::RESPONSE_FORMAT_JSON,
-                Twitter::KEY_PREBUILT_ENDPOINT => true,
             ]
         );
 
@@ -66,7 +65,6 @@ trait AuthTrait
             [
                 Twitter::KEY_OAUTH_VERIFIER => $oauthVerifier,
                 Twitter::KEY_FORMAT => self::RESPONSE_FORMAT_JSON,
-                Twitter::KEY_PREBUILT_ENDPOINT => true,
             ]
         );
 

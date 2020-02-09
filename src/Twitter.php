@@ -57,7 +57,6 @@ class Twitter
     public const VERSION = '3.x-dev';
 
     public const KEY_FORMAT = 'format';
-    public const KEY_PREBUILT_ENDPOINT = 'full_endpoint';
     public const KEY_OAUTH_CALLBACK = 'oauth_callback';
     public const KEY_OAUTH_VERIFIER = 'oauth_verifier';
     public const KEY_OAUTH_TOKEN = 'oauth_token';
@@ -247,7 +246,7 @@ class Twitter
      */
     private function getRequestOptions(array $params, string $requestMethod): array
     {
-        unset($params[self::KEY_FORMAT], $params[self::KEY_PREBUILT_ENDPOINT]);
+        unset($params[self::KEY_FORMAT]);
 
         $paramsKey = $requestMethod === self::REQUEST_METHOD_POST ? RequestOptions::FORM_PARAMS : RequestOptions::QUERY;
 
