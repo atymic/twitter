@@ -11,6 +11,7 @@ use Atymic\Twitter\Exception\Request\RateLimitedException;
 use Atymic\Twitter\Exception\Request\UnauthorizedRequestException;
 use Atymic\Twitter\Exception\RequestException as TwitterRequestException;
 use Atymic\Twitter\Traits\AccountTrait;
+use Atymic\Twitter\Traits\AuthTrait;
 use Atymic\Twitter\Traits\BlockTrait;
 use Atymic\Twitter\Traits\DirectMessageTrait;
 use Atymic\Twitter\Traits\FavoriteTrait;
@@ -50,9 +51,16 @@ class Twitter
         SearchTrait,
         StatusTrait,
         TrendTrait,
-        UserTrait;
+        UserTrait,
+        AuthTrait;
 
     public const VERSION = '3.x-dev';
+
+    public const KEY_FORMAT = 'format';
+    public const KEY_OAUTH_CALLBACK = 'oauth_callback';
+    public const KEY_OAUTH_VERIFIER = 'oauth_verifier';
+    public const KEY_OAUTH_TOKEN = 'oauth_token';
+    public const KEY_OAUTH_TOKEN_SECRET = 'oauth_token_secret';
 
     public const RESPONSE_FORMAT_ARRAY = 'array';
     public const RESPONSE_FORMAT_OBJECT = 'object';
@@ -62,7 +70,6 @@ class Twitter
     private const REQUEST_METHOD_GET = 'GET';
     private const REQUEST_METHOD_POST = 'POST';
     private const URL_FORMAT = 'https://%s/%s/%s.%s';
-    private const KEY_FORMAT = 'format';
 
     /**
      * @var Configuration
@@ -126,7 +133,7 @@ class Twitter
     }
 
     /**
-     * @param string $name
+     * @param string $endpoint
      * @param string $requestMethod
      * @param array  $parameters
      * @param bool   $multipart
@@ -137,29 +144,49 @@ class Twitter
      * @return mixed|string
      */
     public function query(
-        string $name,
+        string $endpoint,
         string $requestMethod = self::REQUEST_METHOD_GET,
         array $parameters = [],
         bool $multipart = false,
         string $extension = self::DEFAULT_EXTENSION
     ) {
         try {
-            $this->logRequest($name, $requestMethod, $parameters, $multipart);
+            $this->logRequest($endpoint, $requestMethod, $parameters, $multipart);
 
             $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
-            $url = $this->buildUrl($host, $this->config->getApiVersion(), $name, $extension);
-            $format = $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
-            $requestOptions = $this->getRequestOptions($parameters, $requestMethod);
-            $response = $this->httpClient->request($requestMethod, $url, $requestOptions);
+            $url = $this->buildUrl($host, $this->config->getApiVersion(), $endpoint, $extension);
 
-            return $this->formatResponse($response, $format);
+            return $this->request($url, $parameters, $requestMethod);
         } catch (GuzzleException $exception) {
             throw $this->transformClientException($exception);
         }
     }
 
     /**
-     * @param        $name
+     * @param string $url
+     * @param string $requestMethod
+     * @param array  $parameters
+     *
+     * @throws TwitterRequestException
+     *
+     * @return mixed|string
+     */
+    public function directQuery(
+        string $url,
+        string $requestMethod = self::REQUEST_METHOD_GET,
+        array $parameters = []
+    ) {
+        try {
+            $this->logRequest($url, $requestMethod, $parameters);
+
+            return $this->request($url, $parameters, $requestMethod);
+        } catch (GuzzleException $exception) {
+            throw $this->transformClientException($exception);
+        }
+    }
+
+    /**
+     * @param string $endpoint
      * @param array  $parameters
      * @param bool   $multipart
      * @param string $extension
@@ -168,23 +195,23 @@ class Twitter
      *
      * @return mixed|string
      */
-    public function get($name, $parameters = [], $multipart = false, $extension = self::DEFAULT_EXTENSION)
+    public function get(string $endpoint, $parameters = [], $multipart = false, $extension = self::DEFAULT_EXTENSION)
     {
-        return $this->query($name, self::REQUEST_METHOD_GET, $parameters, $multipart, $extension);
+        return $this->query($endpoint, self::REQUEST_METHOD_GET, $parameters, $multipart, $extension);
     }
 
     /**
-     * @param       $name
-     * @param array $parameters
-     * @param bool  $multipart
+     * @param string $endpoint
+     * @param array  $parameters
+     * @param bool   $multipart
      *
      * @throws TwitterRequestException
      *
      * @return mixed|string
      */
-    public function post($name, $parameters = [], $multipart = false)
+    public function post(string $endpoint, $parameters = [], $multipart = false)
     {
-        return $this->query($name, self::REQUEST_METHOD_POST, $parameters, $multipart);
+        return $this->query($endpoint, self::REQUEST_METHOD_POST, $parameters, $multipart);
     }
 
     /**
@@ -290,6 +317,23 @@ class Twitter
     }
 
     /**
+     * @param string $url
+     * @param array  $parameters
+     * @param string $method
+     *
+     * @throws GuzzleException
+     * @return mixed|string
+     */
+    private function request(string $url, array $parameters, string $method)
+    {
+        $format = $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
+        $requestOptions = $this->getRequestOptions($parameters, $method);
+        $response = $this->httpClient->request($method, $url, $requestOptions);
+
+        return $this->formatResponse($response, $format);
+    }
+
+    /**
      * @param string $name
      * @param string $requestMethod
      * @param array  $parameters
@@ -300,7 +344,7 @@ class Twitter
         string $name,
         string $requestMethod,
         array $parameters,
-        bool $multipart,
+        bool $multipart = false,
         string $logLevel = LogLevel::DEBUG
     ): void {
         $message = 'Making Request';

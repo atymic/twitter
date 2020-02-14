@@ -14,9 +14,7 @@ return [
     'access_token' => env('TWITTER_ACCESS_TOKEN'),
     'access_token_secret' => env('TWITTER_ACCESS_TOKEN_SECRET'),
 
-    // todo deal with these
     'authenticate_url' => 'https://api.twitter.com/oauth/authenticate',
-    'authorize_url' => 'https://api.twitter.com/oauth/authorize',
     'access_token_url' => 'https://api.twitter.com/oauth/access_token',
     'request_token_url' => 'https://api.twitter.com/oauth/request_token',
 ];
