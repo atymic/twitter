@@ -163,8 +163,8 @@ class Configuration
     public function withoutOauthCredentials(): self
     {
         $config = clone $this;
-        $config->accessToken = '';
-        $config->accessTokenSecret = '';
+        $config->accessToken = null;
+        $config->accessTokenSecret = null;
 
         return $config;
     }
