@@ -7,7 +7,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter) 
 ![GitHub Release Date](https://img.shields.io/github/release-date/atymic/twitter?label=latest%20release&style=flat-square)
 
-Twitter API for Laravel 5.5+ & 6.x
+Twitter API for Laravel 5.5+, 6.x and 7.x
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
