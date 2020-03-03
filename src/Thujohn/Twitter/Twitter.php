@@ -24,20 +24,20 @@ use tmhOAuth;
 
 class Twitter extends tmhOAuth
 {
-    use AccountActivityTrait,
-        AccountTrait,
-        BlockTrait,
-        DirectMessageTrait,
-        FavoriteTrait,
-        FriendshipTrait,
-        GeoTrait,
-        HelpTrait,
-        ListTrait,
-        MediaTrait,
-        SearchTrait,
-        StatusTrait,
-        TrendTrait,
-        UserTrait;
+    use AccountActivityTrait;
+    use AccountTrait;
+    use BlockTrait;
+    use DirectMessageTrait;
+    use FavoriteTrait;
+    use FriendshipTrait;
+    use GeoTrait;
+    use HelpTrait;
+    use ListTrait;
+    use MediaTrait;
+    use SearchTrait;
+    use StatusTrait;
+    use TrendTrait;
+    use UserTrait;
 
     /**
      * Store the config values.
