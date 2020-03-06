@@ -224,18 +224,22 @@ class Twitter
     private function getHttpClient(Configuration $config): HttpClient
     {
         $stack = HandlerStack::create();
-        $middleware = new Oauth1([
-            'consumer_key' => $config->getConsumerKey(),
-            'consumer_secret' => $config->getConsumerSecret(),
-            'token' => $config->getAccessToken(),
-            'token_secret' => $config->getAccessTokenSecret(),
-        ]);
+        $middleware = new Oauth1(
+            [
+                'consumer_key' => $config->getConsumerKey(),
+                'consumer_secret' => $config->getConsumerSecret(),
+                'token' => $config->getAccessToken(),
+                'token_secret' => $config->getAccessTokenSecret(),
+            ]
+        );
         $stack->push($middleware);
 
-        return new HttpClient([
-            'handler' => $stack,
-            'auth' => 'oauth',
-        ]);
+        return new HttpClient(
+            [
+                'handler' => $stack,
+                'auth' => 'oauth',
+            ]
+        );
     }
 
     /**
@@ -277,7 +281,7 @@ class Twitter
     {
         /** @var null|Response $response */
         $response = method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
-        $responseCode = !empty($response) ? $response->getStatusCode() : null;
+        $responseCode = $response !== null ? $response->getStatusCode() : null;
 
         switch ($responseCode) {
             case 400:
@@ -291,7 +295,7 @@ class Twitter
             case 420:
                 return RateLimitedException::fromClientResponse($response, $exception);
             default:
-                return TwitterRequestException::fromClientResponse($response, $exception);
+                return new TwitterRequestException($exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 
