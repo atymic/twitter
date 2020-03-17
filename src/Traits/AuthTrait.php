@@ -26,7 +26,7 @@ trait AuthTrait
             self::REQUEST_METHOD_GET,
             [
                 Twitter::KEY_OAUTH_CALLBACK => $callbackUrl,
-                Twitter::KEY_FORMAT => self::RESPONSE_FORMAT_JSON,
+                Twitter::KEY_RESPONSE_FORMAT => self::RESPONSE_FORMAT_JSON,
             ]
         );
 
@@ -64,7 +64,7 @@ trait AuthTrait
             self::REQUEST_METHOD_GET,
             [
                 Twitter::KEY_OAUTH_VERIFIER => $oauthVerifier,
-                Twitter::KEY_FORMAT => self::RESPONSE_FORMAT_JSON,
+                Twitter::KEY_RESPONSE_FORMAT => self::RESPONSE_FORMAT_JSON,
             ]
         );
 

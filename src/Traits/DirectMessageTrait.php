@@ -55,7 +55,9 @@ trait DirectMessageTrait
     }
 
     /**
-     * Publishes a new message_create event resulting in a Direct Message sent to a specified user from the authenticating user. Returns an event if successful. Supports publishing Direct Messages with optional Quick Reply and media attachment.
+     * Publishes a new message_create event resulting in a Direct Message sent to a specified user from the
+     * authenticating user. Returns an event if successful. Supports publishing Direct Messages with optional Quick
+     * Reply and media attachment.
      *
      * Parameters :
      * - type
@@ -64,11 +66,17 @@ trait DirectMessageTrait
      * @see https://developer.twitter.com/en/docs/direct-messages/sending-and-receiving/api-reference/new-event
      *
      * @param mixed $parameters
+     *
+     * @throws BadMethodCallException
      */
     public function postDm($parameters = [])
     {
-        if ((!array_key_exists('type', $parameters) && !array_key_exists('message_create', $parameters))) {
-            throw new BadMethodCallException('Parameter required missing : user_id, screen_name or text');
+        $apiReference = 'https://developer.twitter.com/en/docs/direct-messages/sending-and-receiving/api-reference/new-event';
+
+        if (!array_key_exists('event', $parameters)) {
+            throw new BadMethodCallException(
+                sprintf('Missing required parameter: `event`. See %s', $apiReference)
+            );
         }
 
         return $this->post('direct_messages/events/new', $parameters);

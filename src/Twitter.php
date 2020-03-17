@@ -32,6 +32,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use InvalidArgumentException;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -56,7 +57,8 @@ class Twitter
 
     public const VERSION = '3.x-dev';
 
-    public const KEY_FORMAT = 'format';
+    public const KEY_REQUEST_FORMAT = 'request_format';
+    public const KEY_RESPONSE_FORMAT = 'format';
     public const KEY_OAUTH_CALLBACK = 'oauth_callback';
     public const KEY_OAUTH_VERIFIER = 'oauth_verifier';
     public const KEY_OAUTH_TOKEN = 'oauth_token';
@@ -111,9 +113,8 @@ class Twitter
      * @param string $accessToken
      * @param string $accessTokenSecret
      *
-     * @throws InvalidArgumentException
-     *
      * @return self
+     * @throws InvalidArgumentException
      */
     public function usingCredentials(string $accessToken, string $accessTokenSecret): self
     {
@@ -123,9 +124,8 @@ class Twitter
     /**
      * @param Configuration $configuration
      *
-     * @throws InvalidArgumentException
-     *
      * @return self
+     * @throws InvalidArgumentException
      */
     public function usingConfiguration(Configuration $configuration): self
     {
@@ -139,9 +139,8 @@ class Twitter
      * @param bool   $multipart
      * @param string $extension
      *
-     * @throws TwitterRequestException
-     *
      * @return mixed|string
+     * @throws TwitterRequestException
      */
     public function query(
         string $endpoint,
@@ -156,6 +155,10 @@ class Twitter
             $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
             $url = $this->buildUrl($host, $this->config->getApiVersion(), $endpoint, $extension);
 
+            if ($multipart) {
+                $parameters[self::KEY_REQUEST_FORMAT] = RequestOptions::MULTIPART;
+            }
+
             return $this->request($url, $parameters, $requestMethod);
         } catch (GuzzleException $exception) {
             throw $this->transformClientException($exception);
@@ -167,9 +170,8 @@ class Twitter
      * @param string $requestMethod
      * @param array  $parameters
      *
-     * @throws TwitterRequestException
-     *
      * @return mixed|string
+     * @throws TwitterRequestException
      */
     public function directQuery(
         string $url,
@@ -191,9 +193,8 @@ class Twitter
      * @param bool   $multipart
      * @param string $extension
      *
-     * @throws TwitterRequestException
-     *
      * @return mixed|string
+     * @throws TwitterRequestException
      */
     public function get(string $endpoint, $parameters = [], $multipart = false, $extension = self::DEFAULT_EXTENSION)
     {
@@ -205,9 +206,8 @@ class Twitter
      * @param array  $parameters
      * @param bool   $multipart
      *
-     * @throws TwitterRequestException
-     *
      * @return mixed|string
+     * @throws TwitterRequestException
      */
     public function post(string $endpoint, $parameters = [], $multipart = false)
     {
@@ -217,9 +217,9 @@ class Twitter
     /**
      * @param Configuration $config
      *
+     * @return HttpClient
      * @throws InvalidArgumentException
      *
-     * @return HttpClient
      */
     private function getHttpClient(Configuration $config): HttpClient
     {
@@ -245,14 +245,23 @@ class Twitter
     /**
      * @param array  $params
      * @param string $requestMethod
+     * @param string $requestFormat
      *
      * @return array
      */
-    private function getRequestOptions(array $params, string $requestMethod): array
+    private function getRequestOptions(array $params, string $requestMethod, string $requestFormat): array
     {
-        unset($params[self::KEY_FORMAT]);
-
-        $paramsKey = $requestMethod === self::REQUEST_METHOD_POST ? RequestOptions::FORM_PARAMS : RequestOptions::QUERY;
+        switch ($requestFormat) {
+            case RequestOptions::JSON:
+                $paramsKey = RequestOptions::JSON;
+                break;
+            case RequestOptions::MULTIPART:
+                $paramsKey = RequestOptions::MULTIPART;
+                break;
+            default:
+                $paramsKey = $requestMethod === self::REQUEST_METHOD_POST ? RequestOptions::FORM_PARAMS : RequestOptions::QUERY;
+                break;
+        }
 
         return [
             $paramsKey => $params,
@@ -300,8 +309,8 @@ class Twitter
     }
 
     /**
-     * @param Response $response
-     * @param string   $format
+     * @param Response|ResponseInterface $response
+     * @param string                     $format
      *
      * @return mixed|string
      */
@@ -313,10 +322,10 @@ class Twitter
             case self::RESPONSE_FORMAT_JSON:
                 return $body;
             case self::RESPONSE_FORMAT_ARRAY:
-                return json_decode($body, true);
+                return json_decode($body, true, 512, JSON_THROW_ON_ERROR);
             case self::RESPONSE_FORMAT_OBJECT:
             default:
-                return json_decode($body, false);
+                return json_decode($body, false, 512, JSON_THROW_ON_ERROR);
         }
     }
 
@@ -325,16 +334,19 @@ class Twitter
      * @param array  $parameters
      * @param string $method
      *
-     * @throws GuzzleException
      * @return mixed|string
      */
     private function request(string $url, array $parameters, string $method)
     {
-        $format = $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
-        $requestOptions = $this->getRequestOptions($parameters, $method);
+        $responseFormat = $parameters[self::KEY_RESPONSE_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
+        $requestFormat = $parameters[self::KEY_REQUEST_FORMAT] ?? $responseFormat;
+
+        unset($parameters[self::KEY_RESPONSE_FORMAT]);
+
+        $requestOptions = $this->getRequestOptions($parameters, $method, $requestFormat);
         $response = $this->httpClient->request($method, $url, $requestOptions);
 
-        return $this->formatResponse($response, $format);
+        return $this->formatResponse($response, $responseFormat);
     }
 
     /**
