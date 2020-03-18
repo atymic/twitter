@@ -233,7 +233,7 @@ Returns a collection of the most recent Tweets posted by the user indicated by t
 ```php
 Route::get('/userTimeline', function()
 {
-	return Twitter::getUserTimeline(['screen_name' => 'thujohn', 'count' => 20, 'format' => 'json']);
+	return Twitter::getUserTimeline(['screen_name' => 'thujohn', 'count' => 20, 'response_format' => 'json']);
 });
 ```
 
@@ -241,7 +241,7 @@ Returns a collection of the most recent Tweets and retweets posted by the authen
 ```php
 Route::get('/homeTimeline', function()
 {
-	return Twitter::getHomeTimeline(['count' => 20, 'format' => 'json']);
+	return Twitter::getHomeTimeline(['count' => 20, 'response_format' => 'json']);
 });
 ```
 
@@ -249,7 +249,7 @@ Returns the X most recent mentions (tweets containing a users's @screen_name) fo
 ```php
 Route::get('/mentionsTimeline', function()
 {
-	return Twitter::getMentionsTimeline(['count' => 20, 'format' => 'json']);
+	return Twitter::getMentionsTimeline(['count' => 20, 'response_format' => 'json']);
 });
 ```
 
@@ -257,7 +257,7 @@ Updates the authenticating user's current status, also known as tweeting.
 ```php
 Route::get('/tweet', function()
 {
-	return Twitter::postTweet(['status' => 'Laravel is beautiful', 'format' => 'json']);
+	return Twitter::postTweet(['status' => 'Laravel is beautiful', 'response_format' => 'json']);
 });
 ```
 
@@ -356,7 +356,7 @@ Then you can access the logs() method.
 ```php
 try
 {
-	$response = Twitter::getUserTimeline(['count' => 20, 'format' => 'array']);
+	$response = Twitter::getUserTimeline(['count' => 20, 'response_format' => 'array']);
 }
 catch (Exception $e)
 {

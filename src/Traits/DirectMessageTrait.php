@@ -2,6 +2,7 @@
 
 namespace Atymic\Twitter\Traits;
 
+use Atymic\Twitter\Twitter;
 use BadMethodCallException;
 
 trait DirectMessageTrait
@@ -78,6 +79,8 @@ trait DirectMessageTrait
                 sprintf('Missing required parameter: `event`. See %s', $apiReference)
             );
         }
+
+        $parameters[Twitter::KEY_REQUEST_FORMAT] = Twitter::REQUEST_FORMAT_JSON;
 
         return $this->post('direct_messages/events/new', $parameters);
     }

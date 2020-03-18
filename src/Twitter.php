@@ -58,11 +58,15 @@ class Twitter
     public const VERSION = '3.x-dev';
 
     public const KEY_REQUEST_FORMAT = 'request_format';
-    public const KEY_RESPONSE_FORMAT = 'format';
+    public const KEY_RESPONSE_FORMAT = 'response_format';
+    public const KEY_FORMAT = 'format';
     public const KEY_OAUTH_CALLBACK = 'oauth_callback';
     public const KEY_OAUTH_VERIFIER = 'oauth_verifier';
     public const KEY_OAUTH_TOKEN = 'oauth_token';
     public const KEY_OAUTH_TOKEN_SECRET = 'oauth_token_secret';
+
+    public const REQUEST_FORMAT_JSON = RequestOptions::JSON;
+    public const REQUEST_FORMAT_MULTIPART = RequestOptions::MULTIPART;
 
     public const RESPONSE_FORMAT_ARRAY = 'array';
     public const RESPONSE_FORMAT_OBJECT = 'object';
@@ -243,19 +247,19 @@ class Twitter
     }
 
     /**
-     * @param array  $params
-     * @param string $requestMethod
-     * @param string $requestFormat
+     * @param array       $params
+     * @param string      $requestMethod
+     * @param string|null $requestFormat
      *
      * @return array
      */
-    private function getRequestOptions(array $params, string $requestMethod, string $requestFormat): array
+    private function getRequestOptions(array $params, string $requestMethod, ?string $requestFormat): array
     {
         switch ($requestFormat) {
-            case RequestOptions::JSON:
+            case self::REQUEST_FORMAT_JSON:
                 $paramsKey = RequestOptions::JSON;
                 break;
-            case RequestOptions::MULTIPART:
+            case self::REQUEST_FORMAT_MULTIPART:
                 $paramsKey = RequestOptions::MULTIPART;
                 break;
             default:
@@ -338,10 +342,10 @@ class Twitter
      */
     private function request(string $url, array $parameters, string $method)
     {
-        $responseFormat = $parameters[self::KEY_RESPONSE_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
-        $requestFormat = $parameters[self::KEY_REQUEST_FORMAT] ?? $responseFormat;
+        $requestFormat = $parameters[self::KEY_REQUEST_FORMAT] ?? null;
+        $responseFormat = $parameters[self::KEY_RESPONSE_FORMAT] ?? $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
 
-        unset($parameters[self::KEY_RESPONSE_FORMAT]);
+        unset($parameters[self::KEY_REQUEST_FORMAT], $parameters[self::KEY_RESPONSE_FORMAT], $parameters[self::KEY_FORMAT]);
 
         $requestOptions = $this->getRequestOptions($parameters, $method, $requestFormat);
         $response = $this->httpClient->request($method, $url, $requestOptions);
