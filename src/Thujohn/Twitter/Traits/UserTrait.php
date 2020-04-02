@@ -7,7 +7,7 @@ use BadMethodCallException;
 trait UserTrait
 {
     /**
-     * Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
+     * Returns fully-hydrated user objects for up to 10 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
      *
      *  Parameters :
      * - user_id
@@ -24,9 +24,9 @@ trait UserTrait
     }
     
     /**
-     * Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
+     * Returns fully-hydrated user objects for up 10 to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
      *
-     * For a large requests of 10-100 users, twitter suggests to use POST request. GET request gives errors for large requests.
+     * For a large request of 10-100 users, twitter suggests to use POST request. GET request gives errors for a large query.
      *
      *  Parameters :
      * - user_id
