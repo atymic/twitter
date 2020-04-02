@@ -22,6 +22,26 @@ trait UserTrait
 
         return $this->get('users/lookup', $parameters);
     }
+    
+    /**
+     * Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
+     *
+     * For a large requests of 10-100 users, twitter suggests to use POST request. GET request gives errors for large requests.
+     *
+     *  Parameters :
+     * - user_id
+     * - screen_name
+     * - include_entities (0|1)
+     */
+
+    public function postUsersLookup($parameters = [])
+    {
+        if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
+            throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
+        }
+
+        return $this->post('users/lookup', $parameters);
+    }
 
     /**
      * Returns a variety of information about the user specified by the required user_id or screen_name parameter. The author’s most recent Tweet will be returned inline when possible.
