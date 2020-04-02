@@ -202,7 +202,8 @@ format : object|json|array (default:object)
 
 ### User
 
-* `getUsersLookup()` - Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
+* `getUsersLookup()` - Returns fully-hydrated user objects for up to 10 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
+* `postUsersLookup()` - Returns fully-hydrated user objects for 10 to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
 * `getUsers()` - Returns a variety of information about the user specified by the required user_id or screen_name parameter. The author’s most recent Tweet will be returned inline when possible.
 * `getUsersSearch()` - Provides a simple, relevance-based search interface to public user accounts on Twitter. Try querying by topical interest, full name, company name, location, or other criteria. Exact match searches are not supported.
 * `getUserBanner()` - Returns a map of the available size variations of the specified user’s profile banner. If the user has not uploaded a profile banner, a HTTP 404 will be served instead. This method can be used instead of string manipulation on the profile_banner_url returned in user objects as described in Profile Images and Banners.
