@@ -124,7 +124,7 @@ format : object|json|array (default:object)
 * `postUnfollow()` - Allows the authenticating user to unfollow the user specified in the ID parameter.
 * `postFollowUpdate()` - Allows one to enable or disable retweets and device notifications from the specified user.
 * `getFriendships()` - Returns detailed information about the relationship between two arbitrary users.
-* `getFriends()` - Returns a cursored collection of user objects for every user the specified user is following (otherwise known as their “friends”).
+* `getFriends()` - Returns a cursored collection of up to 200 user objects for every user the specified user is following (otherwise known as their “friends”).
 * `getFollowers()` - Returns a cursored collection of user objects for users following the specified user.
 * `getFriendshipsLookup()` - Returns the relationships of the authenticating user to the comma-separated list of up to 100 screen_names or user_ids provided. Values for connections can be: following, following_requested, followed_by, none, blocking, muting.
 
