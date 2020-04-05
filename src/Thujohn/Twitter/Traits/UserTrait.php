@@ -48,6 +48,7 @@ trait UserTrait
      * - screen_name
      * - include_entities (0|1)
      */
+    
     public function getUsers($parameters = [])
     {
         if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
