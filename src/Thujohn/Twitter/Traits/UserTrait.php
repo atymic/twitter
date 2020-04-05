@@ -20,23 +20,6 @@ trait UserTrait
             throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
         }
 
-        return $this->get('users/lookup', $parameters);
-    }
-    
-    /**
-     * Returns fully-hydrated user objects for up 10 to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
-     *
-     *  Parameters :
-     * - user_id
-     * - screen_name
-     * - include_entities (0|1)
-     */
-    public function postUsersLookup($parameters = [])
-    {
-        if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
-            throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
-        }
-
         return $this->post('users/lookup', $parameters);
     }
 
@@ -48,7 +31,6 @@ trait UserTrait
      * - screen_name
      * - include_entities (0|1)
      */
-    
     public function getUsers($parameters = [])
     {
         if (!array_key_exists('user_id', $parameters) && !array_key_exists('screen_name', $parameters)) {
