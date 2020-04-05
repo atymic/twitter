@@ -26,8 +26,6 @@ trait UserTrait
     /**
      * Returns fully-hydrated user objects for up 10 to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
      *
-     * For a large request of 10-100 users, twitter suggests to use POST request. GET request gives errors for a large query.
-     *
      *  Parameters :
      * - user_id
      * - screen_name
