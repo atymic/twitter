@@ -149,6 +149,7 @@ trait FriendshipTrait
      * - cursor
      * - skip_status (0|1)
      * - include_user_entities (0|1)
+     * - count (1-200; default: 20)
      */
     public function getFriends($parameters = [])
     {
