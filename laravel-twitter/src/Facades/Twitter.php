@@ -1,6 +1,6 @@
 <?php
 
-namespace Atymic\Twitter\Facades;
+namespace Atymic\LaravelTwitter\Facades;
 
 use Atymic\Twitter\Twitter as TwitterClient;
 use Illuminate\Support\Facades\Facade;

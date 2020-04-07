@@ -2,8 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Atymic\Twitter;
+namespace Atymic\LaravelTwitter;
 
+use Atymic\Twitter\Configuration;
+use Atymic\Twitter\Twitter;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
 
@@ -44,14 +46,13 @@ class TwitterServiceProvider extends ServiceProvider
 
     private function handleConfig(): void
     {
-        // TODO can we kill this logic?
         $app = $this->app ?: app();
         $appVersion = method_exists($app, 'version') ? $app->version() : $app::VERSION;
         $laravelVersion = substr($appVersion, 0, strpos($appVersion, '.'));
 
         $isLumen = false;
 
-        if (strpos(strtolower($laravelVersion), 'lumen') !== false) {
+        if (stripos($laravelVersion, 'lumen') !== false) {
             $isLumen = true;
         }
 

@@ -1,0 +1,64 @@
+{
+    "name": "atymic/laravel-twitter",
+    "description": "Twitter API for Laravel",
+	"keywords": ["twitter", "laravel", "laravel5", "laravel6", "laravel7"],
+    "license": "MIT",
+    "type": "library",
+    "authors": [
+        {
+            "name": "atymic",
+            "email": "atymicq@gmail.com",
+            "homepage": "https://atymic.dev"
+        },
+        {
+            "name": "reliq",
+            "email": "reliq@reliqarts.com",
+            "homepage": "https://iamreliq.com"
+        }
+    ],
+    "require": {
+        "php": ">7.2",
+        "ext-json": "*",
+        "atymic/twitter": "*",
+        "illuminate/support": "~5.5 || ~6.0  || ~7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^8.3",
+        "orchestra/testbench": "3.8 - 5"
+    },
+    "autoload": {
+        "psr-4": {
+            "Atymic\\LaravelTwitter\\": "src/"
+        }
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../twitter-php"
+        }
+    ],
+    "autoload-dev": {
+        "psr-4": {
+            "Atymic\\LaravelTwitter\\Tests\\": "tests"
+        },
+        "files": [
+            "vendor/phpunit/phpunit/src/Framework/Assert/Functions.php"
+        ]
+    },
+    "scripts": {
+        "test": "phpunit",
+        "test:ci": "phpunit --verbose --coverage-clover=coverage.xml"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Atymic\\LaravelTwitter\\TwitterServiceProvider"
+            ],
+            "aliases": {
+                "Twitter": "Atymic\\LaravelTwitter\\Facades\\Twitter"
+            }
+        }
+    },
+    "prefer-stable": true,
+    "minimum-stability": "dev"
+}

@@ -1,6 +1,7 @@
 !.gitkeep
 
-/vendor
+/twitter-php/vendor
+/laravel-twitter/vendor
 composer.phar
 composer.lock
 .DS_Store
