@@ -220,7 +220,7 @@ class Twitter extends tmhOAuth
         $this->log('METHOD : '.$requestMethod);
         $this->log('QUERY : '.$name);
         $this->log('URL : '.$url);
-        $this->log('PARAMETERS : '.http_build_query($parameters));
+        $this->log('PARAMETERS : '.(is_array($parameters) ? http_build_query($parameters) : $parameters));
         $this->log('MULTIPART : '.($multipart ? 'true' : 'false'));
 
         parent::user_request([

@@ -59,10 +59,11 @@ trait DirectMessageTrait
      */
     public function postDm($parameters = [])
     {
-        if ((!array_key_exists('type', $parameters) && !array_key_exists('message_create', $parameters))) {
+        if (!is_array($parameters) && (array_key_exists('type', $parameters) || array_key_exists('message_create', $parameters))) {
             throw new BadMethodCallException('Parameter required missing : type or message_create');
         }
+        $params = ['event' => $parameters];
 
-        return $this->post('direct_messages/events/new', $parameters);
+        return $this->post('direct_messages/events/new', json_encode($params));
     }
 }
