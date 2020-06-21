@@ -7,9 +7,14 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter) 
 ![GitHub Release Date](https://img.shields.io/github/release-date/atymic/twitter?label=latest%20release&style=flat-square)
 
-Twitter API for Laravel 5.5+ & 6.x
+Twitter API for Laravel 5.5+, 6.x and 7.x
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
+
+### Sponsors
+
+[![PHP Hosting](https://cdn2.amezmo.net/assets/blue-logo.svg)](https://www.amezmo.com)  
+<sub>It's like forge, but better!</sub> 
 
 ## Installation
 
@@ -80,6 +85,19 @@ format : object|json|array (default:object)
 * `destroyUserBanner()` - Removes the uploaded profile banner for the authenticating user. Returns HTTP 200 upon success.
 * `postUserBanner()` - Uploads a profile banner on behalf of the authenticating user. For best results, upload an profile_banner_url node in their Users objects.
 
+### Account Activity (Premium)
+
+* `setWebhook($env, $url)` - Registers a webhook url for all event types in the given environment.
+* `crcHash($crcToken)` - Returns HMAC SHA-256 hash from the given CRC token and consumer secret. You'll need to return this on your webhook ([more info](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/guides/securing-webhooks)).
+* `getWebhooks($env)` - Returns webhook URLs for the given environment (or all environments if none provided), and their statuses for the authenticating app.
+* `updateWebhooks($env, $webhookId)` - Triggers the challenge response check (CRC) for the given enviroments webhook for all activites. If the check is successful, returns true and reenables the webhook by setting its status to valid.
+* `destroyWebhook($env, $webhookId)` - Removes the webhook from the provided application's all activities configuration. Returns true on success.
+* `setSubscriptions($env)` - Subscribes the provided application to all events for the provided environment for all message types. Returns true on success.
+* `getSubscriptions($env)` - Returns true if the provided user context has an active subscription with provided application.
+* `getSubscriptionsCount()` - Returns the count of subscriptions that are currently active on your account for all activities.
+* `getSubscriptionsList($env)` - Returns a list of the current All Activity type subscriptions.
+* `destroyUserSubscriptions($env, $userId)` - Deactivates subscription for the specified user id from the environment. Returns true on success.
+
 ### Block
 
 * `getBlocks()` - Returns a collection of user objects that the authenticating user is blocking.
@@ -111,7 +129,7 @@ format : object|json|array (default:object)
 * `postUnfollow()` - Allows the authenticating user to unfollow the user specified in the ID parameter.
 * `postFollowUpdate()` - Allows one to enable or disable retweets and device notifications from the specified user.
 * `getFriendships()` - Returns detailed information about the relationship between two arbitrary users.
-* `getFriends()` - Returns a cursored collection of user objects for every user the specified user is following (otherwise known as their “friends”).
+* `getFriends()` - Returns a cursored collection of up to 200 user objects for every user the specified user is following (otherwise known as their “friends”).
 * `getFollowers()` - Returns a cursored collection of user objects for users following the specified user.
 * `getFriendshipsLookup()` - Returns the relationships of the authenticating user to the comma-separated list of up to 100 screen_names or user_ids provided. Values for connections can be: following, following_requested, followed_by, none, blocking, muting.
 
@@ -271,7 +289,7 @@ Route::get('/tweetMedia', function()
 ```
 
 Get User Credentials with email.
-```
+```php
 $credentials = Twitter::getCredentials([
     'include_email' => 'true',
 ]);
@@ -363,6 +381,16 @@ Route::get('twitter/logout', ['as' => 'twitter.logout', function(){
 }]);
 ```
 
+Webhook
+>In order to setup webhook successfully, you'll need to return a hash using the CRC token in response from your webhook URL ([more info](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/guides/securing-webhooks)).
+```php
+Route::post('twitter/webhook', ['as' => 'twitter.webhook', function(){
+	if (request()->has('crc_token'))
+		return response()->json(['response_token' => Twitter::crcHash(request()->crc_token)], 200);
+	
+	// Your webhook logic goes here
+}]);
+```
 
 ## Debug
 

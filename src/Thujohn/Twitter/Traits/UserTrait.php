@@ -8,6 +8,9 @@ trait UserTrait
 {
     /**
      * Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
+     * POST request is used instead of GET as it throws an error on large requests.
+     *
+     * @see https://developer.twitter.com/en/docs/accounts-and-users/follow-search-get-users/api-reference/get-users-lookup
      *
      *  Parameters :
      * - user_id
@@ -20,7 +23,7 @@ trait UserTrait
             throw new BadMethodCallException('Parameter required missing : user_id or screen_name');
         }
 
-        return $this->get('users/lookup', $parameters);
+        return $this->post('users/lookup', $parameters);
     }
 
     /**
