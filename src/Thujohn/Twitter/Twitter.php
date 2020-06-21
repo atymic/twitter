@@ -373,7 +373,7 @@ class Twitter extends tmhOAuth
                 return '<a href="'.$url.'" target="_blank" rel="nofollow">'."$input</a>";
             }, $text);
         } else {
-            $text = $tweet['text'];
+            $text = $tweet['text'] ?? $tweet['full_text'];
             $entities = $tweet['entities'];
 
             $search = [];
