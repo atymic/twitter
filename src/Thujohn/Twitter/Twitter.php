@@ -344,6 +344,14 @@ class Twitter extends tmhOAuth
         return $this->query($name, 'DELETE', $parameters, $multipart, $extension, $appOnly);
     }
 
+    /**
+     * Get the last response from twitter.
+     */
+    public function getLastResponse()
+    {
+        return $this->response;
+    }
+
     public function linkify($tweet)
     {
         return Utils::linkify($tweet);
