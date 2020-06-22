@@ -222,6 +222,12 @@ format : object|json|array (default:object)
 
 ## Helper Functions
 
+Get Last Response: Get the last response from twitter. For example, you can access the headers to check your rate limit quota.
+```php
+$res = Twitter::getLastResponse();
+var_dump($res['headers']); // ['Rate-Limit' => 'Whatever']
+```
+
 Linkify : Transforms URLs, @usernames, hashtags into links.
 The type of $tweet can be object, array or text.
 By sending an object or an array the method will expand links (t.co) too.
