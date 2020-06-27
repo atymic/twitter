@@ -75,9 +75,7 @@ trait DirectMessageTrait
         $apiReference = 'https://developer.twitter.com/en/docs/direct-messages/sending-and-receiving/api-reference/new-event';
 
         if (!array_key_exists('event', $parameters)) {
-            throw new BadMethodCallException(
-                sprintf('Missing required parameter: `event`. See %s', $apiReference)
-            );
+            throw new BadMethodCallException(sprintf('Missing required parameter: `event`. See %s', $apiReference));
         }
 
         $parameters[Twitter::KEY_REQUEST_FORMAT] = Twitter::REQUEST_FORMAT_JSON;

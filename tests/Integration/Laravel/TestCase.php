@@ -2,10 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Atymic\Twitter\Tests\Integration;
+namespace Atymic\Twitter\Tests\Integration\Laravel;
 
-use Atymic\Twitter\Twitter;
-use Atymic\Twitter\TwitterServiceProvider;
+use Atymic\Twitter\ServiceProviders\LaravelTwitterServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
 use Mockery\Exception\NoMatchingExpectationException;
@@ -28,14 +27,7 @@ abstract class TestCase extends Orchestra
 
     protected function getPackageProviders($app): array
     {
-        return [TwitterServiceProvider::class];
-    }
-
-    protected function getPackageAliases($app): array
-    {
-        return [
-            'twitter' => Twitter::class,
-        ];
+        return [LaravelTwitterServiceProvider::class];
     }
 
     /**
@@ -46,30 +38,26 @@ abstract class TestCase extends Orchestra
         $app[self::KEY_CONFIG]->set('mail.driver', 'log');
 
         $app[self::KEY_CONFIG]->set('database.default', 'sqlite');
-        $app[self::KEY_CONFIG]->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
-            'database' => $this->getTempDirectory() . '/database.sqlite',
-            'prefix' => '',
-        ]);
+        $app[self::KEY_CONFIG]->set(
+            'database.connections.sqlite',
+            [
+                'driver' => 'sqlite',
+                'database' => $this->getTempDirectory() . '/database.sqlite',
+                'prefix' => '',
+            ]
+        );
 
         $app[self::KEY_CONFIG]->set('app.key', '6rE9Nz59bGRbeMATftriyQjrpF7DcOQm');
     }
 
     /**
      * @param string $suffix
-     *
-     * @return string
      */
     private function getTempDirectory($suffix = ''): string
     {
         return __DIR__ . DIRECTORY_SEPARATOR . 'temp' . ($suffix === '' ? '' : DIRECTORY_SEPARATOR . $suffix);
     }
 
-    /**
-     * @param string $directory
-     *
-     * @return bool
-     */
     private function initializeDirectory(string $directory): bool
     {
         if (File::isDirectory($directory)) {

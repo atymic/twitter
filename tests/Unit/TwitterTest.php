@@ -117,8 +117,6 @@ final class TwitterTest extends TestCase
      *
      * @dataProvider providerGetList
      *
-     * @param array $params
-     *
      * @throws RuntimeException
      */
     public function testGetList(array $params): void
@@ -126,9 +124,6 @@ final class TwitterTest extends TestCase
         $this->paramTest('lists/show', 'getList', $params);
     }
 
-    /**
-     * @return array
-     */
     public function providerGetList(): array
     {
         return [
@@ -147,8 +142,6 @@ final class TwitterTest extends TestCase
     /**
      * @dataProvider providerGetListBad
      *
-     * @param array $params
-     *
      * @throws BadMethodCallException
      * @throws RuntimeException
      */
@@ -161,9 +154,6 @@ final class TwitterTest extends TestCase
         $twitter->getList($params);
     }
 
-    /**
-     * @return array
-     */
     public function providerGetListBad(): array
     {
         return [
@@ -178,8 +168,6 @@ final class TwitterTest extends TestCase
      *
      * @dataProvider providerGetListMembers
      *
-     * @param array $params
-     *
      * @throws RuntimeException
      */
     public function testGetListMembers(array $params): void
@@ -187,9 +175,6 @@ final class TwitterTest extends TestCase
         $this->paramTest('lists/members', 'getListMembers', $params);
     }
 
-    /**
-     * @return array
-     */
     public function providerGetListMembers(): array
     {
         return [
@@ -208,8 +193,6 @@ final class TwitterTest extends TestCase
     /**
      * @dataProvider providerGetListMembersBad
      *
-     * @param array $params
-     *
      * @throws BadMethodCallException
      * @throws RuntimeException
      */
@@ -222,9 +205,6 @@ final class TwitterTest extends TestCase
         $twitter->getListMembers($params);
     }
 
-    /**
-     * @return array
-     */
     public function providerGetListMembersBad(): array
     {
         return [
@@ -241,8 +221,6 @@ final class TwitterTest extends TestCase
      *
      * @dataProvider providerGetListMember
      *
-     * @param array $params
-     *
      * @throws RuntimeException
      */
     public function testGetListMember(array $params): void
@@ -250,9 +228,6 @@ final class TwitterTest extends TestCase
         $this->paramTest('lists/members/show', 'getListMember', $params);
     }
 
-    /**
-     * @return array
-     */
     public function providerGetListMember(): array
     {
         return [
@@ -280,8 +255,6 @@ final class TwitterTest extends TestCase
     /**
      * @dataProvider providerGetListMemberBad
      *
-     * @param array $params
-     *
      * @throws BadMethodCallException
      * @throws RuntimeException
      */
@@ -293,9 +266,6 @@ final class TwitterTest extends TestCase
         $twitter->getListMembers($params);
     }
 
-    /**
-     * @return array
-     */
     public function providerGetListMemberBad(): array
     {
         return [
@@ -319,9 +289,6 @@ final class TwitterTest extends TestCase
     }
 
     /**
-     * @param string $endpoint
-     * @param array  $queryParams
-     *
      * @throws RuntimeException
      *
      * @return MockObject|Twitter
@@ -341,10 +308,6 @@ final class TwitterTest extends TestCase
     }
 
     /**
-     * @param string $endpoint
-     * @param string $testedMethod
-     * @param array  $params
-     *
      * @throws RuntimeException
      */
     private function paramTest(string $endpoint, string $testedMethod, array $params)
