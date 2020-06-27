@@ -9,10 +9,13 @@ use Atymic\Twitter\Twitter;
 use Atymic\Twitter\TwitterServiceProvider;
 use DI\Container;
 use DI\ContainerBuilder;
-use function DI\get;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
+use function DI\get;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class PhpDiTwitterServiceProvider implements TwitterServiceProvider
 {
     /**
@@ -39,9 +42,9 @@ final class PhpDiTwitterServiceProvider implements TwitterServiceProvider
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     *
      * @return mixed
+     *
+     * @throws ContainerExceptionInterface
      */
     public function resolve(string $name)
     {
@@ -59,9 +62,6 @@ final class PhpDiTwitterServiceProvider implements TwitterServiceProvider
         $this->container = $containerBuilder->build();
     }
 
-    /**
-     * @return array
-     */
     protected function getDefinitions(): array
     {
         return [

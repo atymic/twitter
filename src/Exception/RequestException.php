@@ -24,8 +24,9 @@ class RequestException extends RuntimeException implements TwitterException
     protected $response;
 
     /**
-     * @return static|TwitterException
      * @throws JsonException
+     *
+     * @return static|TwitterException
      */
     public static function fromClientResponse(
         ResponseInterface $response,

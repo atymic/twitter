@@ -12,6 +12,9 @@ use LogicException;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class LaravelTwitterServiceProvider extends ServiceProvider implements ServiceProviderContract
 {
     private const CONFIG_KEY = 'twitter';
@@ -52,9 +55,8 @@ final class LaravelTwitterServiceProvider extends ServiceProvider implements Ser
     }
 
     /**
-     * @throws ContainerExceptionInterface
-     *
      * @return mixed
+     * @throws ContainerExceptionInterface
      */
     public function resolve(string $name)
     {
