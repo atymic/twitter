@@ -11,7 +11,7 @@ jobs:
       matrix:
         laravel-version: ['5.8.*', '^6.0', '^7.0']
         stabilty: ['stable', 'lowest']
-        php-versions: ['7.2', '7.3']
+        php-versions: ['7.2', '7.3', '7.4']
     name: PHP ${{ matrix.php-versions }} on Laravel ${{ matrix.laravel-version }} (${{ matrix.stabilty }})
     steps:
     - name: Checkout
