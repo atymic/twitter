@@ -40,34 +40,20 @@ use Psr\Log\LogLevel;
 class Twitter
 {
     use FormattingHelpers;
-    use
-        AccountTrait;
-    use
-        BlockTrait;
-    use
-        DirectMessageTrait;
-    use
-        FavoriteTrait;
-    use
-        FriendshipTrait;
-    use
-        GeoTrait;
-    use
-        HelpTrait;
-    use
-        ListTrait;
-    use
-        MediaTrait;
-    use
-        SearchTrait;
-    use
-        StatusTrait;
-    use
-        TrendTrait;
-    use
-        UserTrait;
-    use
-        AuthTrait;
+    use AccountTrait;
+    use BlockTrait;
+    use DirectMessageTrait;
+    use FavoriteTrait;
+    use FriendshipTrait;
+    use GeoTrait;
+    use HelpTrait;
+    use ListTrait;
+    use MediaTrait;
+    use SearchTrait;
+    use StatusTrait;
+    use TrendTrait;
+    use UserTrait;
+    use AuthTrait;
 
     public const VERSION = '3.x-dev';
 
@@ -141,9 +127,8 @@ class Twitter
     }
 
     /**
-     * @throws TwitterRequestException
-     *
      * @return mixed|string
+     * @throws TwitterRequestException
      */
     public function query(
         string $endpoint,
@@ -169,9 +154,8 @@ class Twitter
     }
 
     /**
-     * @throws TwitterRequestException
-     *
      * @return mixed|string
+     * @throws TwitterRequestException
      */
     public function directQuery(
         string $url,
@@ -192,9 +176,8 @@ class Twitter
      * @param bool   $multipart
      * @param string $extension
      *
-     * @throws TwitterRequestException
-     *
      * @return mixed|string
+     * @throws TwitterRequestException
      */
     public function get(string $endpoint, $parameters = [], $multipart = false, $extension = self::DEFAULT_EXTENSION)
     {
@@ -205,9 +188,8 @@ class Twitter
      * @param array $parameters
      * @param bool  $multipart
      *
-     * @throws TwitterRequestException
-     *
      * @return mixed|string
+     * @throws TwitterRequestException
      */
     public function post(string $endpoint, $parameters = [], $multipart = false)
     {

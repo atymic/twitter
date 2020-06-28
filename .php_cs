@@ -62,6 +62,7 @@ $config = PhpCsFixer\Config::create()
         'phpdoc_add_missing_param_annotation' => true,
         'phpdoc_order' => false,
         'phpdoc_trim_consecutive_blank_line_separation' => true,
+        'phpdoc_separation' => false,
         'phpdoc_types_order' => true,
         'return_assignment' => true,
         'semicolon_after_instruction' => true,
