@@ -185,13 +185,10 @@ class Twitter
     }
 
     /**
-     * @param array $parameters
-     * @param bool  $multipart
-     *
      * @return mixed|string
      * @throws TwitterRequestException
      */
-    public function post(string $endpoint, $parameters = [], $multipart = false)
+    public function post(string $endpoint, array $parameters = [], bool $multipart = false)
     {
         return $this->query($endpoint, self::REQUEST_METHOD_POST, $parameters, $multipart);
     }
