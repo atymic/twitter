@@ -39,21 +39,21 @@ use Psr\Log\LogLevel;
 
 class Twitter
 {
-    use FormattingHelpers,
-        AccountTrait,
-        BlockTrait,
-        DirectMessageTrait,
-        FavoriteTrait,
-        FriendshipTrait,
-        GeoTrait,
-        HelpTrait,
-        ListTrait,
-        MediaTrait,
-        SearchTrait,
-        StatusTrait,
-        TrendTrait,
-        UserTrait,
-        AuthTrait;
+    use FormattingHelpers;
+    use AccountTrait;
+    use BlockTrait;
+    use DirectMessageTrait;
+    use FavoriteTrait;
+    use FriendshipTrait;
+    use GeoTrait;
+    use HelpTrait;
+    use ListTrait;
+    use MediaTrait;
+    use SearchTrait;
+    use StatusTrait;
+    use TrendTrait;
+    use UserTrait;
+    use AuthTrait;
 
     public const VERSION = '3.x-dev';
 
@@ -100,9 +100,6 @@ class Twitter
     /**
      * Twitter constructor.
      *
-     * @param Configuration        $config
-     * @param null|LoggerInterface $logger
-     *
      * @throws InvalidArgumentException
      */
     public function __construct(Configuration $config, ?LoggerInterface $logger = null)
@@ -114,10 +111,6 @@ class Twitter
     }
 
     /**
-     * @param string $accessToken
-     * @param string $accessTokenSecret
-     *
-     * @return self
      * @throws InvalidArgumentException
      */
     public function usingCredentials(string $accessToken, string $accessTokenSecret): self
@@ -126,9 +119,6 @@ class Twitter
     }
 
     /**
-     * @param Configuration $configuration
-     *
-     * @return self
      * @throws InvalidArgumentException
      */
     public function usingConfiguration(Configuration $configuration): self
@@ -137,12 +127,6 @@ class Twitter
     }
 
     /**
-     * @param string $endpoint
-     * @param string $requestMethod
-     * @param array  $parameters
-     * @param bool   $multipart
-     * @param string $extension
-     *
      * @return mixed|string
      * @throws TwitterRequestException
      */
@@ -170,10 +154,6 @@ class Twitter
     }
 
     /**
-     * @param string $url
-     * @param string $requestMethod
-     * @param array  $parameters
-     *
      * @return mixed|string
      * @throws TwitterRequestException
      */
@@ -192,7 +172,6 @@ class Twitter
     }
 
     /**
-     * @param string $endpoint
      * @param array  $parameters
      * @param bool   $multipart
      * @param string $extension
@@ -206,24 +185,16 @@ class Twitter
     }
 
     /**
-     * @param string $endpoint
-     * @param array  $parameters
-     * @param bool   $multipart
-     *
      * @return mixed|string
      * @throws TwitterRequestException
      */
-    public function post(string $endpoint, $parameters = [], $multipart = false)
+    public function post(string $endpoint, array $parameters = [], bool $multipart = false)
     {
         return $this->query($endpoint, self::REQUEST_METHOD_POST, $parameters, $multipart);
     }
 
     /**
-     * @param Configuration $config
-     *
-     * @return HttpClient
      * @throws InvalidArgumentException
-     *
      */
     private function getHttpClient(Configuration $config): HttpClient
     {
@@ -246,24 +217,20 @@ class Twitter
         );
     }
 
-    /**
-     * @param array       $params
-     * @param string      $requestMethod
-     * @param string|null $requestFormat
-     *
-     * @return array
-     */
     private function getRequestOptions(array $params, string $requestMethod, ?string $requestFormat): array
     {
         switch ($requestFormat) {
             case self::REQUEST_FORMAT_JSON:
                 $paramsKey = RequestOptions::JSON;
+
                 break;
             case self::REQUEST_FORMAT_MULTIPART:
                 $paramsKey = RequestOptions::MULTIPART;
+
                 break;
             default:
                 $paramsKey = $requestMethod === self::REQUEST_METHOD_POST ? RequestOptions::FORM_PARAMS : RequestOptions::QUERY;
+
                 break;
         }
 
@@ -272,24 +239,11 @@ class Twitter
         ];
     }
 
-    /**
-     * @param string $host
-     * @param string $version
-     * @param string $name
-     * @param string $extension
-     *
-     * @return string
-     */
     private function buildUrl(string $host, string $version, string $name, string $extension): string
     {
         return sprintf(self::URL_FORMAT, $host, $version, $name, $extension);
     }
 
-    /**
-     * @param GuzzleException $exception
-     *
-     * @return TwitterRequestException
-     */
     private function transformClientException(GuzzleException $exception): TwitterRequestException
     {
         /** @var null|Response $response */
@@ -314,7 +268,6 @@ class Twitter
 
     /**
      * @param Response|ResponseInterface $response
-     * @param string                     $format
      *
      * @return mixed|string
      */
@@ -334,10 +287,6 @@ class Twitter
     }
 
     /**
-     * @param string $url
-     * @param array  $parameters
-     * @param string $method
-     *
      * @return mixed|string
      */
     private function request(string $url, array $parameters, string $method)
@@ -353,13 +302,6 @@ class Twitter
         return $this->formatResponse($response, $responseFormat);
     }
 
-    /**
-     * @param string $name
-     * @param string $requestMethod
-     * @param array  $parameters
-     * @param bool   $multipart
-     * @param string $logLevel
-     */
     private function logRequest(
         string $name,
         string $requestMethod,

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Exception;
 
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 use RuntimeException;
@@ -23,8 +24,7 @@ class RequestException extends RuntimeException implements TwitterException
     protected $response;
 
     /**
-     * @param Response       $response
-     * @param null|Throwable $previousException
+     * @throws JsonException
      *
      * @return static|TwitterException
      */
@@ -33,7 +33,7 @@ class RequestException extends RuntimeException implements TwitterException
         Throwable $previousException = null
     ): TwitterException {
         $responseStatusCode = $response->getStatusCode();
-        $responseData = json_decode((string)$response->getBody(), true);
+        $responseData = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
         $instance = new static(self::DEFAULT_ERROR_MESSAGE, $response->getStatusCode(), $previousException);
 
         if (empty($responseData[self::KEY_ERRORS])) {
@@ -50,9 +50,6 @@ class RequestException extends RuntimeException implements TwitterException
         return $instance;
     }
 
-    /**
-     * @return Response
-     */
     public function getResponse(): Response
     {
         return $this->response;

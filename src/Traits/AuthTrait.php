@@ -12,10 +12,7 @@ trait AuthTrait
     /**
      * Get a sign-in request token from Twitter.
      *
-     * @param string $callbackUrl
-     *
      * @throws AuthException
-     * @return array
      */
     public function getRequestToken(string $callbackUrl): array
     {
@@ -38,11 +35,6 @@ trait AuthTrait
         throw new AuthException(sprintf('Failed to fetch request token. Response content: %s', $responseBody));
     }
 
-    /**
-     * @param string $oauthToken
-     *
-     * @return string
-     */
     public function getAuthenticateUrl(string $oauthToken): string
     {
         return sprintf('%s?%s=%s', $this->config->getAuthenticateUrl(), Twitter::KEY_OAUTH_TOKEN, $oauthToken);
@@ -51,10 +43,7 @@ trait AuthTrait
     /**
      * Get an access token for a logged in user.
      *
-     * @param string $oauthVerifier
-     *
      * @throws AuthException
-     * @return array
      */
     public function getAccessToken(string $oauthVerifier): array
     {
