@@ -11,11 +11,6 @@ Twitter API for Laravel 5.5+, 6.x and 7.x
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
-### Sponsors
-
-[![PHP Hosting](https://cdn2.amezmo.net/assets/blue-logo.svg)](https://www.amezmo.com)  
-<sub>It's like forge, but better!</sub> 
-
 ## Installation
 
 ```
