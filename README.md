@@ -11,6 +11,13 @@ Twitter API for Laravel 5.5+, 6.x and 7.x
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
+#### SetApp - 190+ Apps in One Low Cost Subscription!
+
+Get access to **TablePlus**, **Paw**, **Proxyman**, **Gitfox**, **IconJar** and hundreds of other apps for under $10 per month!  
+Hit the banner below to check Setapp out with a free trial.
+
+[![SetApp](https://user-images.githubusercontent.com/50683531/90703320-c7b7ae00-e2d0-11ea-970e-55fc98c5b0c2.png)](https://setapp.sjv.io/c/2446681/516879/5114?subId1=at-twitter&u=https%3A%2F%2Fsetapp.com)
+
 ## Installation
 
 ```
