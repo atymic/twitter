@@ -16,7 +16,7 @@
     ],
     "require": {
         "php": ">7.2.5",
-        "illuminate/support": "~5.5 || ~6.0 || ~7.0",
+        "illuminate/support": "~5.5 || ~6.0 || ~7.0 || ~8.0",
         "atymic/tmhoauth": "0.8.6",
         "ext-json": "*"
     },

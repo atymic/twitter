@@ -8,9 +8,9 @@ jobs:
     strategy:
       max-parallel: 15
       matrix:
-        laravel-version: ['5.8.*', '^6.0']
+        laravel-version: ['5.8.*', '^6.0', '^8.0']
         stabilty: ['stable', 'lowest']
-        php-versions: ['7.2', '7.3']
+        php-versions: ['7.3', '7.4']
     name: PHP ${{ matrix.php-versions }}  on ${{ matrix.laravel-version }} (${{ matrix.stabilty }})
     steps:
     - name: Checkout
