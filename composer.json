@@ -1,7 +1,7 @@
 {
     "name": "atymic/twitter",
     "description": "Twitter API for PHP & Laravel",
-	"keywords": ["twitter", "laravel", "laravel5", "laravel6"],
+    "keywords": ["twitter", "laravel", "laravel5", "laravel6"],
     "license": "MIT",
     "type": "library",
     "authors": [
@@ -20,10 +20,10 @@
         "php": "^7.3",
         "ext-json": "*",
         "illuminate/support": "5.5 - 8",
-        "guzzlehttp/guzzle": "^6.4",
+        "guzzlehttp/guzzle": "^6.4|^7.0",
         "psr/log": "^1.1",
         "nesbot/carbon": "^2.26",
-        "guzzlehttp/oauth-subscriber": "^0.3.0",
+        "guzzlehttp/oauth-subscriber": "^0.4",
         "php-di/php-di": "^6.2"
     },
     "require-dev": {
