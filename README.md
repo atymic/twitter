@@ -11,12 +11,11 @@ Twitter API for Laravel 5.5+, 6.x, 7.x & 8.x
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
-#### SetApp - 190+ Apps in One Low Cost Subscription!
+#### Vultr - High Performance Cloud Servers
 
-Get access to **TablePlus**, **Paw**, **Proxyman**, **Gitfox**, **IconJar** and hundreds of other apps for under $10 per month!  
-Hit the banner below to check Setapp out with a free trial.
+Get $100 free credit to test out Vultr. Fast servers across 17 regions, pefect for hosting Laravel apps from just $2.5/month. 
 
-[![SetApp](https://user-images.githubusercontent.com/50683531/90703320-c7b7ae00-e2d0-11ea-970e-55fc98c5b0c2.png)](https://go.setapp.com/invite/aty1)
+[![Vultr](https://user-images.githubusercontent.com/50683531/94352986-575e3280-00af-11eb-9cc7-3412b1668530.png)](https://rebrand.ly/vultr100)
 
 ## Installation
 
