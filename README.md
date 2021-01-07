@@ -345,9 +345,9 @@ Route::get('twitter/callback', ['as' => 'twitter.callback', function() {
 
 		$oauth_verifier = false;
 
-		if (Input::has('oauth_verifier'))
+		if (Request::has('oauth_verifier'))
 		{
-			$oauth_verifier = Input::get('oauth_verifier');
+			$oauth_verifier = Request::get('oauth_verifier');
 			// getAccessToken() will reset the token for you
 			$token = Twitter::getAccessToken($oauth_verifier);
 		}
