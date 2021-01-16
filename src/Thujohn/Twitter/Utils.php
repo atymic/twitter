@@ -70,6 +70,10 @@ abstract class Utils
         // Long URL
         $text = preg_replace('/'.$patterns['long_url'].'/', '>\\3...\\5\\6<', $text);
 
+        // Convert new line character (\n) to HTML break line (<br>)
+        // Example : https://twitter.com/GNFI/status/1350333230365483009
+        $text = nl2br($text); 
+
         // Remove multiple spaces
         $text = preg_replace('/\s+/', ' ', $text);
 
