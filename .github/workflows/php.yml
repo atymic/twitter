@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         laravel-version: [ '5.8.*', '^6.0', '^7.0', '^8.0' ]
-        stabilty: [ 'stable', 'lowest' ]
+        stability: [ 'stable', 'lowest' ]
         php-version: [ '7.3', '7.4', '8.0' ]
         exclude:
           - laravel-version: 5.8.*
@@ -19,7 +19,10 @@ jobs:
             php-version: 8.0
           - laravel-version: ^7.0
             php-version: 8.0
-    name: PHP ${{ matrix.php-version }} on Laravel ${{ matrix.laravel-version }} (${{ matrix.stabilty }})
+          - laravel-version: ^8.0
+            php-version: 8.0
+            stability: lowest
+    name: PHP ${{ matrix.php-version }} on Laravel ${{ matrix.laravel-version }} (${{ matrix.stability }})
     steps:
       - name: Checkout
         uses: actions/checkout@master
@@ -27,12 +30,12 @@ jobs:
         uses: shivammathur/setup-php@master
         with:
           php-version: ${{ matrix.php-version }}
-          extensions: mbstring, xdebug
+          extensions: mbstring, xdebug, sqlite
           coverage: xdebug
       - name: Install dependencies
         run: |
           composer require --no-update --no-interaction "illuminate/support:${{ matrix.laravel-version }}"
-          composer update --prefer-${{ matrix.stabilty }} --no-interaction --prefer-dist --no-suggest
+          composer update --prefer-${{ matrix.stability }} --no-interaction --prefer-dist --no-suggest
       - name: Lint composer.json
         run: composer validate
       - name: Run Tests
