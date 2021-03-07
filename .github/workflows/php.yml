@@ -1,6 +1,6 @@
 name: PHP
 
-on: [push]
+on: [ push ]
 
 jobs:
   run:
@@ -9,30 +9,40 @@ jobs:
       max-parallel: 15
       fail-fast: false
       matrix:
-        laravel-version: ['5.8.*', '^6.0', '^7.0', '^8.0']
-        stabilty: ['stable', 'lowest']
-        php-versions: ['7.3', '7.4']
-    name: PHP ${{ matrix.php-versions }} on Laravel ${{ matrix.laravel-version }} (${{ matrix.stabilty }})
+        laravel-version: [ '5.8.*', '^6.0', '^7.0', '^8.0' ]
+        stability: [ 'stable', 'lowest' ]
+        php-version: [ '7.3', '7.4', '8.0' ]
+        exclude:
+          - laravel-version: 5.8.*
+            php-version: 8.0
+          - laravel-version: ^6.0
+            php-version: 8.0
+          - laravel-version: ^7.0
+            php-version: 8.0
+          - laravel-version: ^8.0
+            php-version: 8.0
+            stability: lowest
+    name: PHP ${{ matrix.php-version }} on Laravel ${{ matrix.laravel-version }} (${{ matrix.stability }})
     steps:
-    - name: Checkout
-      uses: actions/checkout@master
-    - name: Setup PHP
-      uses: shivammathur/setup-php@master
-      with:
-        php-version: ${{ matrix.php-versions }}
-        extensions: mbstring, xdebug
-        coverage: xdebug
-    - name: Install dependencies
-      run: |
-        composer require --no-update --no-interaction "illuminate/support:${{ matrix.laravel-version }}"
-        composer update --prefer-${{ matrix.stabilty }} --no-interaction --prefer-dist --no-suggest
-    - name: Lint composer.json
-      run: composer validate
-    - name: Run Tests
-      run: composer test:ci
-      env:
-        CI_TESTING: 'github-actions'
-    - name: Upload code coverage
-      uses: codecov/codecov-action@v1.0.3
-      with:
-        token: ${{secrets.CODECOV_TOKEN}}
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, xdebug, sqlite
+          coverage: xdebug
+      - name: Install dependencies
+        run: |
+          composer require --no-update --no-interaction "illuminate/support:${{ matrix.laravel-version }}"
+          composer update --prefer-${{ matrix.stability }} --no-interaction --prefer-dist --no-suggest
+      - name: Lint composer.json
+        run: composer validate
+      - name: Run Tests
+        run: composer test:ci
+        env:
+          CI_TESTING: 'github-actions'
+      - name: Upload code coverage
+        uses: codecov/codecov-action@v1.0.3
+        with:
+          token: ${{secrets.CODECOV_TOKEN}}
