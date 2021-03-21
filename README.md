@@ -3,11 +3,12 @@
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md) 
 [![Build Status](https://img.shields.io/travis/atymic/twitter/master.svg?style=flat-square)](https://travis-ci.org/atymic/twitter) 
 [![StyleCI](https://styleci.io/repos/11009743/shield)](https://styleci.io/repos/11009743) 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter) 
-[![Total Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter) 
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/atymic/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter) 
+[![3.x Downloads](https://img.shields.io/packagist/dt/atymic/twitter.svg?style=flat-square&label=3.x%20downloads)](https://packagist.org/packages/atymic/twitter) 
+[![2.x Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square&label=2.x%20downloads)](https://packagist.org/packages/thujohn/twitter) 
 ![GitHub Release Date](https://img.shields.io/github/release-date/atymic/twitter?label=latest%20release&style=flat-square)
 
-Twitter API for Laravel 5.5 and above.
+Twitter API for Laravel 5.5 and above (6.x, 7.x, 8.x).
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
@@ -30,9 +31,9 @@ TWITTER_ACCESS_TOKEN_SECRET=
 
 ### Advanced configuration
 
-Run `php artisan vendor:publish --provider="Thujohn\Twitter\TwitterServiceProvider"`
+Run `php artisan vendor:publish --provider=" Atymic\Twitter\ServiceProviders\LaravelTwitterServiceProvider"`
 ```
-/config/ttwitter.php
+/config/twitter.php
 ```
 
 # Versions 
@@ -263,7 +264,7 @@ Route::get('/tweetMedia', function()
 ```
 
 Get User Credentials with email.
-```
+```php
 $credentials = Twitter::getCredentials([
     'include_email' => 'true',
 ]);
@@ -341,7 +342,7 @@ Route::get('twitter/logout', ['as' => 'twitter.logout', function () {
 
 ## Debug
 
-First activate debug in the config file.
+First activate debug mode in the config file.
 
 Then you can access the logs() method.
 
