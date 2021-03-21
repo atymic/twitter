@@ -1,4 +1,4 @@
-# Laravel Twitter
+# Twitter for PHP
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md) 
 [![Build Status](https://img.shields.io/travis/atymic/twitter/master.svg?style=flat-square)](https://travis-ci.org/atymic/twitter) 
@@ -8,7 +8,8 @@
 [![2.x Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square&label=2.x%20downloads)](https://packagist.org/packages/thujohn/twitter) 
 ![GitHub Release Date](https://img.shields.io/github/release-date/atymic/twitter?label=latest%20release&style=flat-square)
 
-Twitter API for 6.x, 7.x, 8.x (and new versions as they are released).
+Twitter API for Laravel 6.x, 7.x, 8.x (and new versions as they are released).
+Also supports other frameworks via PHP-DI (or feel free to add support for your framework via PR)
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
@@ -18,7 +19,7 @@ You need to create an application and create your access token in the [Applicati
 composer require atymic/twitter
 ```
 
-## Configuration 
+## Laravel Configuration 
 
 Just set the below environment variables in your `.env`. 
 
@@ -29,7 +30,7 @@ TWITTER_ACCESS_TOKEN=
 TWITTER_ACCESS_TOKEN_SECRET=
 ```
 
-### Advanced configuration
+### Advanced Laravel configuration
 
 Run `php artisan vendor:publish --provider=" Atymic\Twitter\ServiceProviders\LaravelTwitterServiceProvider"`
 ```
