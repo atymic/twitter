@@ -14,7 +14,7 @@ You need to create an application and create your access token in the [Applicati
 ## Installation
 
 ```
-composer require thujohn/twitter
+composer require atymic/twitter
 ```
 
 ## Configuration 
