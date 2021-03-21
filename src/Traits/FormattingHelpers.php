@@ -82,7 +82,7 @@ trait FormattingHelpers
     // todo figure out how this is used and refactor
     public function ago($timestamp): string
     {
-        if (is_numeric($timestamp) && (int)$timestamp === $timestamp) {
+        if (is_numeric($timestamp) && (int) $timestamp === $timestamp) {
             $carbon = Carbon::createFromTimeStamp($timestamp);
         } else {
             $dt = new \DateTime($timestamp);

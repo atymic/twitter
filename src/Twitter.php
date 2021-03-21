@@ -273,7 +273,7 @@ class Twitter
      */
     private function formatResponse(Response $response, string $format)
     {
-        $body = (string)$response->getBody();
+        $body = (string) $response->getBody();
 
         switch ($format) {
             case self::RESPONSE_FORMAT_JSON:

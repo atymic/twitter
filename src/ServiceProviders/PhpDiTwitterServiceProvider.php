@@ -9,9 +9,9 @@ use Atymic\Twitter\Twitter;
 use Atymic\Twitter\TwitterServiceProvider;
 use DI\Container;
 use DI\ContainerBuilder;
+use function DI\get;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
-use function DI\get;
 
 /**
  * @codeCoverageIgnore
