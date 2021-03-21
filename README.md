@@ -7,7 +7,7 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/thujohn/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter) 
 ![GitHub Release Date](https://img.shields.io/github/release-date/atymic/twitter?label=latest%20release&style=flat-square)
 
-Twitter API for Laravel 5.5+ & 6.x
+Twitter API for Laravel 5.5 and above.
 
 You need to create an application and create your access token in the [Application Management](https://apps.twitter.com/).
 
@@ -35,25 +35,17 @@ Run `php artisan vendor:publish --provider="Thujohn\Twitter\TwitterServiceProvid
 /config/ttwitter.php
 ```
 
-# Roadmap
-
-### 2.x 
-
-2.x is in maintenance mode, so we'll continue to add support for new versions, bug fixes, etc but won't be adding new features.
-We'll keep the original package namespace & not break backward compatibility. 
+# Versions 
 
 ### 3.x 
 
-3.x will be a new major version and will not be backward compatible with 2.x
-The main goals of 3.x are
+3.x is the current major version, and is not backward compatible with 2.x.
 
-- Removing our dependency on `tmhoauth` which is extremely outdated
-- Switching to PSR based modules where possible (PSR7 for requests, PSR3 for logging, etc)
-- Take advantage of the newer PHP language features such as typing to make the package more robust
-- Decouple the package from Laravel, as there isn't that much logic specific to the framework and it would be good to
-be able to use it in other frameworks.
+We'll release a detailed migration guide to make switching as easy as possible shorty, but it can be used on new projects now.
 
-We'll release a detailed migration guide to make switching as easy as possible.
+### 2.x 
+
+2.x is not longer going to be maintained by us. We will accept PRs that fix issues, but will not be adding any features.
 
 # Usage
 
