@@ -33,7 +33,7 @@ class RequestException extends RuntimeException implements TwitterException
         Throwable $previousException = null
     ): TwitterException {
         $responseStatusCode = $response->getStatusCode();
-        $responseData = json_decode((string)$response->getBody(), true, 512, JSON_THROW_ON_ERROR);
+        $responseData = json_decode((string) $response->getBody(), true, 512, JSON_THROW_ON_ERROR);
         $instance = new static(self::DEFAULT_ERROR_MESSAGE, $response->getStatusCode(), $previousException);
 
         if (empty($responseData[self::KEY_ERRORS])) {
