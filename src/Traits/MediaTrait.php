@@ -13,18 +13,47 @@ trait MediaTrait
      * - media
      * - media_data
      *
-     * @param mixed $parameters
+     * @return mixed
+     * @throws BadMethodCallException
      */
-    public function uploadMedia($parameters = [])
+    public function uploadMedia(array $parameters = [])
     {
-        if (!array_key_exists('media', $parameters) && !array_key_exists('media_data', $parameters)) {
-            throw new BadMethodCallException('Parameter required missing : media or media_data');
+        $commandKey = 'command';
+        $mediaKey = 'media';
+        $mediaDataKey = 'media_data';
+
+        if (isset($parameters[$mediaKey], $parameters[$mediaDataKey])) {
+            throw new BadMethodCallException('You cannot use `media` and `media_data` at the same time.');
         }
 
-        if (array_key_exists('media', $parameters) && array_key_exists('media_data', $parameters)) {
-            throw new BadMethodCallException('You cannot use media and media_data at the same time');
+        if (!(isset($parameters[$mediaKey]) || isset($parameters[$mediaDataKey]) || isset($parameters[$commandKey]))) {
+            throw new BadMethodCallException('Required parameter: `media`, `media_data` or `command`');
         }
 
-        return $this->post('media/upload', $parameters, true);
+        return $this->post('media/upload', $this->normalizeParameters($parameters), true);
+    }
+
+    private function normalizeParameters(array $parameters): array
+    {
+        $normalizedParams = [];
+        $nameKey = 'name';
+        $contentsKey = 'contents';
+
+        foreach ($parameters as $key => $value) {
+            if (is_array($value) && isset($value[$nameKey], $value[$contentsKey])) {
+                $normalizedParams[] = $value;
+
+                continue;
+            }
+
+            if (!is_array($value)) {
+                $normalizedParams[] = [
+                    $nameKey => $key,
+                    $contentsKey => $value,
+                ];
+            }
+        }
+
+        return $normalizedParams;
     }
 }

@@ -32,6 +32,7 @@ use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
 use GuzzleHttp\Subscriber\Oauth\Oauth1;
 use InvalidArgumentException;
+use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
 use Psr\Log\LoggerInterface;
@@ -127,7 +128,7 @@ class Twitter
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
      * @throws TwitterRequestException
      */
     public function query(
@@ -172,8 +173,8 @@ class Twitter
     }
 
     /**
-     * @param array  $parameters
-     * @param bool   $multipart
+     * @param array $parameters
+     * @param bool $multipart
      * @param string $extension
      *
      * @return mixed|string
@@ -185,7 +186,7 @@ class Twitter
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
      * @throws TwitterRequestException
      */
     public function post(string $endpoint, array $parameters = [], bool $multipart = false)
@@ -269,25 +270,30 @@ class Twitter
     /**
      * @param Response|ResponseInterface $response
      *
-     * @return mixed|string
+     * @return mixed
      */
     private function formatResponse(Response $response, string $format)
     {
-        $body = (string) $response->getBody();
+        try {
+            $body = (string) $response->getBody();
 
-        switch ($format) {
-            case self::RESPONSE_FORMAT_JSON:
-                return $body;
-            case self::RESPONSE_FORMAT_ARRAY:
-                return json_decode($body, true, 512, JSON_THROW_ON_ERROR);
-            case self::RESPONSE_FORMAT_OBJECT:
-            default:
-                return json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+            switch ($format) {
+                case self::RESPONSE_FORMAT_JSON:
+                    return $body;
+                case self::RESPONSE_FORMAT_ARRAY:
+                    return json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+                case self::RESPONSE_FORMAT_OBJECT:
+                default:
+                    return json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+            }
+        } catch (JsonException $exception) {
+            return null;
         }
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
+     * @throws GuzzleException
      */
     private function request(string $url, array $parameters, string $method)
     {
