@@ -128,7 +128,7 @@ class Twitter
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
      * @throws TwitterRequestException
      */
     public function query(
@@ -186,7 +186,7 @@ class Twitter
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
      * @throws TwitterRequestException
      */
     public function post(string $endpoint, array $parameters = [], bool $multipart = false)
@@ -270,7 +270,7 @@ class Twitter
     /**
      * @param Response|ResponseInterface $response
      *
-     * @return mixed|string
+     * @return mixed
      */
     private function formatResponse(Response $response, string $format)
     {
@@ -287,12 +287,12 @@ class Twitter
                     return json_decode($body, false, 512, JSON_THROW_ON_ERROR);
             }
         } catch (JsonException $exception) {
-            return '';
+            return null;
         }
     }
 
     /**
-     * @return mixed|string
+     * @return mixed
      * @throws GuzzleException
      */
     private function request(string $url, array $parameters, string $method)
