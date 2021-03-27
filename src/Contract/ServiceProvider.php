@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Atymic\Twitter;
+namespace Atymic\Twitter\Contract;
 
 use Psr\Container\ContainerExceptionInterface;
 
-interface TwitterServiceProvider
+interface ServiceProvider
 {
-    public const ASSETS_DIR = __DIR__ . '/..';
+    public const ASSETS_DIR = __DIR__ . '/../..';
     public const PACKAGE_ALIAS = 'twitter';
 
     /**
@@ -17,9 +17,9 @@ interface TwitterServiceProvider
     public function set(string $name, ...$concrete): void;
 
     /**
+     * @return mixed
      * @throws ContainerExceptionInterface
      *
-     * @return mixed
      */
     public function resolve(string $name);
 }

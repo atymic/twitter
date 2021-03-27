@@ -1,8 +1,8 @@
 <?php
 
-namespace Atymic\Twitter\Facades;
+namespace Atymic\Twitter\Facade;
 
-use Atymic\Twitter\Twitter as TwitterClient;
+use Atymic\Twitter\Twitter as TwitterContract;
 use Illuminate\Support\Facades\Facade;
 
 class Twitter extends Facade
@@ -12,6 +12,6 @@ class Twitter extends Facade
      */
     protected static function getFacadeAccessor(): string
     {
-        return TwitterClient::class;
+        return TwitterContract::class;
     }
 }

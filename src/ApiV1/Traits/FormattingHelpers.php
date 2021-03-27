@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atymic\Twitter\Traits;
+namespace Atymic\Twitter\ApiV1\Traits;
 
 use Carbon\Carbon;
 

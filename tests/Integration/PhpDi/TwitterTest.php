@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Tests\Integration\PhpDi;
 
-use Atymic\Twitter\ServiceProviders\PhpDiTwitterServiceProvider;
+use Atymic\Twitter\Contract\ServiceProvider;
+use Atymic\Twitter\ServiceProvider\PhpDiServiceProvider;
 use Atymic\Twitter\Tests\Integration\ResolutionTest;
 use Atymic\Twitter\Twitter;
-use Atymic\Twitter\TwitterServiceProvider;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 final class TwitterTest extends TestCase implements ResolutionTest
 {
     /**
-     * @var TwitterServiceProvider
+     * @var ServiceProvider
      */
     private $serviceProvider;
 
@@ -26,20 +26,20 @@ final class TwitterTest extends TestCase implements ResolutionTest
     {
         parent::setUp();
 
-        $this->serviceProvider = new PhpDiTwitterServiceProvider();
+        $this->serviceProvider = new PhpDiServiceProvider();
     }
 
     public function testTwitterResolution(): void
     {
         $instance = $this->serviceProvider->resolve(Twitter::class);
 
-        $this->assertInstanceOf(Twitter::class, $instance);
+        self::assertInstanceOf(Twitter::class, $instance);
     }
 
     public function testTwitterResolutionViaAlias(): void
     {
-        $instance = $this->serviceProvider->resolve(TwitterServiceProvider::PACKAGE_ALIAS);
+        $instance = $this->serviceProvider->resolve(ServiceProvider::PACKAGE_ALIAS);
 
-        $this->assertInstanceOf(Twitter::class, $instance);
+        self::assertInstanceOf(Twitter::class, $instance);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Atymic\Twitter\Traits;
+namespace Atymic\Twitter\ApiV1\Traits;
 
 use BadMethodCallException;
 

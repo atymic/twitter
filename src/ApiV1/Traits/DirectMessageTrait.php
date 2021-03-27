@@ -1,8 +1,8 @@
 <?php
 
-namespace Atymic\Twitter\Traits;
+namespace Atymic\Twitter\ApiV1\Traits;
 
-use Atymic\Twitter\Twitter;
+use Atymic\Twitter\ApiV1\Twitter;
 use BadMethodCallException;
 
 trait DirectMessageTrait

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Atymic\Twitter\Tests\Unit;
+namespace Atymic\Twitter\Tests\Unit\ApiV1\Service;
 
-use Atymic\Twitter\Twitter;
+use Atymic\Twitter\ApiV1\Service\Twitter;
 use BadMethodCallException;
 use Exception;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -26,13 +26,18 @@ final class TwitterTest extends TestCase
      */
     public function testGetUsersWithScreenName(): void
     {
-        $twitter = $this->getTwitterExpecting('users/show', [
-            'screen_name' => 'my_screen_name',
-        ]);
+        $twitter = $this->getTwitterExpecting(
+            'users/show',
+            [
+                'screen_name' => 'my_screen_name',
+            ]
+        );
 
-        $twitter->getUsers([
-            'screen_name' => 'my_screen_name',
-        ]);
+        $twitter->getUsers(
+            [
+                'screen_name' => 'my_screen_name',
+            ]
+        );
     }
 
     /**
@@ -41,13 +46,18 @@ final class TwitterTest extends TestCase
      */
     public function testGetUsersWithId(): void
     {
-        $twitter = $this->getTwitterExpecting('users/show', [
-            'user_id' => 1234567890,
-        ]);
+        $twitter = $this->getTwitterExpecting(
+            'users/show',
+            [
+                'user_id' => 1234567890,
+            ]
+        );
 
-        $twitter->getUsers([
-            'user_id' => 1234567890,
-        ]);
+        $twitter->getUsers(
+            [
+                'user_id' => 1234567890,
+            ]
+        );
     }
 
     /**
@@ -60,9 +70,11 @@ final class TwitterTest extends TestCase
 
         $twitter = $this->getTwitter();
 
-        $twitter->getUsers([
-            'include_entities' => true,
-        ]);
+        $twitter->getUsers(
+            [
+                'include_entities' => true,
+            ]
+        );
     }
 
     /**
@@ -71,13 +83,18 @@ final class TwitterTest extends TestCase
      */
     public function testGetUsersLookupWithIds(): void
     {
-        $twitter = $this->getTwitterExpecting('users/lookup', [
-            'user_id' => '1,2,3,4',
-        ]);
+        $twitter = $this->getTwitterExpecting(
+            'users/lookup',
+            [
+                'user_id' => '1,2,3,4',
+            ]
+        );
 
-        $twitter->getUsersLookup([
-            'user_id' => implode(',', [1, 2, 3, 4]),
-        ]);
+        $twitter->getUsersLookup(
+            [
+                'user_id' => implode(',', [1, 2, 3, 4]),
+            ]
+        );
     }
 
     /**
@@ -86,13 +103,18 @@ final class TwitterTest extends TestCase
      */
     public function testGetUsersLookupWithScreenNames(): void
     {
-        $twitter = $this->getTwitterExpecting('users/lookup', [
-            'screen_name' => 'me,you,everybody',
-        ]);
+        $twitter = $this->getTwitterExpecting(
+            'users/lookup',
+            [
+                'screen_name' => 'me,you,everybody',
+            ]
+        );
 
-        $twitter->getUsersLookup([
-            'screen_name' => implode(',', ['me', 'you', 'everybody']),
-        ]);
+        $twitter->getUsersLookup(
+            [
+                'screen_name' => implode(',', ['me', 'you', 'everybody']),
+            ]
+        );
     }
 
     /**
@@ -105,9 +127,11 @@ final class TwitterTest extends TestCase
 
         $twitter = $this->getTwitter();
 
-        $twitter->getUsersLookup([
-            'include_entities' => true,
-        ]);
+        $twitter->getUsersLookup(
+            [
+                'include_entities' => true,
+            ]
+        );
     }
 
     /**
@@ -276,9 +300,9 @@ final class TwitterTest extends TestCase
     }
 
     /**
+     * @return MockObject|Twitter
      * @throws RuntimeException
      *
-     * @return MockObject|Twitter
      */
     protected function getTwitter(): MockObject
     {
@@ -289,18 +313,18 @@ final class TwitterTest extends TestCase
     }
 
     /**
+     * @return MockObject|Twitter
      * @throws RuntimeException
      *
-     * @return MockObject|Twitter
      */
     protected function getTwitterExpecting(string $endpoint, array $queryParams): MockObject
     {
         $twitter = $this->getTwitter();
-        $twitter->expects($this->once())
+        $twitter->expects(self::once())
             ->method('query')
             ->with(
                 $endpoint,
-                $this->anything(),
+                self::anything(),
                 $queryParams
             );
 
@@ -310,7 +334,7 @@ final class TwitterTest extends TestCase
     /**
      * @throws RuntimeException
      */
-    private function paramTest(string $endpoint, string $testedMethod, array $params)
+    private function paramTest(string $endpoint, string $testedMethod, array $params): void
     {
         $twitter = $this->getTwitterExpecting($endpoint, $params);
 
