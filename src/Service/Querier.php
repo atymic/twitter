@@ -26,6 +26,7 @@ use RuntimeException;
 final class Querier implements QuerierContract
 {
     private const URL_FORMAT = 'https://%s/%s/%s%s';
+    private const STREAM_BYTES_PER_READ = 1024;
 
     protected Configuration $config;
     protected ClientInterface $oAuth1HttpClient;
@@ -199,7 +200,7 @@ final class Querier implements QuerierContract
             $content = '';
 
             while (!$body->eof()) {
-                $content .= $body->read(1024);
+                $content .= $body->read(self::STREAM_BYTES_PER_READ);
             }
 
             switch ($format) {
