@@ -39,7 +39,6 @@ final class GuzzleClientCreator implements GuzzleClientFactory
 
         return new Client(
             [
-                'stream' => true,
                 'handler' => $stack,
                 'auth' => 'oauth',
             ]
