@@ -8,9 +8,11 @@ use Atymic\Twitter\ApiV1\Service\Twitter as TwitterV1;
 use Atymic\Twitter\ApiV1\Twitter as TwitterV1Contract;
 use Atymic\Twitter\Configuration;
 use Atymic\Twitter\Contract\Configuration as ConfigurationContract;
+use Atymic\Twitter\Contract\GuzzleClientFactory;
 use Atymic\Twitter\Contract\Querier as QuerierContract;
 use Atymic\Twitter\Contract\ServiceProvider as ServiceProviderContract;
 use Atymic\Twitter\Contract\Twitter as TwitterV2Contract;
+use Atymic\Twitter\Factory\GuzzleClientCreator;
 use Atymic\Twitter\Service\Accessor;
 use Atymic\Twitter\Service\Querier;
 use Atymic\Twitter\Twitter as TwitterContract;
@@ -18,6 +20,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use LogicException;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @codeCoverageIgnore
@@ -60,10 +63,26 @@ final class LaravelServiceProvider extends ServiceProvider implements ServicePro
     public function register(): void
     {
         $this->app->alias(TwitterContract::class, self::PACKAGE_ALIAS);
-        $this->app->singleton(QuerierContract::class, Querier::class);
         $this->app->singleton(
             ConfigurationContract::class,
             static fn () => Configuration::fromLaravelConfiguration(config(self::CONFIG_KEY))
+        );
+        $this->app->singleton(
+            GuzzleClientFactory::class,
+            static fn (Application $app) => new GuzzleClientCreator($app->get(ConfigurationContract::class))
+        );
+        $this->app->singleton(
+            QuerierContract::class,
+            static function (Application $app) {
+                $guzzleClientCreator = $app->get(GuzzleClientFactory::class);
+
+                return new Querier(
+                    $app->get(ConfigurationContract::class),
+                    $guzzleClientCreator->createClient(GuzzleClientFactory::AUTH_PROTOCOL_OAUTH_1),
+                    $guzzleClientCreator->createClient(GuzzleClientFactory::AUTH_PROTOCOL_OAUTH_2),
+                    $app->get(LoggerInterface::class)
+                );
+            }
         );
         $this->app->singleton(
             TwitterV1Contract::class,

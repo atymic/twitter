@@ -12,13 +12,10 @@ use Atymic\Twitter\Exception\Request\NotFoundException;
 use Atymic\Twitter\Exception\Request\RateLimitedException;
 use Atymic\Twitter\Exception\Request\UnauthorizedRequestException;
 use Atymic\Twitter\Exception\RequestException as TwitterRequestException;
-use GuzzleHttp\Client as HttpClient;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\HandlerStack;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\RequestOptions;
-use GuzzleHttp\Subscriber\Oauth\Oauth1;
-use InvalidArgumentException;
 use JsonException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
@@ -30,45 +27,24 @@ final class Querier implements QuerierContract
     private const URL_FORMAT = 'https://%s/%s/%s%s';
 
     protected Configuration $config;
-    protected HttpClient $httpClient;
+    protected ClientInterface $oAuth1HttpClient;
+    protected ClientInterface $oAuth2HttpClient;
+    protected ClientInterface $activeHttpClient;
     protected ?LoggerInterface $logger;
     protected bool $debug;
 
-    /**
-     * Twitter constructor.
-     *
-     * @throws InvalidArgumentException
-     */
-    public function __construct(Configuration $config, ?LoggerInterface $logger = null)
-    {
+    public function __construct(
+        Configuration $config,
+        ClientInterface $oAuth1HttpClient,
+        ClientInterface $oAuth2HttpClient,
+        ?LoggerInterface $logger = null
+    ) {
         $this->config = $config;
-        $this->logger = $logger;
         $this->debug = $config->isDebugMode();
-        $this->httpClient = $this->getHttpClient($config);
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    private function getHttpClient(Configuration $config): HttpClient
-    {
-        $stack = HandlerStack::create();
-        $middleware = new Oauth1(
-            [
-                'consumer_key' => $config->getConsumerKey(),
-                'consumer_secret' => $config->getConsumerSecret(),
-                'token' => $config->getAccessToken(),
-                'token_secret' => $config->getAccessTokenSecret(),
-            ]
-        );
-        $stack->push($middleware);
-
-        return new HttpClient(
-            [
-                'handler' => $stack,
-                'auth' => 'oauth',
-            ]
-        );
+        $this->oAuth1HttpClient = $oAuth1HttpClient;
+        $this->oAuth2HttpClient = $oAuth2HttpClient;
+        $this->activeHttpClient = $oAuth1HttpClient;
+        $this->logger = $logger;
     }
 
     public function getConfiguration(): Configuration
@@ -76,20 +52,33 @@ final class Querier implements QuerierContract
         return $this->config;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function usingCredentials(string $accessToken, string $accessTokenSecret): self
     {
-        return new self($this->config->withOauthCredentials($accessToken, $accessTokenSecret), $this->logger);
+        return new self(
+            $this->config->withOauthCredentials($accessToken, $accessTokenSecret),
+            $this->oAuth1HttpClient,
+            $this->oAuth2HttpClient,
+            $this->logger
+        );
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function usingConfiguration(Configuration $configuration): self
     {
-        return new self($configuration, $this->logger);
+        return new self($configuration, $this->oAuth1HttpClient, $this->oAuth2HttpClient, $this->logger);
+    }
+
+    public function withOAuth1Client(): self {
+        $instance = clone $this;
+        $instance->activeHttpClient = $this->oAuth1HttpClient;
+
+        return $instance;
+    }
+
+    public function withOAuth2Client(): self {
+        $instance = clone $this;
+        $instance->activeHttpClient = $this->oAuth2HttpClient;
+
+        return $instance;
     }
 
     /**
@@ -152,7 +141,7 @@ final class Querier implements QuerierContract
         unset($parameters[self::KEY_REQUEST_FORMAT], $parameters[self::KEY_RESPONSE_FORMAT], $parameters[self::KEY_FORMAT]);
 
         $requestOptions = $this->getRequestOptions($parameters, $method, $requestFormat);
-        $response = $this->httpClient->request($method, $url, $requestOptions);
+        $response = $this->activeHttpClient->request($method, $url, $requestOptions);
 
         return $this->formatResponse($response, $responseFormat);
     }
@@ -286,5 +275,13 @@ final class Querier implements QuerierContract
     public function put(string $endpoint, array $parameters = [])
     {
         return $this->query($endpoint, self::REQUEST_METHOD_PUT, $parameters);
+    }
+
+    /**
+     * @throws TwitterRequestException
+     */
+    public function delete(string $endpoint, array $parameters = [])
+    {
+        return $this->query($endpoint, self::REQUEST_METHOD_DELETE, $parameters);
     }
 }

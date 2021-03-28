@@ -29,15 +29,69 @@ interface Twitter extends BaseTwitterContract
 
     /**
      * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all
+     */
+    public function searchAll(string $query, string ...$additionalParameters);
+
+    /**
+     * @throws RequestException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets
      */
-    public function userTweets(int $userId, string ...$queryParameters);
+    public function userTweets(string $userId, string ...$queryParameters);
 
     /**
      * @throws RequestException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-mentions
      */
-    public function userMentions(int $userId, string ...$queryParameters);
+    public function userMentions(string $userId, string ...$queryParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
+     */
+    public function getUser(string $userId, string ...$queryParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
+     */
+    public function getUsers(array $userIds, string ...$additionalParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
+     */
+    public function getUserByUsername(string $username, string ...$queryParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
+     */
+    public function getUsersByUsernames(array $usernames, string ...$additionalParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-following
+     */
+    public function getFollowing(string $userId, string ...$queryParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-followers
+     */
+    public function getFollowers(string $userId, string ...$queryParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/post-users-source_user_id-following
+     */
+    public function follow(string $sourceUserId, string $targetUserId);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/delete-users-source_id-following
+     */
+    public function unfollow(string $sourceUserId, string $targetUserId);
 
     /**
      * Hide or un-hide a reply to a Tweet.

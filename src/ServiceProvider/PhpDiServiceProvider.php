@@ -8,9 +8,11 @@ use Atymic\Twitter\ApiV1\Service\Twitter as TwitterV1;
 use Atymic\Twitter\ApiV1\Twitter as TwitterV1Contract;
 use Atymic\Twitter\Configuration;
 use Atymic\Twitter\Contract\Configuration as ConfigurationContract;
+use Atymic\Twitter\Contract\GuzzleClientFactory;
 use Atymic\Twitter\Contract\Querier as QuerierContract;
 use Atymic\Twitter\Contract\ServiceProvider as ServiceProviderContract;
 use Atymic\Twitter\Contract\Twitter as TwitterV2Contract;
+use Atymic\Twitter\Factory\GuzzleClientCreator;
 use Atymic\Twitter\Service\Accessor;
 use Atymic\Twitter\Service\Querier;
 use Atymic\Twitter\Twitter as TwitterContract;
@@ -18,6 +20,9 @@ use DI\Container;
 use DI\ContainerBuilder;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
+use Psr\Log\LoggerInterface;
+
+use Symfony\Component\HttpKernel\Log\Logger;
 
 use function DI\get;
 
@@ -53,8 +58,19 @@ final class PhpDiServiceProvider implements ServiceProviderContract
     {
         return [
             self::PACKAGE_ALIAS => get(TwitterContract::class),
+            LoggerInterface::class => get(Logger::class),
             ConfigurationContract::class => static fn (): ConfigurationContract => Configuration::createWithDefaults(),
-            QuerierContract::class => get(Querier::class),
+            GuzzleClientFactory::class => get(GuzzleClientCreator::class),
+            QuerierContract::class => static function (Container $container): QuerierContract {
+                $guzzleClientCreator = $container->get(GuzzleClientFactory::class);
+
+                return new Querier(
+                    $container->get(ConfigurationContract::class),
+                    $guzzleClientCreator->createClient(GuzzleClientFactory::AUTH_PROTOCOL_OAUTH_1),
+                    $guzzleClientCreator->createClient(GuzzleClientFactory::AUTH_PROTOCOL_OAUTH_2),
+                    $container->get(LoggerInterface::class)
+                );
+            },
             TwitterV1Contract::class => static fn (Container $container): TwitterV1Contract => new TwitterV1(
                 $container->get(QuerierContract::class)
             ),

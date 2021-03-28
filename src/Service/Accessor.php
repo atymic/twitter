@@ -4,20 +4,23 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Service;
 
+use Atymic\Twitter\Concern\Follows;
 use Atymic\Twitter\Concern\HideReplies;
 use Atymic\Twitter\Concern\SearchTweets;
 use Atymic\Twitter\Concern\Timelines;
 use Atymic\Twitter\Concern\TweetLookup;
+use Atymic\Twitter\Concern\UserLookup;
 use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Querier as QuerierContract;
 use Atymic\Twitter\Contract\Twitter as TwitterContract;
-use InvalidArgumentException;
 
 final class Accessor implements TwitterContract
 {
     use TweetLookup;
     use SearchTweets;
     use Timelines;
+    use UserLookup;
+    use Follows;
     use HideReplies;
 
     private QuerierContract $querier;
@@ -27,9 +30,6 @@ final class Accessor implements TwitterContract
         $this->querier = $querier;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function usingCredentials(string $accessToken, string $accessTokenSecret): self
     {
         return new self(
@@ -43,9 +43,6 @@ final class Accessor implements TwitterContract
         return $this->querier;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function usingConfiguration(Configuration $configuration): self
     {
         return new self(

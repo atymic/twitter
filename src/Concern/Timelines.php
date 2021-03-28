@@ -14,19 +14,19 @@ trait Timelines
      * @throws RequestException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets
      */
-    public function userTweets(int $userId, string ...$queryParameters)
+    public function userTweets(string $userId, string ...$queryParameters)
     {
         return $this->getQuerier()
-            ->get(sprintf('users/%d/tweets', $userId), $queryParameters);
+            ->get(sprintf('users/%s/tweets', $userId), $queryParameters);
     }
 
     /**
      * @throws RequestException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-mentions
      */
-    public function userMentions(int $userId, string ...$queryParameters)
+    public function userMentions(string $userId, string ...$queryParameters)
     {
         return $this->getQuerier()
-            ->get(sprintf('users/%d/mentions', $userId), $queryParameters);
+            ->get(sprintf('users/%s/mentions', $userId), $queryParameters);
     }
 }

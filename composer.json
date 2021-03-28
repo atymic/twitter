@@ -24,7 +24,8 @@
         "psr/log": "^1.1",
         "nesbot/carbon": "^2.26",
         "guzzlehttp/oauth-subscriber": "^0.4",
-        "php-di/php-di": "^6.2"
+        "php-di/php-di": "^6.2",
+        "kamermans/guzzle-oauth2-subscriber": "^1.0"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.3",

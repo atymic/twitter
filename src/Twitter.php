@@ -6,7 +6,6 @@ namespace Atymic\Twitter;
 
 use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Querier;
-use InvalidArgumentException;
 
 interface Twitter
 {
@@ -30,13 +29,7 @@ interface Twitter
     public const REQUEST_METHOD_GET = Querier::REQUEST_METHOD_GET;
     public const REQUEST_METHOD_POST = Querier::REQUEST_METHOD_POST;
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function usingCredentials(string $accessToken, string $accessTokenSecret): self;
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function usingConfiguration(Configuration $configuration): self;
 }

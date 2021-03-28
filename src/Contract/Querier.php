@@ -6,7 +6,6 @@ namespace Atymic\Twitter\Contract;
 
 use Atymic\Twitter\Exception\RequestException as TwitterRequestException;
 use GuzzleHttp\RequestOptions;
-use InvalidArgumentException;
 
 interface Querier
 {
@@ -24,16 +23,15 @@ interface Querier
     public const REQUEST_METHOD_GET = 'GET';
     public const REQUEST_METHOD_POST = 'POST';
     public const REQUEST_METHOD_PUT = 'PUT';
+    public const REQUEST_METHOD_DELETE = 'DELETE';
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function usingCredentials(string $accessToken, string $accessTokenSecret): self;
 
-    /**
-     * @throws InvalidArgumentException
-     */
     public function usingConfiguration(Configuration $configuration): self;
+
+    public function withOAuth1Client(): self;
+
+    public function withOAuth2Client(): self;
 
     /**
      * @throws TwitterRequestException
@@ -69,6 +67,11 @@ interface Querier
      * @throws TwitterRequestException
      */
     public function put(string $endpoint, array $parameters = []);
+
+    /**
+     * @throws TwitterRequestException
+     */
+    public function delete(string $endpoint, array $parameters = []);
 
     public function getConfiguration(): Configuration;
 }
