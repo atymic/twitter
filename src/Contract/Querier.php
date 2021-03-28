@@ -12,6 +12,7 @@ interface Querier
     public const KEY_REQUEST_FORMAT = 'request_format';
     public const KEY_RESPONSE_FORMAT = 'response_format';
     public const KEY_FORMAT = 'format';
+    public const KEY_STREAM = 'stream';
 
     public const REQUEST_FORMAT_JSON = RequestOptions::JSON;
     public const REQUEST_FORMAT_MULTIPART = RequestOptions::MULTIPART;

@@ -47,6 +47,30 @@ interface Twitter extends BaseTwitterContract
 
     /**
      * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream
+     */
+    public function getStream(string ...$queryParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream-rules
+     */
+    public function getStreamRules(string ...$queryParameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/post-tweets-search-stream-rules
+     */
+    public function postStreamRules(array $parameters);
+
+    /**
+     * @throws RequestException
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/sampled-stream/api-reference/get-tweets-sample-stream
+     */
+    public function getSampledStream(string ...$queryParameters);
+
+    /**
+     * @throws RequestException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
      */
     public function getUser(string $userId, string ...$queryParameters);

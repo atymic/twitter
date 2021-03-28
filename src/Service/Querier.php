@@ -21,6 +21,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
+use RuntimeException;
 
 final class Querier implements QuerierContract
 {
@@ -67,14 +68,16 @@ final class Querier implements QuerierContract
         return new self($configuration, $this->oAuth1HttpClient, $this->oAuth2HttpClient, $this->logger);
     }
 
-    public function withOAuth1Client(): self {
+    public function withOAuth1Client(): self
+    {
         $instance = clone $this;
         $instance->activeHttpClient = $this->oAuth1HttpClient;
 
         return $instance;
     }
 
-    public function withOAuth2Client(): self {
+    public function withOAuth2Client(): self
+    {
         $instance = clone $this;
         $instance->activeHttpClient = $this->oAuth2HttpClient;
 
@@ -137,17 +140,31 @@ final class Querier implements QuerierContract
     {
         $requestFormat = $parameters[self::KEY_REQUEST_FORMAT] ?? null;
         $responseFormat = $parameters[self::KEY_RESPONSE_FORMAT] ?? $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
+        $stream = $parameters[self::KEY_STREAM] ?? false;
 
-        unset($parameters[self::KEY_REQUEST_FORMAT], $parameters[self::KEY_RESPONSE_FORMAT], $parameters[self::KEY_FORMAT]);
+        unset(
+            $parameters[self::KEY_REQUEST_FORMAT],
+            $parameters[self::KEY_RESPONSE_FORMAT],
+            $parameters[self::KEY_FORMAT],
+            $parameters[self::KEY_STREAM]
+        );
 
-        $requestOptions = $this->getRequestOptions($parameters, $method, $requestFormat);
+        $requestOptions = $this->getRequestOptions($parameters, $method, $requestFormat, $stream);
         $response = $this->activeHttpClient->request($method, $url, $requestOptions);
 
         return $this->formatResponse($response, $responseFormat);
     }
 
-    private function getRequestOptions(array $params, string $requestMethod, ?string $requestFormat): array
-    {
+    private function getRequestOptions(
+        array $params,
+        string $requestMethod,
+        ?string $requestFormat,
+        bool $stream
+    ): array {
+        $options = [
+            RequestOptions::STREAM => $stream,
+        ];
+
         switch ($requestFormat) {
             case self::REQUEST_FORMAT_JSON:
                 $paramsKey = RequestOptions::JSON;
@@ -165,9 +182,9 @@ final class Querier implements QuerierContract
                 break;
         }
 
-        return [
-            $paramsKey => $params,
-        ];
+        $options[$paramsKey] = $params;
+
+        return $options;
     }
 
     /**
@@ -178,18 +195,33 @@ final class Querier implements QuerierContract
     private function formatResponse(Response $response, string $format)
     {
         try {
-            $body = (string) $response->getBody();
+            $body = $response->getBody();
+            $content = '';
+
+            while (!$body->eof()) {
+                $content .= $body->read(1024);
+            }
 
             switch ($format) {
                 case self::RESPONSE_FORMAT_JSON:
-                    return $body;
+                    return $content;
                 case self::RESPONSE_FORMAT_ARRAY:
-                    return json_decode($body, true, 512, JSON_THROW_ON_ERROR);
+                    return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
                 case self::RESPONSE_FORMAT_OBJECT:
                 default:
-                    return json_decode($body, false, 512, JSON_THROW_ON_ERROR);
+                    return json_decode($content, false, 512, JSON_THROW_ON_ERROR);
             }
+        } catch (RuntimeException $exception) {
+            $this->logger->error(
+                sprintf('A runtime exception occurred when formatting twitter response. %s', $exception->getMessage())
+            );
+
+            return null;
         } catch (JsonException $exception) {
+            $this->logger->error(
+                sprintf('A JSON exception occurred when formatting twitter response. %s', $exception->getMessage())
+            );
+
             return null;
         }
     }

@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Service;
 
+use Atymic\Twitter\Concern\FilteredStream;
 use Atymic\Twitter\Concern\Follows;
 use Atymic\Twitter\Concern\HideReplies;
+use Atymic\Twitter\Concern\SampledStream;
 use Atymic\Twitter\Concern\SearchTweets;
 use Atymic\Twitter\Concern\Timelines;
 use Atymic\Twitter\Concern\TweetLookup;
@@ -19,6 +21,8 @@ final class Accessor implements TwitterContract
     use TweetLookup;
     use SearchTweets;
     use Timelines;
+    use FilteredStream;
+    use SampledStream;
     use UserLookup;
     use Follows;
     use HideReplies;

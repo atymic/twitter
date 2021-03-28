@@ -18,6 +18,7 @@ interface Twitter
     public const KEY_REQUEST_FORMAT = Querier::KEY_REQUEST_FORMAT;
     public const KEY_RESPONSE_FORMAT = Querier::KEY_RESPONSE_FORMAT;
     public const KEY_FORMAT = Querier::KEY_FORMAT;
+    public const KEY_STREAM = Querier::KEY_STREAM;
 
     public const REQUEST_FORMAT_JSON = Querier::REQUEST_FORMAT_JSON;
     public const REQUEST_FORMAT_MULTIPART = Querier::REQUEST_FORMAT_MULTIPART;
