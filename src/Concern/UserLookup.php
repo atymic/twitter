@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Concern;
 
-use Atymic\Twitter\Exception\RequestException;
+use Atymic\Twitter\Exception\ClientException;
 
 trait UserLookup
 {
     use ApiV2Behavior;
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
      */
     public function getUser(string $userId, string ...$queryParameters)
@@ -21,7 +21,7 @@ trait UserLookup
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
      */
     public function getUsers(array $userIds, string ...$additionalParameters)
@@ -33,7 +33,7 @@ trait UserLookup
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
      */
     public function getUserByUsername(string $username, string ...$queryParameters)
@@ -43,7 +43,7 @@ trait UserLookup
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
      */
     public function getUsersByUsernames(array $usernames, string ...$additionalParameters)

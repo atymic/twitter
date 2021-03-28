@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Atymic\Twitter\ApiV1;
+namespace Atymic\Twitter\ApiV1\Contract;
 
 use Atymic\Twitter\Twitter as BaseTwitterContract;
 

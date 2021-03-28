@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Atymic\Twitter\Concern;
 
 use Atymic\Twitter\Contract\Twitter;
-use Atymic\Twitter\Exception\RequestException;
+use Atymic\Twitter\Exception\ClientException;
 
 trait Follows
 {
     use ApiV2Behavior;
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-following
      */
     public function getFollowing(string $userId, string ...$queryParameters)
@@ -23,7 +23,7 @@ trait Follows
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-followers
      */
     public function getFollowers(string $userId, string ...$queryParameters)
@@ -34,7 +34,7 @@ trait Follows
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/post-users-source_user_id-following
      */
     public function follow(string $sourceUserId, string $targetUserId)
@@ -50,7 +50,7 @@ trait Follows
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/delete-users-source_id-following
      */
     public function unfollow(string $sourceUserId, string $targetUserId)

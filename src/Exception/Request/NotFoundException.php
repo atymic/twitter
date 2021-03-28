@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Exception\Request;
 
-use Atymic\Twitter\Exception\RequestException;
+use Atymic\Twitter\Exception\ClientException;
 
-final class NotFoundException extends RequestException
+final class NotFoundException extends ClientException
 {
 }

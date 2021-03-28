@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Concern;
 
-use Atymic\Twitter\Exception\RequestException;
+use Atymic\Twitter\Exception\ClientException;
 use Atymic\Twitter\Twitter;
 
 trait FilteredStream
@@ -12,21 +12,18 @@ trait FilteredStream
     use ApiV2Behavior;
 
     /**
-     * @throws RequestException
+     * @throws ClientException
+     * @see Querier::getStream()
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream
      */
-    public function getStream(string ...$queryParameters)
+    public function getStream(callable $onTweet, array $parameters = []): void
     {
-        $parameters = $queryParameters;
-        $parameters[Twitter::KEY_STREAM] = true;
-
-        return $this->getQuerier()
-            ->withOAuth2Client()
-            ->get('tweets/search/stream', $parameters);
+        $this->getQuerier()
+            ->getStream('tweets/search/stream', $onTweet, $parameters);
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream-rules
      */
     public function getStreamRules(string ...$queryParameters)
@@ -37,7 +34,7 @@ trait FilteredStream
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/post-tweets-search-stream-rules
      */
     public function postStreamRules(array $parameters)

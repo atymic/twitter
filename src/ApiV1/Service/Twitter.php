@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\ApiV1\Service;
 
+use Atymic\Twitter\ApiV1\Contract\Twitter as TwitterContract;
 use Atymic\Twitter\ApiV1\Traits\AccountTrait;
 use Atymic\Twitter\ApiV1\Traits\AuthTrait;
 use Atymic\Twitter\ApiV1\Traits\BlockTrait;
@@ -19,10 +20,9 @@ use Atymic\Twitter\ApiV1\Traits\SearchTrait;
 use Atymic\Twitter\ApiV1\Traits\StatusTrait;
 use Atymic\Twitter\ApiV1\Traits\TrendTrait;
 use Atymic\Twitter\ApiV1\Traits\UserTrait;
-use Atymic\Twitter\ApiV1\Twitter as TwitterContract;
 use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Querier;
-use Atymic\Twitter\Exception\RequestException as TwitterRequestException;
+use Atymic\Twitter\Exception\ClientException as TwitterClientException;
 use InvalidArgumentException;
 
 class Twitter implements TwitterContract
@@ -61,9 +61,15 @@ class Twitter implements TwitterContract
     /**
      * @throws InvalidArgumentException
      */
-    public function usingCredentials(string $accessToken, string $accessTokenSecret): self
-    {
-        return new self($this->querier->usingCredentials($accessToken, $accessTokenSecret));
+    public function usingCredentials(
+        string $accessToken,
+        string $accessTokenSecret,
+        ?string $consumerKey = null,
+        ?string $consumerSecret = null
+    ): self {
+        return new self(
+            $this->querier->usingCredentials($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret)
+        );
     }
 
     /**
@@ -76,7 +82,7 @@ class Twitter implements TwitterContract
 
     /**
      * @return mixed
-     * @throws TwitterRequestException
+     * @throws TwitterClientException
      */
     public function query(
         string $endpoint,
@@ -90,7 +96,7 @@ class Twitter implements TwitterContract
 
     /**
      * @return mixed
-     * @throws TwitterRequestException
+     * @throws TwitterClientException
      */
     public function directQuery(
         string $url,
@@ -106,7 +112,7 @@ class Twitter implements TwitterContract
      * @param string $extension
      *
      * @return mixed|string
-     * @throws TwitterRequestException
+     * @throws TwitterClientException
      */
     public function get(string $endpoint, $parameters = [], $multipart = false, $extension = self::DEFAULT_EXTENSION)
     {
@@ -115,7 +121,7 @@ class Twitter implements TwitterContract
 
     /**
      * @return mixed
-     * @throws TwitterRequestException
+     * @throws TwitterClientException
      */
     public function post(string $endpoint, array $parameters = [], bool $multipart = false)
     {

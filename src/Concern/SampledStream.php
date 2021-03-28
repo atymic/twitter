@@ -4,24 +4,20 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Concern;
 
-use Atymic\Twitter\Exception\RequestException;
-use Atymic\Twitter\Twitter;
+use Atymic\Twitter\Exception\ClientException;
 
 trait SampledStream
 {
     use ApiV2Behavior;
 
     /**
-     * @throws RequestException
+     * @throws ClientException
+     * @see Querier::getStream()
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/sampled-stream/api-reference/get-tweets-sample-stream
      */
-    public function getSampledStream(string ...$queryParameters)
+    public function getSampledStream(callable $onTweet, array $parameters = []): void
     {
-        $parameters = $queryParameters;
-        $parameters[Twitter::KEY_STREAM] = true;
-
-        return $this->getQuerier()
-            ->withOAuth2Client()
-            ->get('tweets/sample/stream', $parameters);
+        $this->getQuerier()
+            ->getStream('tweets/sample/stream', $onTweet, $parameters);
     }
 }

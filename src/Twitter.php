@@ -6,6 +6,7 @@ namespace Atymic\Twitter;
 
 use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Querier;
+use InvalidArgumentException;
 
 interface Twitter
 {
@@ -18,7 +19,10 @@ interface Twitter
     public const KEY_REQUEST_FORMAT = Querier::KEY_REQUEST_FORMAT;
     public const KEY_RESPONSE_FORMAT = Querier::KEY_RESPONSE_FORMAT;
     public const KEY_FORMAT = Querier::KEY_FORMAT;
-    public const KEY_STREAM = Querier::KEY_STREAM;
+
+    public const KEY_STREAM_CONTENTS = Querier::KEY_STREAM_CONTENTS;
+    public const KEY_STREAM_STOP_AFTER_SECONDS = Querier::KEY_STREAM_STOP_AFTER_SECONDS;
+    public const KEY_STREAM_STOP_AFTER_COUNT = Querier::KEY_STREAM_STOP_AFTER_COUNT;
 
     public const REQUEST_FORMAT_JSON = Querier::REQUEST_FORMAT_JSON;
     public const REQUEST_FORMAT_MULTIPART = Querier::REQUEST_FORMAT_MULTIPART;
@@ -30,7 +34,20 @@ interface Twitter
     public const REQUEST_METHOD_GET = Querier::REQUEST_METHOD_GET;
     public const REQUEST_METHOD_POST = Querier::REQUEST_METHOD_POST;
 
-    public function usingCredentials(string $accessToken, string $accessTokenSecret): self;
+    /**
+     * @throws InvalidArgumentException
+     * @see Querier::usingCredentials()
+     */
+    public function usingCredentials(
+        string $accessToken,
+        string $accessTokenSecret,
+        ?string $consumerKey = null,
+        ?string $consumerSecret = null
+    ): self;
 
+    /**
+     * @throws InvalidArgumentException
+     * @see Querier::usingConfiguration()
+     */
     public function usingConfiguration(Configuration $configuration): self;
 }

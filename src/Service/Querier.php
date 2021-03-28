@@ -5,47 +5,41 @@ declare(strict_types=1);
 namespace Atymic\Twitter\Service;
 
 use Atymic\Twitter\Contract\Configuration;
+use Atymic\Twitter\Contract\Http\AsyncClient;
+use Atymic\Twitter\Contract\Http\ClientFactory;
+use Atymic\Twitter\Contract\Http\SyncClient;
 use Atymic\Twitter\Contract\Querier as QuerierContract;
-use Atymic\Twitter\Exception\Request\BadRequestException;
-use Atymic\Twitter\Exception\Request\ForbiddenRequestException;
-use Atymic\Twitter\Exception\Request\NotFoundException;
-use Atymic\Twitter\Exception\Request\RateLimitedException;
-use Atymic\Twitter\Exception\Request\UnauthorizedRequestException;
-use Atymic\Twitter\Exception\RequestException as TwitterRequestException;
-use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Psr7\Response;
+use Atymic\Twitter\Exception\ClientException as TwitterClientException;
+use Exception;
 use GuzzleHttp\RequestOptions;
-use JsonException;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
 use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
-use RuntimeException;
+use React\Stream\ReadableStreamInterface;
+use Throwable;
 
 final class Querier implements QuerierContract
 {
     private const URL_FORMAT = 'https://%s/%s/%s%s';
-    private const STREAM_BYTES_PER_READ = 1024;
 
-    protected Configuration $config;
-    protected ClientInterface $oAuth1HttpClient;
-    protected ClientInterface $oAuth2HttpClient;
-    protected ClientInterface $activeHttpClient;
-    protected ?LoggerInterface $logger;
-    protected bool $debug;
+    private Configuration $config;
+    private ClientFactory $clientFactory;
+    private SyncClient $syncClient;
+    private AsyncClient $asyncClient;
+    private ?LoggerInterface $logger;
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function __construct(
         Configuration $config,
-        ClientInterface $oAuth1HttpClient,
-        ClientInterface $oAuth2HttpClient,
+        ClientFactory $clientFactory,
         ?LoggerInterface $logger = null
     ) {
         $this->config = $config;
-        $this->debug = $config->isDebugMode();
-        $this->oAuth1HttpClient = $oAuth1HttpClient;
-        $this->oAuth2HttpClient = $oAuth2HttpClient;
-        $this->activeHttpClient = $oAuth1HttpClient;
+        $this->clientFactory = $clientFactory;
+        $this->syncClient = $clientFactory->createSyncClient($config);
+        $this->asyncClient = $clientFactory->createAsyncClient($config);
         $this->logger = $logger;
     }
 
@@ -54,211 +48,64 @@ final class Querier implements QuerierContract
         return $this->config;
     }
 
-    public function usingCredentials(string $accessToken, string $accessTokenSecret): self
-    {
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function usingCredentials(
+        string $accessToken,
+        string $accessTokenSecret,
+        ?string $consumerKey = null,
+        ?string $consumerSecret = null
+    ): self {
         return new self(
-            $this->config->withOauthCredentials($accessToken, $accessTokenSecret),
-            $this->oAuth1HttpClient,
-            $this->oAuth2HttpClient,
-            $this->logger
+            $this->config->withOauthCredentials($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret),
+            $this->clientFactory
         );
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function usingConfiguration(Configuration $configuration): self
     {
-        return new self($configuration, $this->oAuth1HttpClient, $this->oAuth2HttpClient, $this->logger);
+        return new self($configuration, $this->clientFactory);
     }
 
+    /**
+     * @throws InvalidArgumentException
+     */
     public function withOAuth1Client(): self
     {
         $instance = clone $this;
-        $instance->activeHttpClient = $this->oAuth1HttpClient;
-
-        return $instance;
-    }
-
-    public function withOAuth2Client(): self
-    {
-        $instance = clone $this;
-        $instance->activeHttpClient = $this->oAuth2HttpClient;
+        $instance->syncClient = $this->clientFactory->createSyncClient($this->config, false);
 
         return $instance;
     }
 
     /**
-     * @throws TwitterRequestException
+     * @throws InvalidArgumentException
+     */
+    public function withOAuth2Client(): self
+    {
+        $instance = clone $this;
+        $instance->syncClient = $this->clientFactory->createSyncClient($this->config, true);
+
+        return $instance;
+    }
+
+    /**
+     * @throws TwitterClientException
      */
     public function directQuery(
         string $url,
         string $requestMethod = self::REQUEST_METHOD_GET,
         array $parameters = []
     ) {
-        try {
-            $this->logRequest($url, $requestMethod, $parameters);
-
-            return $this->request($url, $parameters, $requestMethod);
-        } catch (GuzzleException $exception) {
-            throw $this->transformClientException($exception);
-        }
-    }
-
-    private function logRequest(
-        string $name,
-        string $requestMethod,
-        array $parameters,
-        bool $multipart = false,
-        string $logLevel = LogLevel::DEBUG
-    ): void {
-        $message = 'Making Request';
-        $context = [
-            'method' => $requestMethod,
-            'query' => $name,
-            'url' => $name,
-            'params' => http_build_query($parameters),
-            'multipart' => $multipart,
-        ];
-
-        if ($this->logger === null) {
-            return;
-        }
-
-        if (!$this->debug && $logLevel === LogLevel::DEBUG) {
-            return;
-        }
-
-        try {
-            $this->logger->log($logLevel, $message, $context);
-        } catch (InvalidLogArgumentException $exception) {
-            return;
-        }
+        return $this->syncClient->request($url, $requestMethod, $parameters);
     }
 
     /**
-     * @return mixed
-     * @throws GuzzleException
-     */
-    private function request(string $url, array $parameters, string $method)
-    {
-        $requestFormat = $parameters[self::KEY_REQUEST_FORMAT] ?? null;
-        $responseFormat = $parameters[self::KEY_RESPONSE_FORMAT] ?? $parameters[self::KEY_FORMAT] ?? self::RESPONSE_FORMAT_OBJECT;
-        $stream = $parameters[self::KEY_STREAM] ?? false;
-
-        unset(
-            $parameters[self::KEY_REQUEST_FORMAT],
-            $parameters[self::KEY_RESPONSE_FORMAT],
-            $parameters[self::KEY_FORMAT],
-            $parameters[self::KEY_STREAM]
-        );
-
-        $requestOptions = $this->getRequestOptions($parameters, $method, $requestFormat, $stream);
-        $response = $this->activeHttpClient->request($method, $url, $requestOptions);
-
-        return $this->formatResponse($response, $responseFormat);
-    }
-
-    private function getRequestOptions(
-        array $params,
-        string $requestMethod,
-        ?string $requestFormat,
-        bool $stream
-    ): array {
-        $options = [
-            RequestOptions::STREAM => $stream,
-        ];
-
-        switch ($requestFormat) {
-            case self::REQUEST_FORMAT_JSON:
-                $paramsKey = RequestOptions::JSON;
-
-                break;
-            case self::REQUEST_FORMAT_MULTIPART:
-                $paramsKey = RequestOptions::MULTIPART;
-
-                break;
-            default:
-                $paramsKey = in_array($requestMethod, [self::REQUEST_METHOD_POST, self::REQUEST_METHOD_PUT], true)
-                    ? RequestOptions::FORM_PARAMS
-                    : RequestOptions::QUERY;
-
-                break;
-        }
-
-        $options[$paramsKey] = $params;
-
-        return $options;
-    }
-
-    /**
-     * @param Response|ResponseInterface $response
-     *
-     * @return mixed
-     */
-    private function formatResponse(Response $response, string $format)
-    {
-        try {
-            $body = $response->getBody();
-            $content = '';
-
-            while (!$body->eof()) {
-                $content .= $body->read(self::STREAM_BYTES_PER_READ);
-            }
-
-            switch ($format) {
-                case self::RESPONSE_FORMAT_JSON:
-                    return $content;
-                case self::RESPONSE_FORMAT_ARRAY:
-                    return json_decode($content, true, 512, JSON_THROW_ON_ERROR);
-                case self::RESPONSE_FORMAT_OBJECT:
-                default:
-                    return json_decode($content, false, 512, JSON_THROW_ON_ERROR);
-            }
-        } catch (RuntimeException $exception) {
-            $this->logger->error(
-                sprintf('A runtime exception occurred when formatting twitter response. %s', $exception->getMessage())
-            );
-
-            return null;
-        } catch (JsonException $exception) {
-            $this->logger->error(
-                sprintf('A JSON exception occurred when formatting twitter response. %s', $exception->getMessage())
-            );
-
-            return null;
-        }
-    }
-
-    private function transformClientException(GuzzleException $exception): TwitterRequestException
-    {
-        /** @var null|Response $response */
-        $response = method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
-        $responseCode = $response !== null ? $response->getStatusCode() : null;
-
-        switch ($responseCode) {
-            case 400:
-                return BadRequestException::fromClientResponse($response, $exception);
-            case 401:
-                return UnauthorizedRequestException::fromClientResponse($response, $exception);
-            case 403:
-                return ForbiddenRequestException::fromClientResponse($response, $exception);
-            case 404:
-                return NotFoundException::fromClientResponse($response, $exception);
-            case 420:
-                return RateLimitedException::fromClientResponse($response, $exception);
-            default:
-                return new TwitterRequestException($exception->getMessage(), $exception->getCode(), $exception);
-        }
-    }
-
-    /**
-     * @throws TwitterRequestException
-     */
-    public function get(string $endpoint, array $parameters = [], bool $multipart = false, ?string $extension = null)
-    {
-        return $this->query($endpoint, self::REQUEST_METHOD_GET, $parameters, $multipart, $extension);
-    }
-
-    /**
-     * @throws TwitterRequestException
+     * @throws TwitterClientException
      */
     public function query(
         string $endpoint,
@@ -267,35 +114,26 @@ final class Querier implements QuerierContract
         bool $multipart = false,
         ?string $extension = null
     ) {
-        try {
-            $this->logRequest($endpoint, $requestMethod, $parameters, $multipart);
+        $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
+        $url = $this->buildUrl($endpoint, $host, $extension);
 
-            $host = !$multipart ? $this->config->getApiUrl() : $this->config->getUploadUrl();
-            $url = $this->buildUrl($host, $this->config->getApiVersion(), $endpoint, $extension);
-
-            if ($multipart) {
-                $parameters[self::KEY_REQUEST_FORMAT] = RequestOptions::MULTIPART;
-            }
-
-            return $this->request($url, $parameters, $requestMethod);
-        } catch (GuzzleException $exception) {
-            throw $this->transformClientException($exception);
+        if ($multipart) {
+            $parameters[self::KEY_REQUEST_FORMAT] = RequestOptions::MULTIPART;
         }
-    }
 
-    private function buildUrl(string $host, string $version, string $name, ?string $extension = null): string
-    {
-        return sprintf(
-            self::URL_FORMAT,
-            $host,
-            $version,
-            $name,
-            $extension === null ? '' : sprintf('.%s', $extension)
-        );
+        return $this->syncClient->request($requestMethod, $url, $parameters);
     }
 
     /**
-     * @throws TwitterRequestException
+     * @throws TwitterClientException
+     */
+    public function get(string $endpoint, array $parameters = [], ?string $extension = null)
+    {
+        return $this->query($endpoint, self::REQUEST_METHOD_GET, $parameters, false, $extension);
+    }
+
+    /**
+     * @throws TwitterClientException
      */
     public function post(string $endpoint, array $parameters = [], bool $multipart = false)
     {
@@ -303,7 +141,7 @@ final class Querier implements QuerierContract
     }
 
     /**
-     * @throws TwitterRequestException
+     * @throws TwitterClientException
      */
     public function put(string $endpoint, array $parameters = [])
     {
@@ -311,10 +149,81 @@ final class Querier implements QuerierContract
     }
 
     /**
-     * @throws TwitterRequestException
+     * @throws TwitterClientException
      */
     public function delete(string $endpoint, array $parameters = [])
     {
         return $this->query($endpoint, self::REQUEST_METHOD_DELETE, $parameters);
+    }
+
+    /**
+     * @throws TwitterClientException
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference API Reference: Filtered Stream
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/sampled-stream/introduction API Reference: Sampled Stream
+     */
+    public function getStream(string $endpoint, callable $onData, array $parameters = []): void
+    {
+        $countLimit = (int)$parameters[self::KEY_STREAM_STOP_AFTER_COUNT];
+        $streamed = 0;
+
+        unset($parameters[self::KEY_STREAM_STOP_AFTER_COUNT]);
+
+        $this->asyncClient->stream(self::REQUEST_METHOD_GET, $this->buildUrl($endpoint), $parameters)->then(
+            function (ResponseInterface $response) use ($onData, $countLimit, $streamed) {
+                /** @var $stream ReadableStreamInterface */
+                $stream = $response->getBody();
+
+                $stream->on(
+                    AsyncClient::EVENT_DATA,
+                    function (string $chunk) use ($countLimit, $onData, &$streamed) {
+                        $streamed++;
+                        if ($countLimit > 0 && $streamed >= $countLimit) {
+                            $this->asyncClient->loop()
+                                ->stop();
+                        }
+
+                        return ($onData)($chunk);
+                    }
+                );
+                $stream->on(
+                    AsyncClient::EVENT_ERROR,
+                    fn (Throwable $error) => $this->log('Stream [ERROR]: ' . $error->getMessage() . PHP_EOL, 'error')
+
+                );
+                $stream->on(
+                    AsyncClient::EVENT_CLOSE,
+                    fn () => $this->log('Stream [DONE]' . PHP_EOL, 'info')
+                );
+            }
+        )->otherwise(
+            function (Exception $exception) {
+                $this->log('Exception occurred on stream promise: ' . $exception->getMessage() . PHP_EOL, 'error');
+            }
+        );
+
+        $this->asyncClient->loop()
+            ->run();
+    }
+
+    private function log($message, $logMethod): void
+    {
+        if ($this->logger === null) {
+            print $message;
+
+            return;
+        }
+
+        $this->logger->{$logMethod}($message);
+    }
+
+    private function buildUrl(string $endpoint, ?string $host = null, ?string $extension = null): string
+    {
+        return sprintf(
+            self::URL_FORMAT,
+            $host ?? $this->config->getApiUrl(),
+            $this->config->getApiVersion(),
+            $endpoint,
+            $extension === null ? '' : sprintf('.%s', $extension)
+        );
     }
 }

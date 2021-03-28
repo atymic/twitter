@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Concern;
 
-use Atymic\Twitter\Exception\RequestException;
+use Atymic\Twitter\Exception\ClientException;
 
 trait TweetLookup
 {
     use ApiV2Behavior;
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets-id
      */
     public function getTweet(string $tweetId, string ...$queryParameters)
@@ -21,7 +21,7 @@ trait TweetLookup
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets
      */
     public function getTweets(array $tweetIds, string ...$additionalParameters)

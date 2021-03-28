@@ -8,6 +8,7 @@ use Atymic\Twitter\Contract\ServiceProvider;
 use Atymic\Twitter\ServiceProvider\PhpDiServiceProvider;
 use Atymic\Twitter\Tests\Integration\ResolutionTest;
 use Atymic\Twitter\Twitter;
+use Exception;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,11 +23,15 @@ final class TwitterTest extends TestCase implements ResolutionTest
      */
     private $serviceProvider;
 
+    /**
+     * @throws Exception
+     */
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->serviceProvider = new PhpDiServiceProvider();
+        $this->serviceProvider->initContainer();
     }
 
     public function testTwitterResolution(): void

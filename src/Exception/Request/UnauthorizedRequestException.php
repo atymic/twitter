@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Exception\Request;
 
-use Atymic\Twitter\Exception\RequestException;
+use Atymic\Twitter\Exception\ClientException;
 
-final class UnauthorizedRequestException extends RequestException
+final class UnauthorizedRequestException extends ClientException
 {
 }

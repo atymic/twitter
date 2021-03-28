@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Concern;
 
-use Atymic\Twitter\Exception\RequestException;
+use Atymic\Twitter\Exception\ClientException;
 
 trait Timelines
 {
     use ApiV2Behavior;
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets
      */
     public function userTweets(string $userId, string ...$queryParameters)
@@ -21,7 +21,7 @@ trait Timelines
     }
 
     /**
-     * @throws RequestException
+     * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-mentions
      */
     public function userMentions(string $userId, string ...$queryParameters)
