@@ -27,7 +27,7 @@
         "php-di/php-di": "^6.2",
         "kamermans/guzzle-oauth2-subscriber": "^1.0",
         "phpoption/phpoption": "^1.7",
-        "vlucas/phpdotenv": "^5.3",
+        "vlucas/phpdotenv": "*",
         "react/http": "^1.2",
         "league/oauth2-client": "^2.6"
     },
