@@ -19,7 +19,6 @@ interface ServiceProvider
     /**
      * @return mixed
      * @throws ContainerExceptionInterface
-     *
      */
     public function resolve(string $name);
 }

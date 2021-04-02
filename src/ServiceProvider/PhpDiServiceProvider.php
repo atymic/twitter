@@ -50,7 +50,7 @@ final class PhpDiServiceProvider implements ServiceProviderContract
      */
     public function getDefinitions(): array
     {
-        $config = include(sprintf('%s/config/twitter.php', self::ASSETS_DIR));
+        $config = include sprintf('%s/config/twitter.php', self::ASSETS_DIR);
 
         return [
             self::PACKAGE_ALIAS => get(TwitterContract::class),
