@@ -35,11 +35,6 @@ final class Accessor implements TwitterContract
         $this->querier = $querier;
     }
 
-    protected function getQuerier(): QuerierContract
-    {
-        return $this->querier;
-    }
-
     /**
      * @throws InvalidArgumentException
      * @see QuerierContract::usingCredentials()
@@ -68,8 +63,8 @@ final class Accessor implements TwitterContract
         );
     }
 
-    protected function implodeParamValues(array $paramValues): string
+    protected function getQuerier(): QuerierContract
     {
-        return implode(',', $paramValues);
+        return $this->querier;
     }
 }

@@ -5,6 +5,9 @@ namespace Atymic\Twitter\Facade;
 use Atymic\Twitter\Twitter as TwitterContract;
 use Illuminate\Support\Facades\Facade;
 
+/**
+ * @codeCoverageIgnore
+ */
 class Twitter extends Facade
 {
     /**

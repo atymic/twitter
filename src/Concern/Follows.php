@@ -15,7 +15,7 @@ trait Follows
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-following
      */
-    public function getFollowing(string $userId, string ...$queryParameters)
+    public function getFollowing(string $userId, array $queryParameters)
     {
         return $this->getQuerier()
             ->withOAuth2Client()
@@ -26,7 +26,7 @@ trait Follows
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-followers
      */
-    public function getFollowers(string $userId, string ...$queryParameters)
+    public function getFollowers(string $userId, array $queryParameters)
     {
         return $this->getQuerier()
             ->withOAuth2Client()
@@ -46,7 +46,7 @@ trait Follows
 
         return $this->getQuerier()
             ->withOAuth1Client()
-            ->post(sprintf('users/%d/following', $sourceUserId), $parameters);
+            ->post(sprintf('users/%s/following', $sourceUserId), $parameters);
     }
 
     /**

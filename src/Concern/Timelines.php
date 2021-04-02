@@ -14,7 +14,7 @@ trait Timelines
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets
      */
-    public function userTweets(string $userId, string ...$queryParameters)
+    public function userTweets(string $userId, array $queryParameters)
     {
         return $this->getQuerier()
             ->get(sprintf('users/%s/tweets', $userId), $queryParameters);
@@ -24,7 +24,7 @@ trait Timelines
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-mentions
      */
-    public function userMentions(string $userId, string ...$queryParameters)
+    public function userMentions(string $userId, array $queryParameters)
     {
         return $this->getQuerier()
             ->get(sprintf('users/%s/mentions', $userId), $queryParameters);

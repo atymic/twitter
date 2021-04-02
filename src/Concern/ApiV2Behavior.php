@@ -10,5 +10,8 @@ trait ApiV2Behavior
 {
     abstract protected function getQuerier(): Querier;
 
-    abstract protected function implodeParamValues(array $paramValues): string;
+    protected function implodeParamValues(array $paramValues): string
+    {
+        return implode(',', $paramValues);
+    }
 }

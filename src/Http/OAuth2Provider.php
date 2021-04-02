@@ -7,7 +7,10 @@ namespace Atymic\Twitter\Http;
 use Atymic\Twitter\Contract\Configuration;
 use League\OAuth2\Client\Provider\GenericProvider;
 
-final class OAuth2Provider extends GenericProvider
+/**
+ * @codeCoverageIgnore
+ */
+class OAuth2Provider extends GenericProvider
 {
     public const ACCESS_TOKEN_URL = 'https://api.twitter.com/oauth2/token';
 

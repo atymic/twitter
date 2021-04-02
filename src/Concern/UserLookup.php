@@ -14,7 +14,7 @@ trait UserLookup
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
      */
-    public function getUser(string $userId, string ...$queryParameters)
+    public function getUser(string $userId, array $queryParameters)
     {
         return $this->getQuerier()
             ->get(sprintf('users/%s', $userId), $queryParameters);
@@ -24,7 +24,7 @@ trait UserLookup
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
      */
-    public function getUsers(array $userIds, string ...$additionalParameters)
+    public function getUsers(array $userIds, array $additionalParameters)
     {
         $queryParameters = array_merge($additionalParameters, ['ids' => $this->implodeParamValues($userIds)]);
 
@@ -36,7 +36,7 @@ trait UserLookup
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
      */
-    public function getUserByUsername(string $username, string ...$queryParameters)
+    public function getUserByUsername(string $username, array $queryParameters)
     {
         return $this->getQuerier()
             ->get(sprintf('users/by/username/%s', $username), $queryParameters);
@@ -46,7 +46,7 @@ trait UserLookup
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
      */
-    public function getUsersByUsernames(array $usernames, string ...$additionalParameters)
+    public function getUsersByUsernames(array $usernames, array $additionalParameters)
     {
         $queryParameters = array_merge($additionalParameters, ['usernames' => $this->implodeParamValues($usernames)]);
 

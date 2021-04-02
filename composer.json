@@ -19,10 +19,10 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "ext-json": "*",
-        "illuminate/support": "5.5 - 8",
-        "guzzlehttp/guzzle": "^6.4|^7.0",
+        "illuminate/support": "6 - 8",
+        "guzzlehttp/guzzle": "^6.4 || ^7.0",
         "psr/log": "^1.1",
-        "nesbot/carbon": "^2.26",
+        "nesbot/carbon": "^1.2 || ^2.26",
         "guzzlehttp/oauth-subscriber": "^0.4",
         "php-di/php-di": "^6.2",
         "kamermans/guzzle-oauth2-subscriber": "^1.0",
@@ -32,8 +32,9 @@
         "league/oauth2-client": "^2.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "^8.3",
-        "orchestra/testbench": "3.8 - 6"
+        "phpunit/phpunit": "^8.3 || ^9.1",
+        "orchestra/testbench": "3.8 - 6",
+        "phpspec/prophecy-phpunit": "^2.0"
     },
     "autoload": {
         "psr-4": {

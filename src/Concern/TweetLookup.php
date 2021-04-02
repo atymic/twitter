@@ -14,7 +14,7 @@ trait TweetLookup
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets-id
      */
-    public function getTweet(string $tweetId, string ...$queryParameters)
+    public function getTweet(string $tweetId, array $queryParameters)
     {
         return $this->getQuerier()
             ->get(sprintf('tweets/%s', $tweetId), $queryParameters);
@@ -24,7 +24,7 @@ trait TweetLookup
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets
      */
-    public function getTweets(array $tweetIds, string ...$additionalParameters)
+    public function getTweets(array $tweetIds, array $additionalParameters)
     {
         $queryParameters = array_merge($additionalParameters, ['ids' => $this->implodeParamValues($tweetIds)]);
 

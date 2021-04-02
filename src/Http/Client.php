@@ -34,23 +34,23 @@ abstract class Client implements ClientContract
         array $data,
         string $logLevel = LogLevel::DEBUG
     ): void {
-        if ($this->logger === null) {
-            return;
-        }
-
-        $message = 'Making Request';
-        $context = [
-            'method' => $method,
-            'query' => $url,
-            'url' => $url,
-            'params' => http_build_query($data),
-        ];
-
-        if (!$this->debug && $logLevel === LogLevel::DEBUG) {
-            return;
-        }
-
         try {
+            if ($this->logger === null) {
+                return;
+            }
+
+            $message = 'Making Request';
+            $context = [
+                'method' => $method,
+                'query' => $url,
+                'url' => $url,
+                'params' => http_build_query($data),
+            ];
+
+            if (!$this->debug && $logLevel === LogLevel::DEBUG) {
+                return;
+            }
+
             $this->logger->log($logLevel, $message, $context);
         } catch (InvalidLogArgumentException $exception) {
             return;

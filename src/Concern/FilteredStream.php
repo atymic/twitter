@@ -26,7 +26,7 @@ trait FilteredStream
      * @throws ClientException
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream-rules
      */
-    public function getStreamRules(string ...$queryParameters)
+    public function getStreamRules(array $queryParameters)
     {
         return $this->getQuerier()
             ->withOAuth2Client()
