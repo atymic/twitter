@@ -301,8 +301,7 @@ final class TwitterTest extends TestCase
 
     /**
      * @return MockObject|Twitter
-     * @throws RuntimeException
-     *
+     * @throws Exception
      */
     protected function getTwitter(): MockObject
     {
@@ -314,8 +313,7 @@ final class TwitterTest extends TestCase
 
     /**
      * @return MockObject|Twitter
-     * @throws RuntimeException
-     *
+     * @throws Exception
      */
     protected function getTwitterExpecting(string $endpoint, array $queryParams): MockObject
     {

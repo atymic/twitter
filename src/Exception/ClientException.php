@@ -22,7 +22,6 @@ class ClientException extends RuntimeException implements TwitterException
 
     /**
      * @return static|TwitterException
-     *
      */
     public static function fromClientResponse(
         ResponseInterface $response,

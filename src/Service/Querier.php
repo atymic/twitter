@@ -163,7 +163,7 @@ final class Querier implements QuerierContract
      */
     public function getStream(string $endpoint, callable $onData, array $parameters = []): void
     {
-        $countLimit = (int)$parameters[self::KEY_STREAM_STOP_AFTER_COUNT];
+        $countLimit = (int) $parameters[self::KEY_STREAM_STOP_AFTER_COUNT];
         $streamed = 0;
 
         unset($parameters[self::KEY_STREAM_STOP_AFTER_COUNT]);
@@ -208,7 +208,7 @@ final class Querier implements QuerierContract
     private function log($message, $logMethod): void
     {
         if ($this->logger === null) {
-            print $message;
+            echo $message;
 
             return;
         }

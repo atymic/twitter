@@ -33,7 +33,7 @@ jobs:
       - name: Install dependencies
         run: |
           composer require --no-update --no-interaction "illuminate/support:${{ matrix.laravel-version }}"
-          composer update --prefer-${{ matrix.stability }} --no-interaction --prefer-dist --no-suggest
+          composer update --prefer-${{ matrix.stability }} --no-interaction --prefer-dist
       - name: Lint composer.json
         run: composer validate
       - name: Run Tests

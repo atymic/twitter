@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Contract\Http;
 
-use Atymic\Twitter\Exception\ClientException;
 use GuzzleHttp\RequestOptions;
 
 interface Client
