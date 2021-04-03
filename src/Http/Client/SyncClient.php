@@ -85,15 +85,11 @@ final class SyncClient extends Client implements SyncClientContract
      *
      * @return mixed
      */
-    private function formatResponse(Response $response, string $format)
+    private function formatResponse(ResponseInterface $response, string $format)
     {
         try {
             $body = $response->getBody();
-            $content = '';
-
-            while (!$body->eof()) {
-                $content .= $body->read(self::STREAM_BYTES_PER_READ);
-            }
+            $content = (string) $body;
 
             switch ($format) {
                 case self::RESPONSE_FORMAT_JSON:
@@ -105,15 +101,22 @@ final class SyncClient extends Client implements SyncClientContract
                     return json_decode($content, false, 512, JSON_THROW_ON_ERROR);
             }
         } catch (RuntimeException $exception) {
-            $this->logger->error(
-                sprintf('A runtime exception occurred when formatting twitter response. %s', $exception->getMessage())
-            );
+            if ($this->logger !== null) {
+                $this->logger->error(
+                    sprintf(
+                        'A runtime exception occurred when formatting twitter response. %s',
+                        $exception->getMessage()
+                    )
+                );
+            }
 
             return null;
         } catch (JsonException $exception) {
-            $this->logger->error(
-                sprintf('A JSON exception occurred when formatting twitter response. %s', $exception->getMessage())
-            );
+            if ($this->logger !== null) {
+                $this->logger->error(
+                    sprintf('A JSON exception occurred when formatting twitter response. %s', $exception->getMessage())
+                );
+            }
 
             return null;
         }

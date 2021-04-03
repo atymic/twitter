@@ -8,6 +8,9 @@ use JsonException;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use RuntimeException;
 
+/**
+ * @codeCoverageIgnore
+ */
 final class AuthException extends RuntimeException implements TwitterException
 {
     /**

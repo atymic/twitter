@@ -43,12 +43,16 @@ final class Querier implements QuerierContract
         $this->logger = $logger;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function getConfiguration(): Configuration
     {
         return $this->config;
     }
 
     /**
+     * @codeCoverageIgnore
      * @throws InvalidArgumentException
      */
     public function usingCredentials(
@@ -64,6 +68,7 @@ final class Querier implements QuerierContract
     }
 
     /**
+     * @codeCoverageIgnore
      * @throws InvalidArgumentException
      */
     public function usingConfiguration(Configuration $configuration): self
@@ -72,6 +77,7 @@ final class Querier implements QuerierContract
     }
 
     /**
+     * @codeCoverageIgnore
      * @throws InvalidArgumentException
      */
     public function withOAuth1Client(): self
@@ -83,6 +89,7 @@ final class Querier implements QuerierContract
     }
 
     /**
+     * @codeCoverageIgnore
      * @throws InvalidArgumentException
      */
     public function withOAuth2Client(): self
@@ -98,10 +105,10 @@ final class Querier implements QuerierContract
      */
     public function directQuery(
         string $url,
-        string $requestMethod = self::REQUEST_METHOD_GET,
+        string $method = self::REQUEST_METHOD_GET,
         array $parameters = []
     ) {
-        return $this->syncClient->request($url, $requestMethod, $parameters);
+        return $this->syncClient->request($url, $method, $parameters);
     }
 
     /**
@@ -109,7 +116,7 @@ final class Querier implements QuerierContract
      */
     public function query(
         string $endpoint,
-        string $requestMethod = self::REQUEST_METHOD_GET,
+        string $method = self::REQUEST_METHOD_GET,
         array $parameters = [],
         bool $multipart = false,
         ?string $extension = null
@@ -121,7 +128,7 @@ final class Querier implements QuerierContract
             $parameters[self::KEY_REQUEST_FORMAT] = RequestOptions::MULTIPART;
         }
 
-        return $this->syncClient->request($requestMethod, $url, $parameters);
+        return $this->syncClient->request($method, $url, $parameters);
     }
 
     /**
@@ -163,7 +170,7 @@ final class Querier implements QuerierContract
      */
     public function getStream(string $endpoint, callable $onData, array $parameters = []): void
     {
-        $countLimit = (int) $parameters[self::KEY_STREAM_STOP_AFTER_COUNT];
+        $countLimit = (int) ($parameters[self::KEY_STREAM_STOP_AFTER_COUNT] ?? 0);
         $streamed = 0;
 
         unset($parameters[self::KEY_STREAM_STOP_AFTER_COUNT]);
@@ -187,17 +194,20 @@ final class Querier implements QuerierContract
                 );
                 $stream->on(
                     AsyncClient::EVENT_ERROR,
-                    fn (Throwable $error) => $this->log('Stream [ERROR]: ' . $error->getMessage() . PHP_EOL, 'error')
+                    fn (Throwable $error) => $this->forceLog(
+                        'Stream [ERROR]: ' . $error->getMessage() . PHP_EOL,
+                        'error'
+                    )
 
                 );
                 $stream->on(
                     AsyncClient::EVENT_CLOSE,
-                    fn () => $this->log('Stream [DONE]' . PHP_EOL, 'info')
+                    fn () => $this->forceLog('Stream [DONE]' . PHP_EOL, 'info')
                 );
             }
         )->otherwise(
             function (Exception $exception) {
-                $this->log('Exception occurred on stream promise: ' . $exception->getMessage() . PHP_EOL, 'error');
+                $this->forceLog('Exception occurred on stream promise: ' . $exception->getMessage() . PHP_EOL, 'error');
             }
         );
 
@@ -205,7 +215,7 @@ final class Querier implements QuerierContract
             ->run();
     }
 
-    private function log($message, $logMethod): void
+    private function forceLog($message, $logMethod): void
     {
         if ($this->logger === null) {
             echo $message;

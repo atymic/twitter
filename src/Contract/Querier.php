@@ -60,7 +60,7 @@ interface Querier
      */
     public function query(
         string $endpoint,
-        string $requestMethod = self::REQUEST_METHOD_GET,
+        string $method = self::REQUEST_METHOD_GET,
         array $parameters = [],
         bool $multipart = false,
         ?string $extension = null
@@ -71,7 +71,7 @@ interface Querier
      */
     public function directQuery(
         string $url,
-        string $requestMethod = self::REQUEST_METHOD_GET,
+        string $method = self::REQUEST_METHOD_GET,
         array $parameters = []
     );
 

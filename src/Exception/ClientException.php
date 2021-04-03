@@ -10,6 +10,9 @@ use Psr\Http\Message\ResponseInterface as Response;
 use RuntimeException;
 use Throwable;
 
+/**
+ * @codeCoverageIgnore
+ */
 class ClientException extends RuntimeException implements TwitterException
 {
     private const DEFAULT_ERROR_MESSAGE_FORMAT = 'A request error occurred. %s';
