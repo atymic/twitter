@@ -32,7 +32,7 @@ TWITTER_ACCESS_TOKEN_SECRET=
 
 ### Advanced Laravel configuration
 
-Run `php artisan vendor:publish --provider=" Atymic\Twitter\ServiceProviders\LaravelTwitterServiceProvider"`
+Run `php artisan vendor:publish --provider="Atymic\Twitter\ServiceProviders\LaravelTwitterServiceProvider"`
 ```
 /config/twitter.php
 ```
