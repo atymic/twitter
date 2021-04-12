@@ -30,7 +30,7 @@ trait FilteredStream
     {
         return $this->getQuerier()
             ->withOAuth2Client()
-            ->get('tweets/search/stream/rules', $queryParameters);
+            ->get('tweets/search/stream/rules', $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -43,6 +43,6 @@ trait FilteredStream
 
         return $this->getQuerier()
             ->withOAuth2Client()
-            ->post('tweets/search/stream/rules', $parameters);
+            ->post('tweets/search/stream/rules', $this->withDefaultParams($parameters));
     }
 }

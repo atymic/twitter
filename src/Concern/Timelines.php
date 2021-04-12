@@ -17,7 +17,7 @@ trait Timelines
     public function userTweets(string $userId, array $queryParameters)
     {
         return $this->getQuerier()
-            ->get(sprintf('users/%s/tweets', $userId), $queryParameters);
+            ->get(sprintf('users/%s/tweets', $userId), $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -27,6 +27,6 @@ trait Timelines
     public function userMentions(string $userId, array $queryParameters)
     {
         return $this->getQuerier()
-            ->get(sprintf('users/%s/mentions', $userId), $queryParameters);
+            ->get(sprintf('users/%s/mentions', $userId), $this->withDefaultParams($queryParameters));
     }
 }

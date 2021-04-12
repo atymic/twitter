@@ -17,7 +17,7 @@ trait UserLookup
     public function getUser(string $userId, array $queryParameters)
     {
         return $this->getQuerier()
-            ->get(sprintf('users/%s', $userId), $queryParameters);
+            ->get(sprintf('users/%s', $userId), $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -29,7 +29,7 @@ trait UserLookup
         $queryParameters = array_merge($additionalParameters, ['ids' => $this->implodeParamValues($userIds)]);
 
         return $this->getQuerier()
-            ->get('users', $queryParameters);
+            ->get('users', $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -39,7 +39,7 @@ trait UserLookup
     public function getUserByUsername(string $username, array $queryParameters)
     {
         return $this->getQuerier()
-            ->get(sprintf('users/by/username/%s', $username), $queryParameters);
+            ->get(sprintf('users/by/username/%s', $username), $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -51,6 +51,6 @@ trait UserLookup
         $queryParameters = array_merge($additionalParameters, ['usernames' => $this->implodeParamValues($usernames)]);
 
         return $this->getQuerier()
-            ->get('users/by', $queryParameters);
+            ->get('users/by', $this->withDefaultParams($queryParameters));
     }
 }

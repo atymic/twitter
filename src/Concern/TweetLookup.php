@@ -17,7 +17,7 @@ trait TweetLookup
     public function getTweet(string $tweetId, array $queryParameters)
     {
         return $this->getQuerier()
-            ->get(sprintf('tweets/%s', $tweetId), $queryParameters);
+            ->get(sprintf('tweets/%s', $tweetId), $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -29,6 +29,6 @@ trait TweetLookup
         $queryParameters = array_merge($additionalParameters, ['ids' => $this->implodeParamValues($tweetIds)]);
 
         return $this->getQuerier()
-            ->get('tweets', $queryParameters);
+            ->get('tweets', $this->withDefaultParams($queryParameters));
     }
 }

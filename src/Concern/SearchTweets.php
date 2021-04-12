@@ -19,7 +19,7 @@ trait SearchTweets
         $queryParameters = array_merge($additionalParameters, ['query' => $query]);
 
         return $this->getQuerier()
-            ->get('tweets/search/recent', $queryParameters);
+            ->get('tweets/search/recent', $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -32,6 +32,6 @@ trait SearchTweets
 
         return $this->getQuerier()
             ->withOAuth2Client()
-            ->get('tweets/search/all', $queryParameters);
+            ->get('tweets/search/all', $this->withDefaultParams($queryParameters));
     }
 }

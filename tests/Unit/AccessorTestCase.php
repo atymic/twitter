@@ -16,7 +16,7 @@ abstract class AccessorTestCase extends TestCase
     use ProphecyTrait;
 
     protected const USER_ID = '123456789';
-    protected const ARBITRARY_PARAMS = ['foo' => 'bar'];
+    protected const ARBITRARY_PARAMS = ['foo' => 'bar', 'response_format' => 'json'];
     protected const ARBITRARY_RESPONSE = ['response'];
 
     /**

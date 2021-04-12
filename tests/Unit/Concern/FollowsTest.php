@@ -79,7 +79,7 @@ final class FollowsTest extends ConcernTestCase
         $userId = self::USER_ID;
         $targetUserId = '199999991';
 
-        $this->querier->delete(sprintf('users/%s/following/%s', $userId, $targetUserId))
+        $this->querier->delete(sprintf('users/%s/following/%s', $userId, $targetUserId), ['response_format' => 'json'])
             ->shouldBeCalledTimes(1)
             ->willReturn(self::ARBITRARY_RESPONSE);
 

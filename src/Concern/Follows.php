@@ -19,7 +19,7 @@ trait Follows
     {
         return $this->getQuerier()
             ->withOAuth2Client()
-            ->get(sprintf('users/%s/following', $userId), $queryParameters);
+            ->get(sprintf('users/%s/following', $userId), $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -30,7 +30,7 @@ trait Follows
     {
         return $this->getQuerier()
             ->withOAuth2Client()
-            ->get(sprintf('users/%s/followers', $userId), $queryParameters);
+            ->get(sprintf('users/%s/followers', $userId), $this->withDefaultParams($queryParameters));
     }
 
     /**
@@ -46,7 +46,7 @@ trait Follows
 
         return $this->getQuerier()
             ->withOAuth1Client()
-            ->post(sprintf('users/%s/following', $sourceUserId), $parameters);
+            ->post(sprintf('users/%s/following', $sourceUserId), $this->withDefaultParams($parameters));
     }
 
     /**
@@ -57,6 +57,6 @@ trait Follows
     {
         return $this->getQuerier()
             ->withOAuth1Client()
-            ->delete(sprintf('users/%s/following/%s', $sourceUserId, $targetUserId));
+            ->delete(sprintf('users/%s/following/%s', $sourceUserId, $targetUserId), $this->withDefaultParams());
     }
 }

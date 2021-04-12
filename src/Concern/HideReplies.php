@@ -23,6 +23,6 @@ trait HideReplies
         ];
 
         return $this->getQuerier()
-            ->put(sprintf('tweets/%s/hidden', $tweetId), $parameters);
+            ->put(sprintf('tweets/%s/hidden', $tweetId), $this->withDefaultParams($parameters));
     }
 }

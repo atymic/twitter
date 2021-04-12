@@ -63,7 +63,12 @@ format : object|json|array (default:object)
 
 ## Twitter API Versions
 
-To use Twitter API v2 please ensure you set `TWITTER_API_VERSION` to `2`. The package uses API version `1.1` by default.
+To set the default twitter API version to v2 instead of the default `v1.1`, set the  `TWITTER_API_VERSION` to `2` in your `.env`.
+
+If you have set the `v1.1` api as the default, you can use use `Twitter::forApiV2()` to get an instance of the v2 client.
+The same goes for getting a `v1` instance from a `v2` client, using `Twitter::forApiV1()`.
+
+It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instance.
 
 ## Functions
 
