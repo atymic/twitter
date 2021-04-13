@@ -10,4 +10,4 @@ You need to change all references of the old namespace to the new one.
 
 The keys in the config file have changed. If you did not publish the config file and make changes, you do not need to do this step since the environment variable names have not changed.
 
-Run `php artisan vendor:publish --provider="Atymic\Twitter\TwitterServiceProvider"` and compare the old `ttwitter` config file with the new one, moving your changes across. Then delete the old config file.
+Run `php artisan vendor:publish --provider="Atymic\Twitter\ServiceProvider\LaravelServiceProvider"` and compare the old `ttwitter` config file with the new one, moving your changes across. Then delete the old config file.
