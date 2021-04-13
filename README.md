@@ -44,11 +44,11 @@ Run `php artisan vendor:publish --provider="Atymic\Twitter\ServiceProviders\Lara
 
 3.x is the current major version, and is not backward compatible with 2.x.
 
-We'll release a detailed migration guide to make switching as easy as possible shorty, but it can be used on new projects now.
+See the migration guide in [UPGRADE.md](./UPGRADE.md).
 
 ### 2.x 
 
-2.x is not longer going to be maintained by us. We will accept PRs that fix issues, but will not be adding any features.
+2.x is not longer maintained. We are not accepting bug fixes, please upgrade to 3.x
 
 # Usage
 
