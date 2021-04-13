@@ -96,7 +96,7 @@ final class SyncClientTest extends TestCase
         $data = [
             Twitter::KEY_REQUEST_FORMAT => Twitter::REQUEST_FORMAT_JSON,
             Twitter::KEY_RESPONSE_FORMAT => Twitter::RESPONSE_FORMAT_JSON,
-            'key' => 'value'
+            'key' => 'value',
         ];
 
         $this->client->request(

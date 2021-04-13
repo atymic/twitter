@@ -19,10 +19,9 @@ use Atymic\Twitter\Twitter as TwitterContract;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\Definition\Source\DefinitionSource;
+use function DI\get;
 use Exception;
 use Psr\Container\ContainerExceptionInterface;
-
-use function DI\get;
 
 /**
  * @codeCoverageIgnore
@@ -54,8 +53,7 @@ final class PhpDiServiceProvider implements ServiceProviderContract
 
         return [
             self::PACKAGE_ALIAS => get(TwitterContract::class),
-            ConfigurationContract::class =>
-                static fn (): ConfigurationContract => Configuration::createFromConfig($config),
+            ConfigurationContract::class => static fn (): ConfigurationContract => Configuration::createFromConfig($config),
             ClientFactory::class => get(ClientCreator::class),
             QuerierContract::class => get(Querier::class),
             TwitterV1Contract::class => get(TwitterV1::class),
