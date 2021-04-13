@@ -4,85 +4,25 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter;
 
+use Atymic\Twitter\Contract\Configuration as ConfigurationContract;
 use Atymic\Twitter\Exception\InvalidConfigException;
 
-class Configuration
+final class Configuration implements ConfigurationContract
 {
-    public const KEY_API_URL = 'api_url';
-    public const KEY_UPLOAD_URL = 'upload_url';
-    public const KEY_API_VERSION = 'api_version';
-    public const KEY_CONSUMER_KEY = 'consumer_key';
-    public const KEY_CONSUMER_SECRET = 'consumer_secret';
-    public const KEY_ACCESS_TOKEN = 'access_token';
-    public const KEY_ACCESS_TOKEN_SECRET = 'access_token_secret';
-    public const KEY_AUTHENTICATE_URL = 'authenticate_url';
-    public const KEY_ACCESS_TOKEN_URL = 'access_token_url';
-    public const KEY_REQUEST_TOKEN_URL = 'request_token_url';
-    public const DEBUG = 'debug';
-
     private const PACKAGE_NAME = 'atymic/twitter';
-    private const DEFAULT_API_URL = 'api.twitter.com';
-    private const DEFAULT_UPLOAD_URL = 'upload.twitter.com';
-    private const DEFAULT_API_VERSION = '1.1';
 
-    /**
-     * @var string
-     */
-    protected $apiUrl;
-
-    /**
-     * @var string
-     */
-    protected $uploadUrl;
-
-    /**
-     * @var string
-     */
-    protected $apiVersion;
-
-    /**
-     * @var null|string
-     */
-    protected $consumerKey;
-
-    /**
-     * @var null|string
-     */
-    protected $consumerSecret;
-
-    /**
-     * @var null|string
-     */
-    protected $accessToken;
-
-    /**
-     * @var null|string
-     */
-    protected $accessTokenSecret;
-
-    /**
-     * @var bool
-     */
-    protected $debugMode = false;
-
-    /**
-     * @var null|string
-     */
-    protected $userAgent;
-    /**
-     * @var null|string
-     */
-    private $authenticateUrl;
-
-    /**
-     * @var null|string
-     */
-    private $accessTokenUrl;
-
-    /**
-     * @var null|string
-     */
-    private $requestTokenUrl;
+    protected string $apiUrl;
+    protected string $uploadUrl;
+    protected string $apiVersion;
+    protected ?string $consumerKey;
+    protected ?string $consumerSecret;
+    protected ?string $accessToken;
+    protected ?string $accessTokenSecret;
+    protected bool $debugMode = false;
+    protected ?string $userAgent;
+    private ?string $authenticateUrl;
+    private ?string $accessTokenUrl;
+    private ?string $requestTokenUrl;
 
     public function __construct(
         string $apiUrl,
@@ -115,15 +55,10 @@ class Configuration
         $this->userAgent = $userAgent ?? sprintf('%s v%s php v%s', self::PACKAGE_NAME, Twitter::VERSION, PHP_VERSION);
     }
 
-    public static function createWithDefaults(): self
-    {
-        return new self(self::DEFAULT_API_URL, self::DEFAULT_UPLOAD_URL, self::DEFAULT_API_VERSION, null, null);
-    }
-
     /**
      * @throws InvalidConfigException
      */
-    public static function fromLaravelConfiguration(array $config): self
+    public static function createFromConfig(array $config): self
     {
         if (!isset($config[self::KEY_API_URL], $config[self::KEY_UPLOAD_URL], $config[self::KEY_API_VERSION])) {
             throw new InvalidConfigException('Required configuration options missing!');
@@ -140,24 +75,51 @@ class Configuration
             $config[self::KEY_AUTHENTICATE_URL],
             $config[self::KEY_ACCESS_TOKEN_URL],
             $config[self::KEY_REQUEST_TOKEN_URL],
-            $config[self::DEBUG]
+            $config[self::KEY_DEBUG]
         );
     }
 
-    public function withOauthCredentials(string $accessToken, string $accessTokenSecret): self
+    public function forApiV1(): self
     {
+        $instance = clone $this;
+        $instance->apiVersion = Twitter::API_VERSION_1;
+
+        return $instance;
+    }
+
+    public function forApiV2(): self
+    {
+        $instance = clone $this;
+        $instance->apiVersion = Twitter::API_VERSION_2;
+
+        return $instance;
+    }
+
+    public function withOauthCredentials(
+        string $accessToken,
+        string $accessTokenSecret,
+        ?string $consumerKey = null,
+        ?string $consumerSecret = null
+    ): self {
         $config = clone $this;
         $config->accessToken = $accessToken;
         $config->accessTokenSecret = $accessTokenSecret;
+        $config->consumerKey = $consumerKey ?? $config->consumerKey;
+        $config->consumerSecret = $consumerSecret ?? $config->consumerSecret;
 
         return $config;
     }
 
-    public function withoutOauthCredentials(): self
+    public function withoutOauthCredentials(bool $removeConsumerCredentials = false): self
     {
         $config = clone $this;
         $config->accessToken = null;
         $config->accessTokenSecret = null;
+
+        if ($removeConsumerCredentials) {
+            $config->consumerKey = null;
+            $config->consumerSecret = null;
+        }
 
         return $config;
     }

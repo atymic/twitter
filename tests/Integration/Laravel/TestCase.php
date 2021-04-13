@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Tests\Integration\Laravel;
 
-use Atymic\Twitter\ServiceProviders\LaravelTwitterServiceProvider;
+use Atymic\Twitter\ServiceProvider\LaravelServiceProvider;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\File;
 use Mockery\Exception\NoMatchingExpectationException;
@@ -27,7 +27,7 @@ abstract class TestCase extends Orchestra
 
     protected function getPackageProviders($app): array
     {
-        return [LaravelTwitterServiceProvider::class];
+        return [LaravelServiceProvider::class];
     }
 
     /**

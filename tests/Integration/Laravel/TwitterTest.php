@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Tests\Integration\Laravel;
 
+use Atymic\Twitter\Contract\ServiceProvider;
 use Atymic\Twitter\Tests\Integration\ResolutionTest;
 use Atymic\Twitter\Twitter;
-use Atymic\Twitter\TwitterServiceProvider;
 use Exception;
 
 /**
@@ -20,7 +20,7 @@ final class TwitterTest extends TestCase implements ResolutionTest
      */
     public function testTwitterResolution(): void
     {
-        $this->assertInstanceOf(Twitter::class, app(Twitter::class));
+        self::assertInstanceOf(Twitter::class, app(Twitter::class));
     }
 
     /**
@@ -28,6 +28,6 @@ final class TwitterTest extends TestCase implements ResolutionTest
      */
     public function testTwitterResolutionViaAlias(): void
     {
-        $this->assertInstanceOf(Twitter::class, app(TwitterServiceProvider::PACKAGE_ALIAS));
+        self::assertInstanceOf(Twitter::class, app(ServiceProvider::PACKAGE_ALIAS));
     }
 }

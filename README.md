@@ -28,6 +28,7 @@ TWITTER_CONSUMER_KEY=
 TWITTER_CONSUMER_SECRET=
 TWITTER_ACCESS_TOKEN=
 TWITTER_ACCESS_TOKEN_SECRET=
+TWITTER_API_VERSION=
 ```
 
 ### Advanced Laravel configuration
@@ -60,9 +61,20 @@ use the `format` option in the parameters you pass to any method.
 format : object|json|array (default:object)
 ```
 
+## Twitter API Versions
+
+To set the default twitter API version to v2 instead of the default `v1.1`, set the  `TWITTER_API_VERSION` to `2` in your `.env`.
+
+If you have set the `v1.1` api as the default, you can use use `Twitter::forApiV2()` to get an instance of the v2 client.
+The same goes for getting a `v1` instance from a `v2` client, using `Twitter::forApiV1()`.
+
+It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instance.
+
 ## Functions
 
-### Account
+### Twitter API v1.1
+
+#### Account
 
 * `getSettings()` - Returns settings (including current trend, geo and sleep time information) for the authenticating user.
 * `getCredentials()`
@@ -74,27 +86,27 @@ format : object|json|array (default:object)
 * `destroyUserBanner()` - Removes the uploaded profile banner for the authenticating user. Returns HTTP 200 upon success.
 * `postUserBanner()` - Uploads a profile banner on behalf of the authenticating user. For best results, upload an profile_banner_url node in their Users objects.
 
-### Block
+#### Block
 
 * `getBlocks()` - Returns a collection of user objects that the authenticating user is blocking.
 * `getBlocksIds()` - Returns an array of numeric user ids the authenticating user is blocking.
 * `postBlock()` - Blocks the specified user from following the authenticating user. In addition the blocked user will not show in the authenticating users mentions or timeline (unless retweeted by another user). If a follow or friend relationship exists it is destroyed.
 * `destroyBlock()` - Un-blocks the user specified in the ID parameter for the authenticating user. Returns the un-blocked user in the requested format when successful. If relationships existed before the block was instated, they will not be restored.
 
-### DirectMessage
+#### DirectMessage
 
 * `getDm()` - Returns a single direct message event, specified by an id parameter.
 * `getDms()` - Returns all Direct Message events (both sent and received) within the last 30 days. Sorted in reverse-chronological order.
 * `destroyDm()` - Destroys the direct message specified in the required ID parameter. The authenticating user must be the recipient of the specified direct message.
 * `postDm()` - Publishes a new message_create event resulting in a Direct Message sent to a specified user from the authenticating user. Returns an event if successful. Supports publishing Direct Messages with optional Quick Reply and media attachment.
 
-### Favorite
+#### Favorite
 
 * `getFavorites()` - Returns the 20 most recent Tweets favorited by the authenticating or specified user.
 * `destroyFavorite()` - Un-favorites the status specified in the ID parameter as the authenticating user. Returns the un-favorited status in the requested format when successful.
 * `postFavorite()` - Favorites the status specified in the ID parameter as the authenticating user. Returns the favorite status when successful.
 
-### Friendship
+#### Friendship
 
 * `getNoRters()` - Returns a collection of user_ids that the currently authenticated user does not want to receive retweets from.
 * `getFriendsIds()` - Returns a cursored collection of user IDs for every user following the specified user.
@@ -109,14 +121,14 @@ format : object|json|array (default:object)
 * `getFollowers()` - Returns a cursored collection of user objects for users following the specified user.
 * `getFriendshipsLookup()` - Returns the relationships of the authenticating user to the comma-separated list of up to 100 screen_names or user_ids provided. Values for connections can be: following, following_requested, followed_by, none, blocking, muting.
 
-### Geo
+#### Geo
 
 * `getGeo()` - Returns all the information about a known place.
 * `getGeoReverse()` - Given a latitude and a longitude, searches for up to 20 places that can be used as a place_id when updating a status.
 * `getGeoSearch()` - Search for places that can be attached to a statuses/update. Given a latitude and a longitude pair, an IP address, or a name, this request will return a list of all the valid places that can be used as the place_id when updating a status.
 * `getGeoSimilar()` - Locates places near the given coordinates which are similar in name. Conceptually you would use this method to get a list of known places to choose from first. Then, if the desired place doesn't exist, make a request to POST geo/place to create a new one. The token contained in the response is the token needed to be able to create a new place.
 
-### Help
+#### Help
 
 * `postSpam()` - Report the specified user as a spam account to Twitter. Additionally performs the equivalent of POST blocks / create on behalf of the authenticated user.
 * `getHelpConfiguration()` - Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co URL lengths.
@@ -125,7 +137,7 @@ format : object|json|array (default:object)
 * `getHelpTos()` - Returns the Twitter Terms of Service. Note: these are not the same as the Developer Policy.
 * `getAppRateLimit()` - Returns the current rate limits for methods belonging to the specified resource families.
 
-### List
+#### List
 
 * `getLists()` - Returns all lists the authenticating or specified user subscribes to, including their own. The user is specified using the user_id or screen_name parameters. If no user is given, the authenticating user is used.
 * `getListStatuses()` - Returns a timeline of tweets authored by members of the specified list. Retweets are included by default. Use the include_rts=false parameter to omit retweets.
@@ -147,11 +159,11 @@ format : object|json|array (default:object)
 * `destroyListMembers()` - Removes multiple members from a list, by specifying a comma-separated list of member ids or screen names. The authenticated user must own the list to be able to remove members from it. Note that lists can’t have more than 500 members, and you are limited to removing up to 100 members to a list at a time with this method.
 * `getListOwnerships()` - Returns the lists owned by the specified Twitter user. Private lists will only be shown if the authenticated user is also the owner of the lists.
 
-### Media
+#### Media
 
 * `uploadMedia()` - Upload media (images) to Twitter, to use in a Tweet or Twitter-hosted Card.
 
-### Search
+#### Search
 
 * `getSearch()` - Returns a collection of relevant Tweets matching a specified query.
 * `getSavedSearches()` - Returns the authenticated user’s saved search queries.
@@ -159,7 +171,7 @@ format : object|json|array (default:object)
 * `postSavedSearch()` - Create a new saved search for the authenticated user. A user may only have 25 saved searches.
 * `destroySavedSearch()` - Destroys a saved search for the authenticating user. The authenticating user must be the owner of saved search id being destroyed.
 
-### Status
+#### Status
 
 * `getMentionsTimeline()` - Returns the 20 most recent mentions (tweets containing a users’s @screen_name) for the authenticating user.
 * `getUserTimeline()` - Returns a collection of the most recent Tweets posted by the user indicated by the screen_name or user_id parameters.
@@ -175,13 +187,13 @@ format : object|json|array (default:object)
 * `getRters()` - Returns a collection of up to 100 user IDs belonging to users who have retweeted the tweet specified by the id parameter.
 * `getStatusesLookup()` - Returns fully-hydrated tweet objects for up to 100 tweets per request, as specified by comma-separated values passed to the id parameter.
 
-### Trend
+#### Trend
 
 * `getTrendsPlace()` - Returns the top 10 trending topics for a specific WOEID, if trending information is available for it.
 * `getTrendsAvailable()` - Returns the locations that Twitter has trending topic information for.
 * `getTrendsClosest()` - Returns the locations that Twitter has trending topic information for, closest to a specified location.
 
-### User
+#### User
 
 * `getUsersLookup()` - Returns fully-hydrated user objects for up to 100 users per request, as specified by comma-separated values passed to the user_id and/or screen_name parameters.
 * `getUsers()` - Returns a variety of information about the user specified by the required user_id or screen_name parameter. The author’s most recent Tweet will be returned inline when possible.
@@ -193,8 +205,40 @@ format : object|json|array (default:object)
 * `mutedUsers()` - Returns an array of user objects the authenticating user has muted.
 * `getSuggesteds()` - Access the users in a given category of the Twitter suggested user list.
 * `getSuggestions()` - Access to Twitter’s suggested user list. This returns the list of suggested user categories. The category can be used in GET users / suggestions / :slug to get the users in that category.
-* `getSuggestedsMembers()` - Access the users in a given category of the Twitter suggested user list and return their most recent status if they are not a protected user. 
+* `getSuggestedsMembers()` - Access the users in a given category of the Twitter suggested user list and return their most recent status if they are not a protected user.
 
+### Twitter API v2
+
+#### Tweet Lookup
+
+* `getTweet()` - Returns a variety of information about a single Tweet specified by the requested ID.
+* `getTweets()` - Returns a variety of information about the Tweet specified by the requested ID or list of IDs.
+
+#### Search Tweets
+
+* `searchRecent()` - The recent search endpoint returns Tweets from the last seven days that match a search query.
+* `searchAll()` - The full-archive search endpoint returns the complete history of public Tweets matching a search query; since the first Tweet was created March 26, 2006.
+
+  **Note:** oThis endpoint is only available to those approved for the Academic Research product track.
+
+#### Timelines
+
+* `userTweets()` - Returns Tweets composed by a single user, specified by the requested user ID. By default, the most recent ten Tweets are returned per request. Using pagination, the most recent 3,200 Tweets can be retrieved.
+* `userMentions()` - Returns Tweets mentioning a single user specified by the requested user ID. By default, the most recent ten Tweets are returned per request. Using pagination, up to the most recent 800 Tweets can be retrieved.
+
+#### Filtered Stream
+
+* `getStreamRules()` - Return a list of rules currently active on the streaming endpoint, either as a list or individually.
+* `postStreamRules()` - Add or delete rules to your stream.
+* `getStream()` - Streams Tweets in real-time based on a specific set of filter rules.
+
+#### Sampled Stream
+
+* `getSampledStream()` - Streams about 1% of all Tweets in real-time.
+
+#### Hide Replies
+
+* `hideTweet()` - Hides or unhides a reply to a Tweet.
 
 ## Helper Functions
 
@@ -340,6 +384,47 @@ Route::get('twitter/logout', ['as' => 'twitter.logout', function () {
 }]);
 ```
 
+### Twitter API v2 Examples
+
+Get user tweets:
+```php
+// ...
+
+use Atymic\Twitter\Twitter as TwitterContract;
+use Illuminate\Http\JsonResponse;
+use Twitter;
+
+// ... 
+
+public function userTweets(int $userId): JsonResponse
+{
+	$params = [
+		'place.fields' => 'country,name',
+		'tweet.fields' => 'author_id,geo',
+		'expansions' => 'author_id,in_reply_to_user_id',
+		TwitterContract::KEY_RESPONSE_FORMAT => TwitterContract::RESPONSE_FORMAT_JSON,
+	];
+
+	return JsonResponse::fromJsonString(Twitter::userTweets($userId, $params));
+}
+```
+
+Search tweets:
+```php
+// ...
+public function searchRecent(string $query): JsonResponse
+{
+    $params = [
+        'place.fields' => 'country,name',
+        'tweet.fields' => 'author_id,geo',
+        'expansions' => 'author_id,in_reply_to_user_id',
+        TwitterContract::KEY_RESPONSE_FORMAT => TwitterContract::RESPONSE_FORMAT_JSON,
+    ];
+
+    return JsonResponse::fromJsonString(Twitter::searchRecent($query, $params));
+}
+// ...
+```
 
 ## Debug
 
