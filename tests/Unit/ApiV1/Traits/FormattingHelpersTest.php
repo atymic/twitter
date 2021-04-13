@@ -8,10 +8,6 @@ declare(strict_types=1);
 namespace Atymic\Twitter\Tests\Unit\ApiV1\Traits;
 
 use Atymic\Twitter\ApiV1\Traits\FormattingHelpers;
-use Atymic\Twitter\Concern\HideReplies;
-use Atymic\Twitter\Twitter;
-use Exception;
-use Prophecy\Argument;
 
 final class FormattingHelpersTest extends ConcernTestCase
 {
@@ -49,12 +45,10 @@ final class FormattingHelpersTest extends ConcernTestCase
     public function dataLinkAddTweetToFavorites(): array
     {
         return [
-          'object' =>  [(object) ['id_str' => '1381031025053155332']],
-          'array' =>  [['id_str' => '1381031025053155332']],
+            'object' =>  [(object) ['id_str' => '1381031025053155332']],
+            'array' =>  [['id_str' => '1381031025053155332']],
         ];
     }
-
-
 
     protected function getTraitName(): string
     {

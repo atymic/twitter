@@ -8,10 +8,6 @@ declare(strict_types=1);
 namespace Atymic\Twitter\Tests\Unit\Concern;
 
 use Atymic\Twitter\ApiV1\Traits\FormattingHelpers;
-use Atymic\Twitter\Concern\HideReplies;
-use Atymic\Twitter\Twitter;
-use Exception;
-use Prophecy\Argument;
 
 final class FormattingHelpersTest extends ConcernTestCase
 {
@@ -29,13 +25,11 @@ final class FormattingHelpersTest extends ConcernTestCase
     public function dataGetUserLink(): array
     {
         return [
-          'string' =>  ['atymic'],
-          'object' =>  [(object) ['user' => 'screen_name']],
-          'arrat' =>  [['user' => 'screen_name']],
+            'string' =>  ['atymic'],
+            'object' =>  [(object) ['user' => 'screen_name']],
+            'arrat' =>  [['user' => 'screen_name']],
         ];
     }
-
-
 
     protected function getTraitName(): string
     {
