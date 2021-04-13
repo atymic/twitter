@@ -93,28 +93,83 @@ trait FormattingHelpers
     }
 
     // todo redo these helpers
+
+    /**
+     * @param object|array|string $user
+     *
+     * @return string
+     */
     public function linkUser($user): string
     {
-        return 'https://twitter.com/' . (is_object($user) ? $user->screen_name : $user);
+        $screenName = is_string($user) ? $user : $this->objectToArray($user)['screen_name'];
+
+        return 'https://twitter.com/' . $screenName;
     }
 
+    /**
+     * @param object|array $tweet
+     *
+     * @return string
+     */
     public function linkTweet($tweet): string
     {
-        return $this->linkUser($tweet->user) . '/status/' . $tweet->id_str;
+        $tweet = $this->objectToArray($tweet);
+
+        return $this->linkUser($tweet['user']) . '/status/' . $tweet['id_str'];
     }
 
+    /**
+     * @param object|array $tweet
+     *
+     * @return string
+     */
     public function linkRetweet($tweet): string
     {
-        return 'https://twitter.com/intent/retweet?tweet_id=' . $tweet->id_str;
+        $tweet = $this->objectToArray($tweet);
+
+        return 'https://twitter.com/intent/retweet?tweet_id=' . $tweet['id_str'];
     }
 
+    /**
+     * @param object|array $tweet
+     *
+     * @return string
+     */
     public function linkAddTweetToFavorites($tweet): string
     {
-        return 'https://twitter.com/intent/favorite?tweet_id=' . $tweet->id_str;
+        $tweet = $this->objectToArray($tweet);
+
+        return 'https://twitter.com/intent/favorite?tweet_id=' . $tweet['id_str'];
     }
 
+    /**
+     * @param object|array $tweet
+     *
+     * @return string
+     */
     public function linkReply($tweet): string
     {
-        return 'https://twitter.com/intent/tweet?in_reply_to=' . $tweet->id_str;
+        $tweet = $this->objectToArray($tweet);
+
+        return 'https://twitter.com/intent/tweet?in_reply_to=' . $tweet['id_str'];
+    }
+
+    /**
+     * @param $data
+     *
+     * @return array|mixed
+     */
+    protected function objectToArray($data)
+    {
+        if (is_array($data)) {
+            return $data;
+        }
+
+        if (is_object($data)) {
+            return json_decode(json_encode($data), true);
+        }
+
+        // Fallback for non objects
+        return $data;
     }
 }
