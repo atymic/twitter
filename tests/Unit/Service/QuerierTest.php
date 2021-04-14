@@ -98,7 +98,7 @@ final class QuerierTest extends TestCase
         $params = [];
         $response = '{}';
 
-        $this->syncClient->request($url, $method, $params)
+        $this->syncClient->request($method, $url, $params)
             ->shouldBeCalledTimes(1)
             ->willReturn($response);
 
