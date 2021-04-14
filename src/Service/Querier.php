@@ -108,7 +108,7 @@ final class Querier implements QuerierContract
         string $method = self::REQUEST_METHOD_GET,
         array $parameters = []
     ) {
-        return $this->syncClient->request($url, $method, $parameters);
+        return $this->syncClient->request($method, $url, $parameters);
     }
 
     /**
