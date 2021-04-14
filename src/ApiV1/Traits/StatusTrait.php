@@ -221,10 +221,11 @@ trait StatusTrait
             throw new BadMethodCallException('Parameter required missing : url');
         }
 
+        // TODO re-implement this
         $this->tconfig['API_URL'] = 'publish.twitter.com';
         $this->tconfig['API_VERSION'] = '';
 
-        return $this->get('oembed', $parameters, false, '');
+        return $this->get('oembed', $parameters);
     }
 
     /**

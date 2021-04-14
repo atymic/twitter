@@ -233,7 +233,7 @@ final class Querier implements QuerierContract
             $host ?? $this->config->getApiUrl(),
             $this->config->getApiVersion(),
             $endpoint,
-            $extension === null ? '' : sprintf('.%s', $extension)
+            empty($extension) ? '' : sprintf('.%s', $extension)
         );
     }
 }

@@ -300,6 +300,22 @@ final class TwitterTest extends TestCase
     }
 
     /**
+     * @throws BadMethodCallException
+     * @throws RuntimeException
+     */
+    public function testGetOembed(): void
+    {
+        $twitter = $this->getTwitterExpecting(
+            'oembed',
+            [
+                'url' => 'https://twitter.com/jxeeno/status/1343506068236689408',
+            ]
+        );
+
+        $twitter->getOembed(['url' => 'https://twitter.com/jxeeno/status/1343506068236689408']);
+    }
+
+    /**
      * @return MockObject|Twitter
      * @throws Exception
      */
