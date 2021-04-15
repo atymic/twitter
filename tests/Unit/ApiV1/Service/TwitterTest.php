@@ -26,7 +26,7 @@ final class TwitterTest extends TestCase
      */
     public function testGetUsersWithScreenName(): void
     {
-        $twitter = $this->getTwitterExpecting(
+        $twitter = $this->getTwitterExpectingQueryCall(
             'users/show',
             [
                 'screen_name' => 'my_screen_name',
@@ -46,7 +46,7 @@ final class TwitterTest extends TestCase
      */
     public function testGetUsersWithId(): void
     {
-        $twitter = $this->getTwitterExpecting(
+        $twitter = $this->getTwitterExpectingQueryCall(
             'users/show',
             [
                 'user_id' => 1234567890,
@@ -83,7 +83,7 @@ final class TwitterTest extends TestCase
      */
     public function testGetUsersLookupWithIds(): void
     {
-        $twitter = $this->getTwitterExpecting(
+        $twitter = $this->getTwitterExpectingQueryCall(
             'users/lookup',
             [
                 'user_id' => '1,2,3,4',
@@ -103,7 +103,7 @@ final class TwitterTest extends TestCase
      */
     public function testGetUsersLookupWithScreenNames(): void
     {
-        $twitter = $this->getTwitterExpecting(
+        $twitter = $this->getTwitterExpectingQueryCall(
             'users/lookup',
             [
                 'screen_name' => 'me,you,everybody',
@@ -305,12 +305,15 @@ final class TwitterTest extends TestCase
      */
     public function testGetOembed(): void
     {
-        $twitter = $this->getTwitterExpecting(
-            'oembed',
-            [
-                'url' => 'https://twitter.com/jxeeno/status/1343506068236689408',
-            ]
-        );
+        $twitter = $this->getTwitter();
+
+        $twitter->expects(self::once())
+            ->method('directQuery')
+            ->with(
+                'https://publish.twitter.com/oembed',
+                "GET",
+                ['url' => 'https://twitter.com/jxeeno/status/1343506068236689408']
+            );
 
         $twitter->getOembed(['url' => 'https://twitter.com/jxeeno/status/1343506068236689408']);
     }
@@ -322,7 +325,7 @@ final class TwitterTest extends TestCase
     protected function getTwitter(): MockObject
     {
         return $this->getMockBuilder(Twitter::class)
-            ->onlyMethods(['query'])
+            ->onlyMethods(['query', 'directQuery'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -331,7 +334,7 @@ final class TwitterTest extends TestCase
      * @return MockObject|Twitter
      * @throws Exception
      */
-    protected function getTwitterExpecting(string $endpoint, array $queryParams): MockObject
+    protected function getTwitterExpectingQueryCall(string $endpoint, array $queryParams): MockObject
     {
         $twitter = $this->getTwitter();
         $twitter->expects(self::once())
@@ -350,7 +353,7 @@ final class TwitterTest extends TestCase
      */
     private function paramTest(string $endpoint, string $testedMethod, array $params): void
     {
-        $twitter = $this->getTwitterExpecting($endpoint, $params);
+        $twitter = $this->getTwitterExpectingQueryCall($endpoint, $params);
 
         $twitter->{$testedMethod}($params);
     }
