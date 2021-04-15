@@ -2,7 +2,7 @@
 
 namespace Atymic\Twitter\ApiV1\Traits;
 
-use Atymic\Twitter\ApiV1\Twitter;
+use Atymic\Twitter\ApiV1\Service\Twitter;
 use BadMethodCallException;
 
 trait DirectMessageTrait

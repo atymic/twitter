@@ -20,9 +20,6 @@ final class SyncClient extends Client implements SyncClientContract
 {
     private ClientInterface $client;
 
-    /**
-     * @param ClientInterface $client
-     */
     public function __construct(ClientInterface $client, bool $debug = false, ?LoggerInterface $logger = null)
     {
         parent::__construct($debug, $logger);

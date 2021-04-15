@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\ApiV1\Traits;
 
-use Atymic\Twitter\ApiV1\Twitter;
+use Atymic\Twitter\ApiV1\Service\Twitter;
 use Atymic\Twitter\Exception\AuthException;
 
 trait AuthTrait
