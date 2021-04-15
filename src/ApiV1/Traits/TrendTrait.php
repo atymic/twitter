@@ -2,6 +2,8 @@
 
 namespace Atymic\Twitter\ApiV1\Traits;
 
+use BadMethodCallException;
+
 trait TrendTrait
 {
     /**

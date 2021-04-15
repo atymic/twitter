@@ -127,4 +127,13 @@ class Twitter implements TwitterContract
     {
         return $this->query($endpoint, self::REQUEST_METHOD_POST, $parameters, $multipart);
     }
+
+    /**
+     * @return mixed
+     * @throws TwitterClientException
+     */
+    public function delete(string $endpoint, array $parameters = [])
+    {
+        return $this->query($endpoint, self::REQUEST_METHOD_DELETE, $parameters);
+    }
 }

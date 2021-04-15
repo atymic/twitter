@@ -33,6 +33,7 @@ interface Twitter
 
     public const REQUEST_METHOD_GET = Querier::REQUEST_METHOD_GET;
     public const REQUEST_METHOD_POST = Querier::REQUEST_METHOD_POST;
+    public const REQUEST_METHOD_DELETE = Querier::REQUEST_METHOD_DELETE;
 
     /**
      * @throws InvalidArgumentException
