@@ -321,7 +321,7 @@ $credentials = Twitter::getCredentials([
 
 Sign in with twitter
 ```php
-use Atymic\Twitter\Facades\Twitter;
+use Atymic\Twitter\Facade\Twitter;
 
 Route::get('twitter/login', ['as' => 'twitter.login', static function () {
     $token = Twitter::getRequestToken(route('twitter.callback'));
