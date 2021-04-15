@@ -311,7 +311,7 @@ final class TwitterTest extends TestCase
             ->method('directQuery')
             ->with(
                 'https://publish.twitter.com/oembed',
-                "GET",
+                'GET',
                 ['url' => 'https://twitter.com/jxeeno/status/1343506068236689408']
             );
 
