@@ -45,10 +45,10 @@ final class Accessor implements TwitterContract
         ?string $consumerKey = null,
         ?string $consumerSecret = null
     ): self {
-        return new self(
-            $this->getQuerier()
-                ->usingCredentials($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret)
-        );
+        $this->querier = $this->getQuerier()
+            ->usingCredentials($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret);
+
+        return $this;
     }
 
     /**
@@ -57,13 +57,13 @@ final class Accessor implements TwitterContract
      */
     public function usingConfiguration(Configuration $configuration): self
     {
-        return new self(
-            $this->getQuerier()
-                ->usingConfiguration($configuration)
-        );
+        $this->querier = $this->getQuerier()
+            ->usingConfiguration($configuration);
+
+        return $this;
     }
 
-    protected function getQuerier(): QuerierContract
+    public function getQuerier(): QuerierContract
     {
         return $this->querier;
     }

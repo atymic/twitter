@@ -52,10 +52,7 @@ class Twitter implements TwitterContract
 
     public function __construct(Querier $querier)
     {
-        $config = $querier->getConfiguration();
-        $this->config = $config;
-        $this->querier = $querier;
-        $this->debug = $config->isDebugMode();
+        $this->setQuerier($querier);
     }
 
     /**
@@ -67,8 +64,13 @@ class Twitter implements TwitterContract
         ?string $consumerKey = null,
         ?string $consumerSecret = null
     ): self {
-        return new self(
-            $this->querier->usingCredentials($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret)
+        return $this->setQuerier(
+            $this->querier->usingCredentials(
+                $accessToken,
+                $accessTokenSecret,
+                $consumerKey,
+                $consumerSecret
+            )
         );
     }
 
@@ -77,7 +79,7 @@ class Twitter implements TwitterContract
      */
     public function usingConfiguration(Configuration $configuration): self
     {
-        return new self($this->querier->usingConfiguration($configuration));
+        return $this->setQuerier($this->querier->usingConfiguration($configuration));
     }
 
     /**
@@ -135,5 +137,15 @@ class Twitter implements TwitterContract
     public function delete(string $endpoint, array $parameters = [])
     {
         return $this->query($endpoint, self::REQUEST_METHOD_DELETE, $parameters);
+    }
+
+    private function setQuerier(Querier $querier): self
+    {
+        $config = $querier->getConfiguration();
+        $this->config = $config;
+        $this->querier = $querier;
+        $this->debug = $config->isDebugMode();
+
+        return $this;
     }
 }

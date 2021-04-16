@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Tests\Unit\Service;
 
-use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Twitter;
 use Atymic\Twitter\Service\Accessor;
 use Atymic\Twitter\Tests\Unit\AccessorTestCase;
@@ -43,12 +42,29 @@ final class AccessorTest extends AccessorTestCase
     {
         $accessToken = 'token';
         $accessTokenSecret = 'secret';
+        $consumerKey = 'consumer-key';
+        $consumerSecret = 'consumer-secret';
+
+        $this->config->getAccessToken()
+            ->willReturn($accessToken);
+        $this->config->getAccessTokenSecret()
+            ->willReturn($accessTokenSecret);
+        $this->config->getConsumerKey()
+            ->willReturn($consumerKey);
+        $this->config->getConsumerSecret()
+            ->willReturn($consumerSecret);
 
         $result = $this->subject
-            ->usingCredentials($accessToken, $accessTokenSecret);
+            ->usingCredentials($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret);
+        $resultConfig = $result->getQuerier()
+            ->getConfiguration();
 
         self::assertInstanceOf(Twitter::class, $result);
-        self::assertNotSame($result, $this->subject);
+        self::assertSame($result, $this->subject);
+        self::assertSame($accessToken, $resultConfig->getAccessToken());
+        self::assertSame($accessTokenSecret, $resultConfig->getAccessTokenSecret());
+        self::assertSame($consumerKey, $resultConfig->getConsumerKey());
+        self::assertSame($consumerSecret, $resultConfig->getConsumerSecret());
     }
 
     /**
@@ -59,16 +75,18 @@ final class AccessorTest extends AccessorTestCase
      */
     public function testUsingConfiguration(): void
     {
-        /**
-         * @var Configuration $config
-         */
-        $config = $this->prophesize(Configuration::class)
-            ->reveal();
+        $accessToken = 'access-token';
+
+        $this->config->getAccessToken()
+            ->willReturn($accessToken);
 
         $result = $this->subject
-            ->usingConfiguration($config);
+            ->usingConfiguration($this->config->reveal());
+        $resultConfig = $result->getQuerier()
+            ->getConfiguration();
 
         self::assertInstanceOf(Twitter::class, $result);
-        self::assertNotSame($result, $this->subject);
+        self::assertSame($result, $this->subject);
+        self::assertSame($resultConfig->getAccessToken(), $accessToken);
     }
 }
