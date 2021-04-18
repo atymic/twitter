@@ -9,7 +9,7 @@ use Atymic\Twitter\Twitter;
 
 trait ApiV2Behavior
 {
-    abstract protected function getQuerier(): Querier;
+    abstract public function getQuerier(): Querier;
 
     protected function implodeParamValues(array $paramValues): string
     {

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Tests\Unit;
 
+use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Querier;
 use Atymic\Twitter\Tests\Integration\Laravel\TestCase;
 use Exception;
@@ -20,6 +21,11 @@ abstract class AccessorTestCase extends TestCase
     protected const ARBITRARY_RESPONSE = ['response'];
 
     /**
+     * @var ObjectProphecy|Configuration
+     */
+    protected ObjectProphecy $config;
+
+    /**
      * @var ObjectProphecy|Querier
      */
     protected ObjectProphecy $querier;
@@ -29,6 +35,7 @@ abstract class AccessorTestCase extends TestCase
      */
     protected function setUp(): void
     {
+        $this->config = $this->prophesize(Configuration::class);
         $this->querier = $this->prophesize(Querier::class);
 
         $this->querier
@@ -43,5 +50,8 @@ abstract class AccessorTestCase extends TestCase
         $this->querier
             ->withOAuth2Client(Argument::cetera())
             ->willReturn($this->querier);
+        $this->querier
+            ->getConfiguration()
+            ->willReturn($this->config->reveal());
     }
 }

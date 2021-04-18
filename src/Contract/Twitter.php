@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter\Contract;
 
+use Atymic\Twitter\Contract\Querier as QuerierContract;
 use Atymic\Twitter\Exception\ClientException;
 use Atymic\Twitter\Twitter as BaseTwitterContract;
 
@@ -130,4 +131,6 @@ interface Twitter extends BaseTwitterContract
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/hide-replies/api-reference/put-tweets-id-hidden
      */
     public function hideTweet(string $tweetId, bool $hidden = true);
+
+    public function getQuerier(): QuerierContract;
 }
