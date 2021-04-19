@@ -33,7 +33,7 @@ TWITTER_API_VERSION=
 
 ### Advanced Laravel configuration
 
-Run `php artisan vendor:publish --provider="Atymic\Twitter\ServiceProviders\LaravelTwitterServiceProvider"`
+Run `php artisan vendor:publish --provider="Atymic\Twitter\ServiceProvider\LaravelServiceProvider"`
 ```
 /config/twitter.php
 ```
