@@ -13,7 +13,6 @@ return [
     'consumer_secret' => env('TWITTER_CONSUMER_SECRET'),
     'access_token' => env('TWITTER_ACCESS_TOKEN'),
     'access_token_secret' => env('TWITTER_ACCESS_TOKEN_SECRET'),
-    'bearer_token' => env('TWITTER_BEARER_TOKEN'),
 
     'authenticate_url' => 'https://api.twitter.com/oauth/authenticate',
     'access_token_url' => 'https://api.twitter.com/oauth/access_token',
