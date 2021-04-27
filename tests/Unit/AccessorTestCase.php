@@ -38,6 +38,11 @@ abstract class AccessorTestCase extends TestCase
         $this->config = $this->prophesize(Configuration::class);
         $this->querier = $this->prophesize(Querier::class);
 
+        $this->config->getApiVersion()
+            ->willReturn('1.1');
+        $this->config->isDebugMode()
+            ->willReturn(true);
+
         $this->querier
             ->usingCredentials(Argument::cetera())
             ->willReturn($this->querier);
