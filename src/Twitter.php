@@ -51,4 +51,14 @@ interface Twitter
      * @see Querier::usingConfiguration()
      */
     public function usingConfiguration(Configuration $configuration): self;
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function forApiV1(): self;
+
+    /**
+     * @throws InvalidArgumentException
+     */
+    public function forApiV2(): self;
 }

@@ -7,15 +7,14 @@ namespace Atymic\Twitter\Service;
 use Atymic\Twitter\Concern\FilteredStream;
 use Atymic\Twitter\Concern\Follows;
 use Atymic\Twitter\Concern\HideReplies;
+use Atymic\Twitter\Concern\HotSwapper;
 use Atymic\Twitter\Concern\SampledStream;
 use Atymic\Twitter\Concern\SearchTweets;
 use Atymic\Twitter\Concern\Timelines;
 use Atymic\Twitter\Concern\TweetLookup;
 use Atymic\Twitter\Concern\UserLookup;
-use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Querier as QuerierContract;
 use Atymic\Twitter\Contract\Twitter as TwitterContract;
-use InvalidArgumentException;
 
 final class Accessor implements TwitterContract
 {
@@ -27,6 +26,7 @@ final class Accessor implements TwitterContract
     use UserLookup;
     use Follows;
     use HideReplies;
+    use HotSwapper;
 
     private QuerierContract $querier;
 
@@ -35,36 +35,15 @@ final class Accessor implements TwitterContract
         $this->querier = $querier;
     }
 
-    /**
-     * @throws InvalidArgumentException
-     * @see QuerierContract::usingCredentials()
-     */
-    public function usingCredentials(
-        string $accessToken,
-        string $accessTokenSecret,
-        ?string $consumerKey = null,
-        ?string $consumerSecret = null
-    ): self {
-        $this->querier = $this->getQuerier()
-            ->usingCredentials($accessToken, $accessTokenSecret, $consumerKey, $consumerSecret);
-
-        return $this;
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     * @see QuerierContract::usingConfiguration()
-     */
-    public function usingConfiguration(Configuration $configuration): self
-    {
-        $this->querier = $this->getQuerier()
-            ->usingConfiguration($configuration);
-
-        return $this;
-    }
-
     public function getQuerier(): QuerierContract
     {
         return $this->querier;
+    }
+
+    private function setQuerier(QuerierContract $querier): self
+    {
+        $this->querier = $querier;
+
+        return $this;
     }
 }
