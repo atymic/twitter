@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Atymic\Twitter;
 
+use Atymic\Twitter\ApiV1\Contract\Twitter as TwitterV1Contract;
 use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Querier;
+use Atymic\Twitter\Contract\Twitter as TwitterV2Contract;
 use InvalidArgumentException;
 
 interface Twitter
@@ -57,12 +59,12 @@ interface Twitter
      *
      * @throws InvalidArgumentException
      */
-    public function forApiV1(): self;
+    public function forApiV1(): TwitterV1Contract;
 
     /**
      * Get an instance of Twitter configured for API v2.
      *
      * @throws InvalidArgumentException
      */
-    public function forApiV2(): self;
+    public function forApiV2(): TwitterV2Contract;
 }
