@@ -51,8 +51,9 @@ trait HotSwapper
     {
         $config = $this->getQuerier()
             ->getConfiguration();
+        $instance = clone $this;
 
-        return $this->usingConfiguration($config->forApiV1());
+        return $instance->usingConfiguration($config->forApiV1());
     }
 
     /**
@@ -62,7 +63,8 @@ trait HotSwapper
     {
         $config = $this->getQuerier()
             ->getConfiguration();
+        $instance = clone $this;
 
-        return $this->usingConfiguration($config->forApiV2());
+        return $instance->usingConfiguration($config->forApiV2());
     }
 }

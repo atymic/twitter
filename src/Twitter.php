@@ -53,11 +53,15 @@ interface Twitter
     public function usingConfiguration(Configuration $configuration): self;
 
     /**
+     * Get an instance of Twitter configured for API v1.
+     *
      * @throws InvalidArgumentException
      */
     public function forApiV1(): self;
 
     /**
+     * Get an instance of Twitter configured for API v2.
+     *
      * @throws InvalidArgumentException
      */
     public function forApiV2(): self;
