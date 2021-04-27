@@ -20,10 +20,10 @@ use Atymic\Twitter\ApiV1\Traits\SearchTrait;
 use Atymic\Twitter\ApiV1\Traits\StatusTrait;
 use Atymic\Twitter\ApiV1\Traits\TrendTrait;
 use Atymic\Twitter\ApiV1\Traits\UserTrait;
+use Atymic\Twitter\Concern\HotSwapper;
 use Atymic\Twitter\Contract\Configuration;
 use Atymic\Twitter\Contract\Querier;
 use Atymic\Twitter\Exception\ClientException as TwitterClientException;
-use InvalidArgumentException;
 
 class Twitter implements TwitterContract
 {
@@ -42,6 +42,7 @@ class Twitter implements TwitterContract
     use TrendTrait;
     use UserTrait;
     use AuthTrait;
+    use HotSwapper;
 
     private const DEFAULT_EXTENSION = 'json';
     private const URL_FORMAT = 'https://%s/%s/%s.%s';
@@ -55,31 +56,9 @@ class Twitter implements TwitterContract
         $this->setQuerier($querier);
     }
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function usingCredentials(
-        string $accessToken,
-        string $accessTokenSecret,
-        ?string $consumerKey = null,
-        ?string $consumerSecret = null
-    ): self {
-        return $this->setQuerier(
-            $this->querier->usingCredentials(
-                $accessToken,
-                $accessTokenSecret,
-                $consumerKey,
-                $consumerSecret
-            )
-        );
-    }
-
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function usingConfiguration(Configuration $configuration): self
+    public function getQuerier(): Querier
     {
-        return $this->setQuerier($this->querier->usingConfiguration($configuration));
+        return $this->querier;
     }
 
     /**

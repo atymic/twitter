@@ -33,7 +33,7 @@ final class AccessorTest extends AccessorTestCase
     }
 
     /**
-     * @covers ::usingCredentials
+     * @covers \Atymic\Twitter\Concern\HotSwapper::usingCredentials
      * @covers ::__construct
      * @covers ::getQuerier
      * @throws Exception
@@ -68,7 +68,7 @@ final class AccessorTest extends AccessorTestCase
     }
 
     /**
-     * @covers ::usingConfiguration
+     * @covers \Atymic\Twitter\Concern\HotSwapper::usingConfiguration
      * @covers ::__construct
      * @covers ::getQuerier
      * @throws Exception
