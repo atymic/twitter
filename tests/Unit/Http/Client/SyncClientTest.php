@@ -80,6 +80,7 @@ final class SyncClientTest extends TestCase
 
         self::assertInstanceOf(stdClass::class, $result);
         self::assertSame('bar', $result->foo);
+        self::assertInstanceOf(ResponseInterface::class, $this->subject->getResponse());
     }
 
     /**

@@ -46,11 +46,21 @@ final class SyncClient extends Client implements SyncClientContract
             );
 
             $requestOptions = $this->getRequestOptions($method, $data, $requestFormat);
+            $response = $this->client->request($method, $url, $requestOptions);
+            $this->response = $response;
 
-            return $this->formatResponse($this->client->request($method, $url, $requestOptions), $responseFormat);
+            return $this->formatResponse($response, $responseFormat);
         } catch (Throwable $exception) {
             throw $this->deduceClientException($exception);
         }
+    }
+
+    /**
+     * @return ResponseInterface|null
+     */
+    public function getResponse(): ?ResponseInterface
+    {
+        return $this->response;
     }
 
     private function getRequestOptions(string $requestMethod, array $params, ?string $requestFormat): array

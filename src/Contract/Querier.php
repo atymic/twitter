@@ -6,6 +6,7 @@ namespace Atymic\Twitter\Contract;
 
 use Atymic\Twitter\Contract\Http\AsyncClient;
 use Atymic\Twitter\Contract\Http\Client as HttpClient;
+use Atymic\Twitter\Contract\Http\SyncClient;
 use Atymic\Twitter\Exception\ClientException as TwitterClientException;
 use GuzzleHttp\RequestOptions;
 use InvalidArgumentException;
@@ -105,4 +106,6 @@ interface Querier
     public function getStream(string $endpoint, callable $onData, array $parameters = []): void;
 
     public function getConfiguration(): Configuration;
+
+    public function getSyncClient(): SyncClient;
 }

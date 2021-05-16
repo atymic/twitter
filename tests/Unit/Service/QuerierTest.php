@@ -144,6 +144,7 @@ final class QuerierTest extends TestCase
         $result = $this->subject->query($endpoint, $method, $params, $multipart, $extension);
 
         self::assertSame($response, $result);
+        self::assertInstanceOf(SyncClient::class, $this->subject->getSyncClient());
     }
 
     /**

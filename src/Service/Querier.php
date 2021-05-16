@@ -53,6 +53,14 @@ final class Querier implements QuerierContract
 
     /**
      * @codeCoverageIgnore
+     */
+    public function getSyncClient(): SyncClient
+    {
+        return $this->syncClient;
+    }
+
+    /**
+     * @codeCoverageIgnore
      * @throws InvalidArgumentException
      */
     public function usingCredentials(

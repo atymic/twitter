@@ -12,6 +12,7 @@ use Atymic\Twitter\Exception\Request\NotFoundException;
 use Atymic\Twitter\Exception\Request\RateLimitedException;
 use Atymic\Twitter\Exception\Request\UnauthorizedRequestException;
 use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Log\InvalidArgumentException as InvalidLogArgumentException;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
@@ -21,6 +22,7 @@ abstract class Client implements ClientContract
 {
     protected bool $debug;
     protected ?LoggerInterface $logger = null;
+    protected ?ResponseInterface $response = null;
 
     public function __construct(bool $debug, ?LoggerInterface $logger)
     {
@@ -61,6 +63,7 @@ abstract class Client implements ClientContract
     {
         /** @var null|Response $response */
         $response = method_exists($exception, 'getResponse') ? $exception->getResponse() : null;
+        $this->response = $response;
         $responseCode = $response !== null ? $response->getStatusCode() : null;
 
         switch ($responseCode) {
