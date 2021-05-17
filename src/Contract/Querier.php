@@ -108,4 +108,6 @@ interface Querier
     public function getConfiguration(): Configuration;
 
     public function getSyncClient(): SyncClient;
+
+    public function getAsyncClient(): AsyncClient;
 }

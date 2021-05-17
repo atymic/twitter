@@ -58,7 +58,7 @@ final class SyncClient extends Client implements SyncClientContract
     /**
      * @return ResponseInterface|null
      */
-    public function getResponse(): ?ResponseInterface
+    public function getLastResponse(): ?ResponseInterface
     {
         return $this->response;
     }

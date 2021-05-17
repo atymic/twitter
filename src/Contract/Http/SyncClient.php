@@ -18,5 +18,5 @@ interface SyncClient extends Client
     /**
      * @return ResponseInterface|null
      */
-    public function getResponse();
+    public function getLastResponse();
 }
