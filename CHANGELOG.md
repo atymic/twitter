@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.9]
+
+### Added
+
+Add ability to get last response (for checking headers such as rate limits) [#359](https://github.com/atymic/twitter/pull/359)
+
+## [3.1.8]
+
+### Fixed
+
+Prior to this, hot-swapping methods (`forApiV1()` and `forApiV2()`) did not actually swap service implementations. #357
+
+## [3.1.6]
+
+### Fixed
+
+Unable to switch API version on service (#356)
+
+## [3.1.5]
+
+### Fixed
+
+Ensure `Twitter` service acts as singleton [#352](https://github.com/atymic/twitter/pull/352)
+
 ## [3.1.4]
 
 ### Fixed
