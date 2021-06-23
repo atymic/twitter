@@ -72,12 +72,10 @@ trait FormattingHelpers
         }
 
         if ($linkifyEmails) {
-            // Mailto
             $text = preg_replace('/' . $patterns['mailto'] . '/i', '<a href="mailto:\\1">\\1</a>', $text);
         }
 
         if ($linkifyUsers) {
-            // User
             $text = preg_replace(
                 '/' . $patterns['user'] . '/i',
                 ' <a href="https://twitter.com/\\1" target="_blank">@\\1</a>',
@@ -86,7 +84,6 @@ trait FormattingHelpers
         }
 
         if ($linkifyHashTags) {
-            // Hashtag
             $text = preg_replace(
                 '/' . $patterns['hashtag'] . '/ui',
                 '<a href="https://twitter.com/search?q=%23\\1" target="_blank">#\\1</a>',
