@@ -132,5 +132,17 @@ interface Twitter extends BaseTwitterContract
      */
     public function hideTweet(string $tweetId, bool $hidden = true);
 
+    /**
+     * @throws ClientException
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/counts/api-reference/get-tweets-counts-recent
+     */
+    public function countRecent(string $query, array $additionalParameters = []);
+
+    /**
+     * @throws ClientException
+     * @see https://developer.twitter.com/en/docs/twitter-api/tweets/counts/api-reference/get-tweets-counts-all
+     */
+    public function countAll(string $query, array $additionalParameters = []);
+
     public function getQuerier(): QuerierContract;
 }
