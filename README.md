@@ -524,7 +524,7 @@ public function searchRecent(string $query): JsonResponse
 
 ###### Call a newly added endpoint:
 
-Since Twitter API v2 is being actively developed, you might need to call an endpoint we did not explicitly document in
+Since Twitter API v2 is in active development, you might need to call an endpoint we did not explicitly document in
 the "Functions" section above. Here is an example of how you may use this package to make calls to any newly added
 endpoints. Here we use the newly added "recent count" endpoint.
 
