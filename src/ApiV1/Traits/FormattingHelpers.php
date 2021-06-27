@@ -5,38 +5,48 @@ declare(strict_types=1);
 namespace Atymic\Twitter\ApiV1\Traits;
 
 use Carbon\Carbon;
+use JsonException;
 
 trait FormattingHelpers
 {
-    public function linkify($tweet): string
-    {
-        //todo fix this logic
+    /**
+     * @param array|object|string $tweet
+     *
+     * @throws JsonException
+     */
+    public function linkify(
+        $tweet,
+        bool $linkifyHashTags = true,
+        bool $linkifyUsers = true,
+        bool $linkifyEmails = true
+    ): string {
+        $type = 'text';
+
         if (is_object($tweet)) {
             $type = 'object';
-            $tweet = json_decode(json_encode($tweet), true);
+            $tweet = json_decode(json_encode($tweet, JSON_THROW_ON_ERROR), true, 512, JSON_THROW_ON_ERROR);
         } elseif (is_array($tweet)) {
             $type = 'array';
-        } else {
-            $type = 'text';
-            $text = ' ' . $tweet;
         }
 
         $patterns = [];
         $patterns['url'] = '(?xi)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))';
         $patterns['mailto'] = '([_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,3}))';
-        $patterns['user'] = ' +@([a-z0-9_]*)?';
+        $patterns['user'] = '(?: +|^)@([A-Za-z0-9_]*)?';
         $patterns['hashtag'] = '(?:(?<=\s)|^)#(\w*[\p{L}\-\d\p{Cyrillic}\d]+\w*)';
         $patterns['long_url'] = '>(([[:alnum:]]+:\/\/)|www\.)?([^[:space:]]{12,22})([^[:space:]]*)([^[:space:]]{12,22})([[:alnum:]#?\/&=])<';
 
         if ($type === 'text') {
-            // URL
-            $pattern = '(?xi)\b((?:https?://|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\(([^\s()<>]+|(\([^\s()<>]+\)))*\))+(?:\(([^\s()<>]+|(\([^\s()<>]+\)))*\)|[^\s`!()\[\]{};:\'".,<>?«»“”‘’]))';
-            $text = preg_replace_callback('#' . $patterns['url'] . '#i', function ($matches) {
-                $input = $matches[0];
-                $url = preg_match('!^https?://!i', $input) ? $input : "http://${input}";
+            $text = preg_replace_callback(
+                '#' . $patterns['url'] . '#i',
+                static function ($matches) {
+                    $input = $matches[0];
+                    $url = preg_match('!^https?://!i', $input) ? $input : "http://${input}";
 
-                return '<a href="' . $url . '" target="_blank" rel="nofollow">' . "${input}</a>";
-            }, $text);
+                    return '<a href="' . $url . '" target="_blank" rel="nofollow">' . "${input}</a>";
+                },
+                sprintf(' %s', $tweet)
+            );
         } else {
             $text = $tweet['text'];
             $entities = $tweet['entities'];
@@ -61,14 +71,25 @@ trait FormattingHelpers
             $text = str_replace($search, $replace, $text);
         }
 
-        // Mailto
-        $text = preg_replace('/' . $patterns['mailto'] . '/i', '<a href="mailto:\\1">\\1</a>', $text);
+        if ($linkifyEmails) {
+            $text = preg_replace('/' . $patterns['mailto'] . '/i', '<a href="mailto:\\1">\\1</a>', $text);
+        }
 
-        // User
-        $text = preg_replace('/' . $patterns['user'] . '/i', ' <a href="https://twitter.com/\\1" target="_blank">@\\1</a>', $text);
+        if ($linkifyUsers) {
+            $text = preg_replace(
+                '/' . $patterns['user'] . '/i',
+                ' <a href="https://twitter.com/\\1" target="_blank">@\\1</a>',
+                $text
+            );
+        }
 
-        // Hashtag
-        $text = preg_replace('/' . $patterns['hashtag'] . '/ui', '<a href="https://twitter.com/search?q=%23\\1" target="_blank">#\\1</a>', $text);
+        if ($linkifyHashTags) {
+            $text = preg_replace(
+                '/' . $patterns['hashtag'] . '/ui',
+                '<a href="https://twitter.com/search?q=%23\\1" target="_blank">#\\1</a>',
+                $text
+            );
+        }
 
         // Long URL
         $text = preg_replace('/' . $patterns['long_url'] . '/', '>\\3...\\5\\6<', $text);
