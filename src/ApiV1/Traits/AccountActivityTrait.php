@@ -1,22 +1,31 @@
 <?php
 
+/** @noinspection PhpDocRedundantThrowsInspection */
+
 namespace Atymic\Twitter\ApiV1\Traits;
+
+use Atymic\Twitter\Exception\TwitterException;
+use Illuminate\Http\Response;
 
 trait AccountActivityTrait
 {
     /**
-     * Creates HMAC SHA-256 hash from incomming crc_token and consumer secret.
+     * Creates HMAC SHA-256 hash from incoming crc_token and consumer secret.
      * This base64 encoded hash needs to be returned by the application when Twitter calls the webhook.
      *
-     * @param mixed $crcToken
+     * @param string $crcToken
      *
      * @return string
+     * @throws TwitterException
      */
-    public function crcHash($crcToken)
+    public function crcHash(string $crcToken): string
     {
-        $hash = hash_hmac('sha256', $crcToken, $this->tconfig['CONSUMER_SECRET'], true);
+        $secret = $this->getQuerier()
+            ->getConfiguration()
+            ->getConsumerSecret();
+        $hash = hash_hmac('sha256', $crcToken, $secret, true);
 
-        return 'sha256='.base64_encode($hash);
+        return 'sha256=' . base64_encode($hash);
     }
 
     /**
@@ -26,6 +35,7 @@ trait AccountActivityTrait
      * @param mixed $url
      *
      * @return object
+     * @throws TwitterException
      */
     public function setWebhook($env, $url)
     {
@@ -38,26 +48,32 @@ trait AccountActivityTrait
      * @param mixed $env
      *
      * @return object
+     * @throws TwitterException
      */
     public function getWebhooks($env = null)
     {
-        return $this->get('account_activity/all/'.($env ? $env.'/' : '').'webhooks');
+        return $this->get('account_activity/all/' . ($env ? $env . '/' : '') . 'webhooks');
     }
 
     /**
-     * Triggers the challenge response check (CRC) for the given enviroments webhook for all activites.
-     * If the check is successful, returns 204 and reenables the webhook by setting its status to valid.
+     * Triggers the challenge response check (CRC) for the given environments webhook for all activities.
+     * If the check is successful, returns 204 and re-enables the webhook by setting its status to valid.
      *
      * @param mixed $env
      * @param mixed $webhookId
      *
      * @return bool
+     * @throws TwitterException
      */
-    public function updateWebhooks($env, $webhookId)
+    public function updateWebhooks($env, $webhookId): bool
     {
         $this->query("account_activity/all/{$env}/webhooks/{$webhookId}", 'PUT');
 
-        return $this->response['code'] === 204;
+        $response = $this->getQuerier()
+            ->getSyncClient()
+            ->getLastResponse();
+
+        return $response !== null && $response->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 
     /**
@@ -68,12 +84,17 @@ trait AccountActivityTrait
      * @param mixed $webhookId
      *
      * @return bool
+     * @throws TwitterException
      */
-    public function destroyWebhook($env, $webhookId)
+    public function destroyWebhook($env, $webhookId): bool
     {
         $this->delete("account_activity/all/{$env}/webhooks/{$webhookId}");
 
-        return $this->response['code'] === 204;
+        $response = $this->getQuerier()
+            ->getSyncClient()
+            ->getLastResponse();
+
+        return $response !== null && $response->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 
     /**
@@ -84,12 +105,17 @@ trait AccountActivityTrait
      * @param mixed $env
      *
      * @return bool
+     * @throws TwitterException
      */
-    public function setSubscriptions($env)
+    public function setSubscriptions($env): bool
     {
         $this->post("account_activity/all/{$env}/subscriptions");
 
-        return $this->response['code'] === 204;
+        $response = $this->getQuerier()
+            ->getSyncClient()
+            ->getLastResponse();
+
+        return $response !== null && $response->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 
     /**
@@ -102,22 +128,28 @@ trait AccountActivityTrait
      * @param mixed $env
      *
      * @return bool
+     * @throws TwitterException
      */
-    public function getSubscriptions($env)
+    public function getSubscriptions($env): bool
     {
         $this->get("account_activity/all/{$env}/subscriptions");
 
-        return $this->response['code'] === 204;
+        $response = $this->getQuerier()
+            ->getSyncClient()
+            ->getLastResponse();
+
+        return $response !== null && $response->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 
     /**
      * Returns the count of subscriptions that are currently active on your account for all activities.
      *
-     * @return object
+     * @return mixed
+     * @throws TwitterException
      */
     public function getSubscriptionsCount()
     {
-        return $this->get('account_activity/all/subscriptions/count', [], false, 'json', true);
+        return $this->get('account_activity/all/subscriptions/count', [], false, 'json');
     }
 
     /**
@@ -125,11 +157,12 @@ trait AccountActivityTrait
      *
      * @param mixed $env
      *
-     * @return object
+     * @return mixed
+     * @throws TwitterException
      */
     public function getSubscriptionsList($env)
     {
-        return $this->get("account_activity/all/{$env}/subscriptions/list", [], false, 'json', true);
+        return $this->get("account_activity/all/{$env}/subscriptions/list", [], false, 'json');
     }
 
     /**
@@ -140,11 +173,16 @@ trait AccountActivityTrait
      * @param mixed $userId
      *
      * @return bool
+     * @throws TwitterException
      */
-    public function destroyUserSubscriptions($env, $userId)
+    public function destroyUserSubscriptions($env, $userId): bool
     {
-        $this->delete("account_activity/all/{$env}/subscriptions/{$userId}", [], false, 'json', true);
+        $this->delete("account_activity/all/{$env}/subscriptions/{$userId}", []);
 
-        return $this->response['code'] === 204;
+        $response = $this->getQuerier()
+            ->getSyncClient()
+            ->getLastResponse();
+
+        return $response !== null && $response->getStatusCode() === Response::HTTP_NO_CONTENT;
     }
 }
