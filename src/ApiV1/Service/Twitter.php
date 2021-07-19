@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Atymic\Twitter\ApiV1\Service;
 
 use Atymic\Twitter\ApiV1\Contract\Twitter as TwitterContract;
+use Atymic\Twitter\ApiV1\Traits\AccountActivityTrait;
 use Atymic\Twitter\ApiV1\Traits\AccountTrait;
 use Atymic\Twitter\ApiV1\Traits\AuthTrait;
 use Atymic\Twitter\ApiV1\Traits\BlockTrait;
@@ -29,6 +30,7 @@ class Twitter implements TwitterContract
 {
     use FormattingHelpers;
     use AccountTrait;
+    use AccountActivityTrait;
     use BlockTrait;
     use DirectMessageTrait;
     use FavoriteTrait;
