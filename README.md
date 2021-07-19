@@ -96,7 +96,7 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 * `postUserBanner()` - Uploads a profile banner on behalf of the authenticating user. For best results, upload an
   profile_banner_url node in their Users objects.
 
-### Account Activity (Premium)
+#### Account Activity (Premium)
 
 * `setWebhook($env, $url)` - Registers a webhook url for all event types in the given environment.
 * `crcHash($crcToken)` - Returns HMAC SHA-256 hash from the given CRC token and consumer secret. You'll need to return this on your webhook ([more info](https://developer.twitter.com/en/docs/accounts-and-users/subscribe-account-activity/guides/securing-webhooks)).
@@ -109,7 +109,7 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 * `getSubscriptionsList($env)` - Returns a list of the current All Activity type subscriptions.
 * `destroyUserSubscriptions($env, $userId)` - Deactivates subscription for the specified user id from the environment. Returns true on success.
 
-### Block
+#### Block
 
 * `getBlocks()` - Returns a collection of user objects that the authenticating user is blocking.
 * `getBlocksIds()` - Returns an array of numeric user ids the authenticating user is blocking.
