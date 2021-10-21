@@ -36,6 +36,7 @@ final class AccessorTest extends AccessorTestCase
      * @covers \Atymic\Twitter\Concern\HotSwapper::usingCredentials
      * @covers ::__construct
      * @covers ::getQuerier
+     *
      * @throws Exception
      */
     public function testUsingCredentials(): void
@@ -71,6 +72,7 @@ final class AccessorTest extends AccessorTestCase
      * @covers \Atymic\Twitter\Concern\HotSwapper::usingConfiguration
      * @covers ::__construct
      * @covers ::getQuerier
+     *
      * @throws Exception
      */
     public function testUsingConfiguration(): void

@@ -19,7 +19,7 @@ trait StatusTrait
      * - include_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getMentionsTimeline($parameters = [])
     {
@@ -42,7 +42,7 @@ trait StatusTrait
      * - include_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getUserTimeline($parameters = [])
     {
@@ -62,7 +62,7 @@ trait StatusTrait
      * - include_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getHomeTimeline($parameters = [])
     {
@@ -81,7 +81,7 @@ trait StatusTrait
      * - include_user_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getRtsTimeline($parameters = [])
     {
@@ -95,8 +95,8 @@ trait StatusTrait
      * - count (1-200)
      * - trim_user (0|1)
      *
-     * @param mixed $id
-     * @param mixed $parameters
+     * @param  mixed  $id
+     * @param  mixed  $parameters
      */
     public function getRts($id, $parameters = [])
     {
@@ -113,8 +113,8 @@ trait StatusTrait
      * - include_entities (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
      *
-     * @param mixed $id
-     * @param mixed $parameters
+     * @param  mixed  $id
+     * @param  mixed  $parameters
      */
     public function getTweet($id, $parameters = [])
     {
@@ -127,8 +127,8 @@ trait StatusTrait
      * Parameters :
      * - trim_user (0|1)
      *
-     * @param mixed $id
-     * @param mixed $parameters
+     * @param  mixed  $id
+     * @param  mixed  $parameters
      */
     public function destroyTweet($id, $parameters = [])
     {
@@ -148,7 +148,7 @@ trait StatusTrait
      * - trim_user (0|1)
      * - media_ids
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postTweet($parameters = [])
     {
@@ -165,8 +165,8 @@ trait StatusTrait
      * Parameters :
      * - trim_user (0|1)
      *
-     * @param mixed $id
-     * @param mixed $parameters
+     * @param  mixed  $id
+     * @param  mixed  $parameters
      */
     public function postRt($id, $parameters = [])
     {
@@ -187,7 +187,7 @@ trait StatusTrait
      * - place_id
      * - display_coordinates (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postTweetMedia($parameters = [])
     {
@@ -213,7 +213,7 @@ trait StatusTrait
      * - link_color (hex value)
      * - widget_type (video)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getOembed($parameters = [])
     {
@@ -232,7 +232,7 @@ trait StatusTrait
      * - cursor
      * - stringify_ids (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getRters($parameters = [])
     {
@@ -253,7 +253,7 @@ trait StatusTrait
      * - map (0|1)
      * - tweet_mode ('extended' returns a collection of Tweets, which are not truncated)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getStatusesLookup($parameters = [])
     {

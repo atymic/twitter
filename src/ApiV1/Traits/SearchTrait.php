@@ -22,7 +22,7 @@ trait SearchTrait
      * - include_entities (0|1)
      * - callback
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getSearch($parameters = [])
     {
@@ -44,7 +44,7 @@ trait SearchTrait
     /**
      * Retrieve the information for the saved search represented by the given id. The authenticating user must be the owner of saved search ID being requested.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function getSavedSearch($id)
     {
@@ -57,7 +57,7 @@ trait SearchTrait
      * Parameters :
      * - query
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postSavedSearch($parameters = [])
     {
@@ -71,8 +71,8 @@ trait SearchTrait
     /**
      * Destroys a saved search for the authenticating user. The authenticating user must be the owner of saved search id being destroyed.
      *
-     * @param mixed $id
-     * @param mixed $parameters
+     * @param  mixed  $id
+     * @param  mixed  $parameters
      */
     public function destroySavedSearch($id, $parameters = [])
     {

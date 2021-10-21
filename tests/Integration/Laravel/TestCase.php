@@ -31,7 +31,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param Application $app
+     * @param  Application  $app
      */
     protected function getEnvironmentSetUp($app): void
     {
@@ -51,7 +51,7 @@ abstract class TestCase extends Orchestra
     }
 
     /**
-     * @param string $suffix
+     * @param  string  $suffix
      */
     private function getTempDirectory($suffix = ''): string
     {

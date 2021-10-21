@@ -14,7 +14,7 @@ trait UserTrait
      * - screen_name
      * - include_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getUsersLookup($parameters = [])
     {
@@ -33,7 +33,7 @@ trait UserTrait
      * - screen_name
      * - include_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getUsers($parameters = [])
     {
@@ -53,7 +53,7 @@ trait UserTrait
      * - count
      * - include_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getUsersSearch($parameters = [])
     {
@@ -71,7 +71,7 @@ trait UserTrait
      * - user_id
      * - screen_name
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getUserBanner($parameters = [])
     {
@@ -85,7 +85,7 @@ trait UserTrait
      * - screen_name
      * - user_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function muteUser($parameters = [])
     {
@@ -103,7 +103,7 @@ trait UserTrait
      * - screen_name
      * - user_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function unmuteUser($parameters = [])
     {
@@ -120,7 +120,7 @@ trait UserTrait
      *  Parameters :
      * - cursor
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function mutedUserIds($parameters = [])
     {
@@ -135,7 +135,7 @@ trait UserTrait
      * - include_entities
      * - skip_status
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function mutedUsers($parameters = [])
     {
@@ -148,8 +148,8 @@ trait UserTrait
      * Parameters :
      * - lang
      *
-     * @param mixed $slug
-     * @param mixed $parameters
+     * @param  mixed  $slug
+     * @param  mixed  $parameters
      */
     public function getSuggesteds($slug, $parameters = [])
     {
@@ -162,7 +162,7 @@ trait UserTrait
      * Parameters :
      * - lang
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getSuggestions($parameters = [])
     {
@@ -172,8 +172,8 @@ trait UserTrait
     /**
      * Access the users in a given category of the Twitter suggested user list and return their most recent status if they are not a protected user.
      *
-     * @param mixed $slug
-     * @param mixed $parameters
+     * @param  mixed  $slug
+     * @param  mixed  $parameters
      */
     public function getSuggestedsMembers($slug, $parameters = [])
     {

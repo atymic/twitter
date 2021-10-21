@@ -11,6 +11,7 @@ interface SyncClient extends Client
 {
     /**
      * @return mixed
+     *
      * @throws ClientException
      */
     public function request(string $method, string $url, array $data = []);

@@ -9,7 +9,7 @@ trait AccountTrait
     /**
      * Returns settings (including current trend, geo and sleep time information) for the authenticating user.
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getSettings($parameters = [])
     {
@@ -25,7 +25,7 @@ trait AccountTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getCredentials($parameters = [])
     {
@@ -43,7 +43,7 @@ trait AccountTrait
      * - time_zone
      * - lang
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postSettings($parameters = [])
     {
@@ -62,7 +62,7 @@ trait AccountTrait
      * - device (sms|none)
      * - include_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postSettingsDevice($parameters = [])
     {
@@ -84,7 +84,7 @@ trait AccountTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postProfile($parameters = [])
     {
@@ -105,7 +105,7 @@ trait AccountTrait
      * - skip_status (0|1)
      * - use (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postBackground($parameters = [])
     {
@@ -124,7 +124,7 @@ trait AccountTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postProfileImage($parameters = [])
     {
@@ -138,7 +138,7 @@ trait AccountTrait
     /**
      * Removes the uploaded profile banner for the authenticating user. Returns HTTP 200 upon success.
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function destroyUserBanner($parameters = [])
     {
@@ -155,7 +155,7 @@ trait AccountTrait
      * - offset_left
      * - offset_top
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postUserBanner($parameters = [])
     {

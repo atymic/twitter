@@ -12,6 +12,7 @@ trait SampledStream
 
     /**
      * @throws ClientException
+     *
      * @see Querier::getStream()
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/sampled-stream/api-reference/get-tweets-sample-stream
      */

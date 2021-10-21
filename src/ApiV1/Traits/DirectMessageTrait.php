@@ -13,7 +13,7 @@ trait DirectMessageTrait
      * Parameters :
      * - id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getDm($parameters = [])
     {
@@ -31,7 +31,7 @@ trait DirectMessageTrait
      * - count (1-50)
      * - cursor
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getDms($parameters = [])
     {
@@ -44,7 +44,7 @@ trait DirectMessageTrait
      * Parameters :
      * - id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function destroyDm($parameters = [])
     {
@@ -66,7 +66,7 @@ trait DirectMessageTrait
      *
      * @see https://developer.twitter.com/en/docs/direct-messages/sending-and-receiving/api-reference/new-event
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      *
      * @throws BadMethodCallException
      */

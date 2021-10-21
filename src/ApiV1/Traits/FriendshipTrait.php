@@ -12,7 +12,7 @@ trait FriendshipTrait
      * Parameters :
      * - stringify_ids (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getNoRters($parameters = [])
     {
@@ -29,7 +29,7 @@ trait FriendshipTrait
      * - stringify_ids (0|1)
      * - count (1-5000)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFriendsIds($parameters = [])
     {
@@ -46,7 +46,7 @@ trait FriendshipTrait
      * - stringify_ids (0|1)
      * - count (1-5000)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFollowersIds($parameters = [])
     {
@@ -60,7 +60,7 @@ trait FriendshipTrait
      * - cursor
      * - stringify_ids (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFriendshipsIn($parameters = [])
     {
@@ -74,7 +74,7 @@ trait FriendshipTrait
      * - cursor
      * - stringify_ids (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFriendshipsOut($parameters = [])
     {
@@ -89,7 +89,7 @@ trait FriendshipTrait
      * - user_id
      * - follow (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postFollow($parameters = [])
     {
@@ -107,7 +107,7 @@ trait FriendshipTrait
      * - screen_name
      * - user_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postUnfollow($parameters = [])
     {
@@ -127,7 +127,7 @@ trait FriendshipTrait
      * - device (0|1)
      * - retweets (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postFollowUpdate($parameters = [])
     {
@@ -147,7 +147,7 @@ trait FriendshipTrait
      * - target_id
      * - target_screen_name
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFriendships($parameters = [])
     {
@@ -168,7 +168,7 @@ trait FriendshipTrait
      * - skip_status (0|1)
      * - include_user_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFriends($parameters = [])
     {
@@ -185,7 +185,7 @@ trait FriendshipTrait
      * - skip_status (0|1)
      * - include_user_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFollowers($parameters = [])
     {
@@ -199,7 +199,7 @@ trait FriendshipTrait
      * - screen_name
      * - user_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFriendshipsLookup($parameters = [])
     {

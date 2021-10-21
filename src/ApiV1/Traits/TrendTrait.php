@@ -13,7 +13,7 @@ trait TrendTrait
      * - id
      * - exclude
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getTrendsPlace($parameters = [])
     {
@@ -27,7 +27,7 @@ trait TrendTrait
     /**
      * Returns the locations that Twitter has trending topic information for.
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getTrendsAvailable($parameters = [])
     {
@@ -41,7 +41,7 @@ trait TrendTrait
      * - lat
      * - long
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getTrendsClosest($parameters = [])
     {

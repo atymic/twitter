@@ -105,6 +105,7 @@ final class AsyncClientTest extends TestCase
      * @covers ::getQueryParams
      * @covers \Atymic\Twitter\Http\Client::__construct
      * @covers \Atymic\Twitter\Http\Client::logRequest
+     *
      * @throws Exception
      */
     public function testRequest(): void
@@ -130,6 +131,7 @@ final class AsyncClientTest extends TestCase
      * @covers \Atymic\Twitter\Http\Client::__construct
      * @covers \Atymic\Twitter\Http\Client::logRequest
      * @covers \Atymic\Twitter\Http\Client::deduceClientException
+     *
      * @throws Exception
      */
     public function testRequestWhenExceptionOccurs(): void
@@ -152,6 +154,7 @@ final class AsyncClientTest extends TestCase
      * @covers ::getQueryParams
      * @covers \Atymic\Twitter\Http\Client::__construct
      * @covers \Atymic\Twitter\Http\Client::logRequest
+     *
      * @throws Exception
      */
     public function testStream(): void
@@ -176,6 +179,7 @@ final class AsyncClientTest extends TestCase
      * @covers \Atymic\Twitter\Http\Client::__construct
      * @covers \Atymic\Twitter\Http\Client::logRequest
      * @covers \Atymic\Twitter\Http\Client::deduceClientException
+     *
      * @throws Exception
      */
     public function testStreamWhenExceptionOccurs(): void

@@ -65,6 +65,7 @@ class Twitter implements TwitterContract
 
     /**
      * @return mixed
+     *
      * @throws TwitterClientException
      */
     public function query(
@@ -79,6 +80,7 @@ class Twitter implements TwitterContract
 
     /**
      * @return mixed
+     *
      * @throws TwitterClientException
      */
     public function directQuery(
@@ -90,11 +92,11 @@ class Twitter implements TwitterContract
     }
 
     /**
-     * @param array $parameters
-     * @param bool $multipart
-     * @param string $extension
-     *
+     * @param  array  $parameters
+     * @param  bool  $multipart
+     * @param  string  $extension
      * @return mixed|string
+     *
      * @throws TwitterClientException
      */
     public function get(string $endpoint, $parameters = [], $multipart = false, $extension = self::DEFAULT_EXTENSION)
@@ -104,6 +106,7 @@ class Twitter implements TwitterContract
 
     /**
      * @return mixed
+     *
      * @throws TwitterClientException
      */
     public function post(string $endpoint, array $parameters = [], bool $multipart = false)
@@ -113,6 +116,7 @@ class Twitter implements TwitterContract
 
     /**
      * @return mixed
+     *
      * @throws TwitterClientException
      */
     public function delete(string $endpoint, array $parameters = [])

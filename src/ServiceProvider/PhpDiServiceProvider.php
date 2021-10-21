@@ -31,9 +31,10 @@ final class PhpDiServiceProvider implements ServiceProviderContract
     private ?Container $container = null;
 
     /**
-     * @param string|array|DefinitionSource ...$additionalDefinitions
+     * @param  string|array|DefinitionSource  ...$additionalDefinitions
      *
      * @throws Exception
+     *
      * @see ContainerBuilder::addDefinitions()
      */
     public function initContainer(...$additionalDefinitions): void

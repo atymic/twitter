@@ -14,7 +14,7 @@ trait BlockTrait
      * - skip_status (0|1)
      * - cursor
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getBlocks($parameters = [])
     {
@@ -28,7 +28,7 @@ trait BlockTrait
      * - stringify_ids (0|1)
      * - cursor
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getBlocksIds($parameters = [])
     {
@@ -44,7 +44,7 @@ trait BlockTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postBlock($parameters = [])
     {
@@ -64,7 +64,7 @@ trait BlockTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function destroyBlock($parameters = [])
     {
