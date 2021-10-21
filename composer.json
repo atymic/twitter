@@ -21,7 +21,7 @@
         "ext-json": "*",
         "illuminate/support": "6 - 8",
         "guzzlehttp/guzzle": "^6.4 || ^7.0",
-        "psr/log": "^1.1",
+        "psr/log": "^1.1 || ^2.0 || ^3.0",
         "nesbot/carbon": "^1.2 || ^2.26",
         "guzzlehttp/oauth-subscriber": "^0.6",
         "php-di/php-di": "^6.2",
