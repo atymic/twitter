@@ -10,7 +10,7 @@ use JsonException;
 trait FormattingHelpers
 {
     /**
-     * @param array|object|string $tweet
+     * @param  array|object|string  $tweet
      *
      * @throws JsonException
      */
@@ -116,8 +116,7 @@ trait FormattingHelpers
     // todo redo these helpers
 
     /**
-     * @param object|array|string $user
-     *
+     * @param  object|array|string  $user
      * @return string
      */
     public function linkUser($user): string
@@ -128,8 +127,7 @@ trait FormattingHelpers
     }
 
     /**
-     * @param object|array $tweet
-     *
+     * @param  object|array  $tweet
      * @return string
      */
     public function linkTweet($tweet): string
@@ -140,8 +138,7 @@ trait FormattingHelpers
     }
 
     /**
-     * @param object|array $tweet
-     *
+     * @param  object|array  $tweet
      * @return string
      */
     public function linkRetweet($tweet): string
@@ -152,8 +149,7 @@ trait FormattingHelpers
     }
 
     /**
-     * @param object|array $tweet
-     *
+     * @param  object|array  $tweet
      * @return string
      */
     public function linkAddTweetToFavorites($tweet): string
@@ -164,8 +160,7 @@ trait FormattingHelpers
     }
 
     /**
-     * @param object|array $tweet
-     *
+     * @param  object|array  $tweet
      * @return string
      */
     public function linkReply($tweet): string
@@ -177,7 +172,6 @@ trait FormattingHelpers
 
     /**
      * @param $data
-     *
      * @return array|mixed
      */
     protected function objectToArray($data)

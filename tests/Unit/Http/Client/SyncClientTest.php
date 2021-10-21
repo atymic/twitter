@@ -68,6 +68,7 @@ final class SyncClientTest extends TestCase
      * @covers ::request
      * @covers ::getRequestOptions
      * @covers ::formatResponse
+     *
      * @throws Throwable
      */
     public function testRequest(): void
@@ -88,6 +89,7 @@ final class SyncClientTest extends TestCase
      * @covers ::request
      * @covers ::getRequestOptions
      * @covers ::formatResponse
+     *
      * @throws Throwable
      */
     public function testJsonRequestJsonResponse(): void
@@ -122,6 +124,7 @@ final class SyncClientTest extends TestCase
      * @covers ::request
      * @covers ::getRequestOptions
      * @covers ::formatResponse
+     *
      * @throws Throwable
      */
     public function testMultipartRequestArrayResponse(): void
@@ -155,6 +158,7 @@ final class SyncClientTest extends TestCase
      * @covers ::request
      * @covers ::getRequestOptions
      * @covers ::formatResponse
+     *
      * @throws Throwable
      */
     public function testRequestWhenRuntimeExceptionOccursInResponseFormatting(): void
@@ -176,6 +180,7 @@ final class SyncClientTest extends TestCase
      * @covers ::request
      * @covers ::getRequestOptions
      * @covers ::formatResponse
+     *
      * @throws Throwable
      */
     public function testRequestWhenJsonExceptionOccursInResponseFormatting(): void
@@ -197,6 +202,7 @@ final class SyncClientTest extends TestCase
      * @covers ::request
      * @covers ::getRequestOptions
      * @covers ::formatResponse
+     *
      * @throws Throwable
      */
     public function testRequestWhenExceptionOccurs(): void

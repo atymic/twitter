@@ -12,6 +12,7 @@ trait SearchTweets
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-recent
      */
     public function searchRecent(string $query, array $additionalParameters)
@@ -24,6 +25,7 @@ trait SearchTweets
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/search/api-reference/get-tweets-search-all
      */
     public function searchAll(string $query, array $additionalParameters)

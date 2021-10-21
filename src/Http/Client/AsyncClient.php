@@ -70,6 +70,7 @@ final class AsyncClient extends Client implements AsyncClientContract
 
     /**
      * @throws ClientException
+     *
      * @see Browser::requestStreaming()
      */
     public function stream(string $method, string $url, array $parameters = []): PromiseInterface

@@ -19,17 +19,18 @@ interface AsyncClient extends Client
     public const KEY_STREAM_STOP_AFTER_SECONDS = 'stop_after_seconds';
 
     /**
-     * @param array $parameters Array of parameters which may contain [headers](array), [stop_after_seconds](float)
+     * @param  array  $parameters  Array of parameters which may contain [headers](array), [stop_after_seconds](float)
      *
      * @throws ClientException
      */
     public function request(string $method, string $url, string $body = '', array $parameters = []): PromiseInterface;
 
     /**
-     * @param array $parameters Array of parameters which may contain [contents](ReadableStreamInterface|string),
-     *                          [stop_after_seconds](float), and [stop_after_count](int)
+     * @param  array  $parameters  Array of parameters which may contain [contents](ReadableStreamInterface|string),
+     *                             [stop_after_seconds](float), and [stop_after_count](int)
      *
      * @throws ClientException
+     *
      * @see Browser::requestStreaming()
      */
     public function stream(string $method, string $url, array $parameters = []): PromiseInterface;

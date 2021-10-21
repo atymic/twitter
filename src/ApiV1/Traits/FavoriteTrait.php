@@ -17,7 +17,7 @@ trait FavoriteTrait
      * - max_id
      * - include_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getFavorites($parameters = [])
     {
@@ -31,7 +31,7 @@ trait FavoriteTrait
      * - id
      * - include_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function destroyFavorite($parameters = [])
     {
@@ -49,7 +49,7 @@ trait FavoriteTrait
      * - id
      * - include_entities (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postFavorite($parameters = [])
     {

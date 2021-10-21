@@ -14,7 +14,7 @@ trait ListTrait
      * - screen_name
      * - reverse (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getLists($parameters = [])
     {
@@ -35,7 +35,7 @@ trait ListTrait
      * - include_entities (0|1)
      * - include_rts (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getListStatuses($parameters = [])
     {
@@ -57,7 +57,7 @@ trait ListTrait
      * - owner_screen_name
      * - owner_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function destroyListMember($parameters = [])
     {
@@ -82,7 +82,7 @@ trait ListTrait
      * - cursor
      * - filter_to_owned_lists
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getListsMemberships($parameters = [])
     {
@@ -101,7 +101,7 @@ trait ListTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getListsSubscribers($parameters = [])
     {
@@ -121,7 +121,7 @@ trait ListTrait
      * - owner_screen_name
      * - owner_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postListSubscriber($parameters = [])
     {
@@ -149,7 +149,7 @@ trait ListTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getListSubscriber($parameters = [])
     {
@@ -173,7 +173,7 @@ trait ListTrait
      * - owner_screen_name
      * - owner_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function destroyListSubscriber($parameters = [])
     {
@@ -195,7 +195,7 @@ trait ListTrait
      * - owner_screen_name
      * - owner_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postListCreateAll($parameters = [])
     {
@@ -219,7 +219,7 @@ trait ListTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getListMember($parameters = [])
     {
@@ -250,7 +250,7 @@ trait ListTrait
      * - include_entities (0|1)
      * - skip_status (0|1)
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getListMembers($parameters = [])
     {
@@ -276,7 +276,7 @@ trait ListTrait
      * - user_id
      * - screen_name
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postListMember($parameters = [])
     {
@@ -300,7 +300,7 @@ trait ListTrait
      * - owner_screen_name
      * - owner_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function destroyList($parameters = [])
     {
@@ -327,7 +327,7 @@ trait ListTrait
      * - mode (public|private)
      * - description
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postListUpdate($parameters = [])
     {
@@ -350,7 +350,7 @@ trait ListTrait
      * - mode (public|private)
      * - description
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postList($parameters = [])
     {
@@ -370,7 +370,7 @@ trait ListTrait
      * - owner_screen_name
      * - owner_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getList($parameters = [])
     {
@@ -394,7 +394,7 @@ trait ListTrait
      * - count (1-1000)
      * - cursor
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getListSubscriptions($parameters = [])
     {
@@ -412,7 +412,7 @@ trait ListTrait
      * - user_id
      * - screen_name
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function destroyListMembers($parameters = [])
     {
@@ -436,7 +436,7 @@ trait ListTrait
      * - count (1-1000)
      * - cursor
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getListOwnerships($parameters = [])
     {

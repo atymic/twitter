@@ -13,6 +13,7 @@ trait Follows
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-following
      */
     public function getFollowing(string $userId, array $queryParameters)
@@ -24,6 +25,7 @@ trait Follows
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/get-users-id-followers
      */
     public function getFollowers(string $userId, array $queryParameters)
@@ -35,6 +37,7 @@ trait Follows
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/post-users-source_user_id-following
      */
     public function follow(string $sourceUserId, string $targetUserId)
@@ -51,6 +54,7 @@ trait Follows
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/users/follows/api-reference/delete-users-source_id-following
      */
     public function unfollow(string $sourceUserId, string $targetUserId)

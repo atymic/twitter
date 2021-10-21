@@ -89,6 +89,7 @@ final class QuerierTest extends TestCase
     /**
      * @covers ::__construct
      * @covers ::directQuery
+     *
      * @throws Exception
      */
     public function testDirectQuery(): void
@@ -111,6 +112,7 @@ final class QuerierTest extends TestCase
      * @covers ::__construct
      * @covers ::query
      * @covers ::buildUrl
+     *
      * @throws Exception
      */
     public function testQuery(): void
@@ -151,6 +153,7 @@ final class QuerierTest extends TestCase
      * @covers ::get
      * @covers ::query
      * @covers ::buildUrl
+     *
      * @throws Exception
      */
     public function testGet(): void
@@ -189,6 +192,7 @@ final class QuerierTest extends TestCase
      * @covers ::post
      * @covers ::query
      * @covers ::buildUrl
+     *
      * @throws Exception
      */
     public function testPost(): void
@@ -225,6 +229,7 @@ final class QuerierTest extends TestCase
      * @covers ::put
      * @covers ::query
      * @covers ::buildUrl
+     *
      * @throws Exception
      */
     public function testPut(): void
@@ -261,6 +266,7 @@ final class QuerierTest extends TestCase
      * @covers ::delete
      * @covers ::query
      * @covers ::buildUrl
+     *
      * @throws Exception
      */
     public function testDelete(): void

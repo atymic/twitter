@@ -12,6 +12,7 @@ trait TweetCounts
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/counts/api-reference/get-tweets-counts-recent
      */
     public function countRecent(string $query, array $additionalParameters = [])
@@ -25,6 +26,7 @@ trait TweetCounts
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/counts/api-reference/get-tweets-counts-all
      */
     public function countAll(string $query, array $additionalParameters = [])

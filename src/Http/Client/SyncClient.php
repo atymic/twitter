@@ -29,6 +29,7 @@ final class SyncClient extends Client implements SyncClientContract
 
     /**
      * @return mixed
+     *
      * @throws ClientException
      */
     public function request(string $method, string $url, array $data = [])
@@ -88,8 +89,7 @@ final class SyncClient extends Client implements SyncClientContract
     }
 
     /**
-     * @param Response|ResponseInterface $response
-     *
+     * @param  Response|ResponseInterface  $response
      * @return mixed
      */
     private function formatResponse(ResponseInterface $response, string $format)

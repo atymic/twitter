@@ -69,6 +69,7 @@ final class Querier implements QuerierContract
 
     /**
      * @codeCoverageIgnore
+     *
      * @throws InvalidArgumentException
      */
     public function usingCredentials(
@@ -85,6 +86,7 @@ final class Querier implements QuerierContract
 
     /**
      * @codeCoverageIgnore
+     *
      * @throws InvalidArgumentException
      */
     public function usingConfiguration(Configuration $configuration): self
@@ -94,6 +96,7 @@ final class Querier implements QuerierContract
 
     /**
      * @codeCoverageIgnore
+     *
      * @throws InvalidArgumentException
      */
     public function withOAuth1Client(): self
@@ -106,6 +109,7 @@ final class Querier implements QuerierContract
 
     /**
      * @codeCoverageIgnore
+     *
      * @throws InvalidArgumentException
      */
     public function withOAuth2Client(): self
@@ -181,6 +185,7 @@ final class Querier implements QuerierContract
 
     /**
      * @throws TwitterClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference API Reference: Filtered Stream
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/sampled-stream/introduction API Reference: Sampled Stream
      */

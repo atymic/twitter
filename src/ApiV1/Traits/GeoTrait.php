@@ -9,7 +9,7 @@ trait GeoTrait
     /**
      * Returns all the information about a known place.
      *
-     * @param mixed $id
+     * @param  mixed  $id
      */
     public function getGeo($id)
     {
@@ -27,7 +27,7 @@ trait GeoTrait
      * - max_results
      * - callback
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getGeoReverse($parameters = [])
     {
@@ -53,7 +53,7 @@ trait GeoTrait
      * - attribute:street_address
      * - callback
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getGeoSearch($parameters = [])
     {
@@ -71,7 +71,7 @@ trait GeoTrait
      * - attribute:street_address
      * - callback
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getGeoSimilar($parameters = [])
     {

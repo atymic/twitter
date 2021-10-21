@@ -12,6 +12,7 @@ trait TweetLookup
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets-id
      */
     public function getTweet(string $tweetId, array $queryParameters)
@@ -22,6 +23,7 @@ trait TweetLookup
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/lookup/api-reference/get-tweets
      */
     public function getTweets(array $tweetIds, array $additionalParameters)

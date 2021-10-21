@@ -39,6 +39,7 @@ interface Twitter
 
     /**
      * @throws InvalidArgumentException
+     *
      * @see Querier::usingCredentials()
      */
     public function usingCredentials(
@@ -50,6 +51,7 @@ interface Twitter
 
     /**
      * @throws InvalidArgumentException
+     *
      * @see Querier::usingConfiguration()
      */
     public function usingConfiguration(Configuration $configuration): self;

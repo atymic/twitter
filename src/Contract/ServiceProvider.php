@@ -12,12 +12,13 @@ interface ServiceProvider
     public const PACKAGE_ALIAS = 'twitter';
 
     /**
-     * @param mixed ...$concrete
+     * @param  mixed  ...$concrete
      */
     public function set(string $name, ...$concrete): void;
 
     /**
      * @return mixed
+     *
      * @throws ContainerExceptionInterface
      */
     public function resolve(string $name);

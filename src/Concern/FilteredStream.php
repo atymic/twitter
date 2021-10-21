@@ -13,6 +13,7 @@ trait FilteredStream
 
     /**
      * @throws ClientException
+     *
      * @see Querier::getStream()
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream
      */
@@ -24,6 +25,7 @@ trait FilteredStream
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/get-tweets-search-stream-rules
      */
     public function getStreamRules(array $queryParameters)
@@ -35,6 +37,7 @@ trait FilteredStream
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference/post-tweets-search-stream-rules
      */
     public function postStreamRules(array $parameters)

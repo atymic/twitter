@@ -14,6 +14,7 @@ trait MediaTrait
      * - media_data
      *
      * @return mixed
+     *
      * @throws BadMethodCallException
      */
     public function uploadMedia(array $parameters = [])

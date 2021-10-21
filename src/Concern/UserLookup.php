@@ -12,6 +12,7 @@ trait UserLookup
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-id
      */
     public function getUser(string $userId, array $queryParameters)
@@ -22,6 +23,7 @@ trait UserLookup
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
      */
     public function getUsers(array $userIds, array $additionalParameters)
@@ -34,6 +36,7 @@ trait UserLookup
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users-by-username-username
      */
     public function getUserByUsername(string $username, array $queryParameters)
@@ -44,6 +47,7 @@ trait UserLookup
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/users/lookup/api-reference/get-users
      */
     public function getUsersByUsernames(array $usernames, array $additionalParameters)

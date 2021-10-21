@@ -13,7 +13,7 @@ trait HelpTrait
      * - screen_name
      * - user_id
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function postSpam($parameters = [])
     {
@@ -27,7 +27,7 @@ trait HelpTrait
     /**
      * Returns the current configuration used by Twitter including twitter.com slugs which are not usernames, maximum photo resolutions, and t.co URL lengths.
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getHelpConfiguration($parameters = [])
     {
@@ -37,7 +37,7 @@ trait HelpTrait
     /**
      * Returns the list of languages supported by Twitter along with the language code supported by Twitter.
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getHelpLanguages($parameters = [])
     {
@@ -47,7 +47,7 @@ trait HelpTrait
     /**
      * Returns Twitter’s Privacy Policy.
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getHelpPrivacy($parameters = [])
     {
@@ -57,7 +57,7 @@ trait HelpTrait
     /**
      * Returns the Twitter Terms of Service. Note: these are not the same as the Developer Policy.
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getHelpTos($parameters = [])
     {
@@ -67,7 +67,7 @@ trait HelpTrait
     /**
      * Returns the current rate limits for methods belonging to the specified resource families.
      *
-     * @param mixed $parameters
+     * @param  mixed  $parameters
      */
     public function getAppRateLimit($parameters = [])
     {

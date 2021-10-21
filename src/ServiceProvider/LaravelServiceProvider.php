@@ -94,6 +94,7 @@ final class LaravelServiceProvider extends ServiceProvider implements ServicePro
 
     /**
      * @return mixed
+     *
      * @throws ContainerExceptionInterface
      */
     public function resolve(string $name)

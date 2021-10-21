@@ -13,6 +13,7 @@ trait HideReplies
 
     /**
      * @throws ClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/hide-replies/api-reference/put-tweets-id-hidden
      */
     public function hideTweet(string $tweetId, bool $hidden = true)

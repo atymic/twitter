@@ -97,9 +97,10 @@ interface Querier
     public function delete(string $endpoint, array $parameters = []);
 
     /**
-     * @param callable $onData Callable function which expects a chunk of data (string) as it's only param.
+     * @param  callable  $onData  Callable function which expects a chunk of data (string) as it's only param.
      *
      * @throws TwitterClientException
+     *
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/filtered-stream/api-reference API Reference: Filtered Stream
      * @see https://developer.twitter.com/en/docs/twitter-api/tweets/sampled-stream/introduction API Reference: Sampled Stream
      */
