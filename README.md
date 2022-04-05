@@ -56,11 +56,11 @@ See the migration guide in [UPGRADE.md](./UPGRADE.md).
 
 ## Output format
 
-You can choose between three different output formats. By default responses will be returned as objects. To change this,
-use the `format` option in the parameters you pass to any method.
+You can choose between three different output formats. By default, API v1 responses will be returned as objects while API v2 responses will be returned as JSON. To change this,
+use the `response_format` option in the parameters you pass to any method.
 
 ```
-format : object|json|array (default:object)
+response_format : object|json|array (v1 default:object) (v2 default:json)
 ```
 
 ## Twitter API Versions
