@@ -41,9 +41,9 @@ trait FormattingHelpers
                 '#' . $patterns['url'] . '#i',
                 static function ($matches) {
                     $input = $matches[0];
-                    $url = preg_match('!^https?://!i', $input) ? $input : "http://${input}";
+                    $url = preg_match('!^https?://!i', $input) ? $input : "http://{$input}";
 
-                    return '<a href="' . $url . '" target="_blank" rel="nofollow">' . "${input}</a>";
+                    return '<a href="' . $url . '" target="_blank" rel="nofollow">' . "{$input}</a>";
                 },
                 sprintf(' %s', $tweet)
             );
