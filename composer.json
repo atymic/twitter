@@ -1,7 +1,7 @@
 {
     "name": "atymic/twitter",
     "description": "Twitter API for PHP & Laravel",
-    "keywords": ["twitter", "laravel", "laravel5", "laravel6", "laravel7", "laravel8", "lareavel9", "laravel10"],
+    "keywords": ["twitter", "laravel"],
     "license": "MIT",
     "type": "library",
     "authors": [
