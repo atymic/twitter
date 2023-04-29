@@ -24,7 +24,7 @@
         "psr/log": "^1.1 || ^2.0 || ^3.0",
         "nesbot/carbon": "^1.2 || ^2.26",
         "guzzlehttp/oauth-subscriber": "^0.6",
-        "php-di/php-di": "^6.2",
+        "php-di/php-di": "^7.0.2",
         "kamermans/guzzle-oauth2-subscriber": "^1.0",
         "phpoption/phpoption": "^1.7",
         "vlucas/phpdotenv": "*",
