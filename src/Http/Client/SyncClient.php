@@ -70,7 +70,7 @@ final class SyncClient extends Client implements SyncClientContract
             case self::REQUEST_FORMAT_JSON:
                 return json_encode([
                     $options['headers'] = [
-                        'Content-Type' => 'application/json'
+                        'Content-Type' => 'application/json',
                     ],
                     $options[RequestOptions::JSON] = $params,
                 ]);
