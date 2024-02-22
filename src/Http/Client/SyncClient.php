@@ -68,8 +68,12 @@ final class SyncClient extends Client implements SyncClientContract
     {
         switch ($requestFormat) {
             case self::REQUEST_FORMAT_JSON:
-                $paramsKey = RequestOptions::JSON;
-
+                return json_encode([
+                    $options['headers'] = [
+                        'Content-Type' => 'application/json'
+                    ],
+                    $options[RequestOptions::JSON] = $params,
+                ]);
                 break;
             case self::REQUEST_FORMAT_MULTIPART:
                 $paramsKey = RequestOptions::MULTIPART;
