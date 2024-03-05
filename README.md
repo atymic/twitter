@@ -17,7 +17,7 @@ the [Application Management](https://apps.twitter.com/).
 ## Installation
 
 ```
-composer require atymic/twitter
+composer require atymic/twitter:^3.0 -W
 ```
 
 ## Laravel Configuration
