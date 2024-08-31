@@ -1,4 +1,4 @@
-# Twitter for PHP
+# X (Twitter) for PHP
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![StyleCI](https://styleci.io/repos/11009743/shield)](https://styleci.io/repos/11009743)
@@ -62,7 +62,7 @@ use the `response_format` option in the parameters you pass to any method.
 response_format : object|json|array (v1 default:object) (v2 default:json)
 ```
 
-## Twitter API Versions
+## X (Twitter) API Versions
 
 To set the default twitter API version to v2 instead of the default `v1.1`, set the  `TWITTER_API_VERSION` to `2` in
 your `.env`.
@@ -74,7 +74,7 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 
 ## Functions
 
-### Twitter API v1.1
+### X (Twitter) API v1.1
 
 #### Account
 
@@ -174,14 +174,14 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 
 #### Help
 
-* `postSpam()` - Report the specified user as a spam account to Twitter. Additionally performs the equivalent of POST
+* `postSpam()` - Report the specified user as a spam account to X (Twitter). Additionally performs the equivalent of POST
   blocks / create on behalf of the authenticated user.
-* `getHelpConfiguration()` - Returns the current configuration used by Twitter including twitter.com slugs which are not
+* `getHelpConfiguration()` - Returns the current configuration used by X (Twitter) including twitter.com slugs which are not
   usernames, maximum photo resolutions, and t.co URL lengths.
-* `getHelpLanguages()` - Returns the list of languages supported by Twitter along with the language code supported by
-  Twitter.
+* `getHelpLanguages()` - Returns the list of languages supported by Twitter along with the language code supported by X
+  (Twitter).
 * `getHelpPrivacy()` - Returns Twitter’s Privacy Policy.
-* `getHelpTos()` - Returns the Twitter Terms of Service. Note: these are not the same as the Developer Policy.
+* `getHelpTos()` - Returns the X (Twitter) Terms of Service. Note: these are not the same as the Developer Policy.
 * `getAppRateLimit()` - Returns the current rate limits for methods belonging to the specified resource families.
 
 #### List
