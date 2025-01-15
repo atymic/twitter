@@ -148,7 +148,7 @@ final class TwitterTest extends TestCase
         $this->paramTest('lists/show', 'getList', $params);
     }
 
-    public function providerGetList(): array
+    public static function providerGetList(): array
     {
         return [
             [
@@ -178,7 +178,7 @@ final class TwitterTest extends TestCase
         $twitter->getList($params);
     }
 
-    public function providerGetListBad(): array
+    public static function providerGetListBad(): array
     {
         return [
             [
@@ -199,7 +199,7 @@ final class TwitterTest extends TestCase
         $this->paramTest('lists/members', 'getListMembers', $params);
     }
 
-    public function providerGetListMembers(): array
+    public static function providerGetListMembers(): array
     {
         return [
             [
@@ -229,7 +229,7 @@ final class TwitterTest extends TestCase
         $twitter->getListMembers($params);
     }
 
-    public function providerGetListMembersBad(): array
+    public static function providerGetListMembersBad(): array
     {
         return [
             [
@@ -252,7 +252,7 @@ final class TwitterTest extends TestCase
         $this->paramTest('lists/members/show', 'getListMember', $params);
     }
 
-    public function providerGetListMember(): array
+    public static function providerGetListMember(): array
     {
         return [
             [
@@ -290,7 +290,7 @@ final class TwitterTest extends TestCase
         $twitter->getListMembers($params);
     }
 
-    public function providerGetListMemberBad(): array
+    public static function providerGetListMemberBad(): array
     {
         return [
             [
