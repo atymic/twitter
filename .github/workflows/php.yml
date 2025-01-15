@@ -3,46 +3,37 @@ name: PHP
 on: [ push ]
 
 jobs:
-  run:
-    runs-on: ubuntu-latest
+  tests:
+    runs-on: ubuntu-22.04
+
     strategy:
-      max-parallel: 15
-      fail-fast: false
+      fail-fast: true
       matrix:
-        laravel-version: [ '^6.0', '^7.0', '^8.0', '^9.0' ]
-        php-version: [ '7.4', '8.0', '8.1']
+        php: [8.1, 8.2, 8.3, 8.4]
+        laravel: [10, 11]
         exclude:
-          - laravel-version: ^6.0
-            php-version: 8.0
-          - laravel-version: ^7.0
-            php-version: 8.0
-          - laravel-version: ^6.0
-            php-version: 8.1
-          - laravel-version: ^7.0
-            php-version: 8.1
-          - laravel-version: ^9.0
-            php-version: 7.4
-    name: PHP ${{ matrix.php-version }} on Laravel ${{ matrix.laravel-version }}
+          - php: 8.1
+            laravel: 11
+          - php: 8.4
+            laravel: 10
+
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@v4
+
       - name: Setup PHP
-        uses: shivammathur/setup-php@master
+        uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php-version }}
-          extensions: mbstring, xdebug, sqlite
-          coverage: xdebug
+          php-version: ${{ matrix.php }}
+          extensions: mbstring, pdo, sqlite, pdo_sqlite
+          ini-values: error_reporting=E_ALL
+          tools: composer:v2
+          coverage: none
+
       - name: Install dependencies
         run: |
-          composer require --no-update --no-interaction "illuminate/support:${{ matrix.laravel-version }}"
-          composer update --prefer-stable --no-interaction --prefer-dist
-      - name: Lint composer.json
-        run: composer validate
-      - name: Run Tests
-        run: composer test:ci
-        env:
-          CI_TESTING: 'github-actions'
-      - name: Upload code coverage
-        uses: codecov/codecov-action@v1.0.3
-        with:
-          token: ${{secrets.CODECOV_TOKEN}}
+          composer update --prefer-dist --no-interaction --no-progress --with="illuminate/contracts=^${{ matrix.laravel }}"
+
+      - name: Execute tests
+        run: vendor/bin/phpunit ${{ matrix.laravel >= 10 && '--display-deprecations' || '' }}

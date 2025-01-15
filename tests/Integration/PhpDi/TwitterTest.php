@@ -6,7 +6,6 @@ namespace Atymic\Twitter\Tests\Integration\PhpDi;
 
 use Atymic\Twitter\Contract\ServiceProvider;
 use Atymic\Twitter\ServiceProvider\PhpDiServiceProvider;
-use Atymic\Twitter\Tests\Integration\ResolutionTest;
 use Atymic\Twitter\Twitter;
 use Exception;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @internal
  */
-final class TwitterTest extends TestCase implements ResolutionTest
+final class TwitterTest extends TestCase
 {
     /**
      * @var ServiceProvider

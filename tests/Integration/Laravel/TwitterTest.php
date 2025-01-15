@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Atymic\Twitter\Tests\Integration\Laravel;
 
 use Atymic\Twitter\Contract\ServiceProvider;
-use Atymic\Twitter\Tests\Integration\ResolutionTest;
 use Atymic\Twitter\Twitter;
 use Exception;
 
@@ -13,7 +12,7 @@ use Exception;
  * @internal
  * @coversNothing
  */
-final class TwitterTest extends TestCase implements ResolutionTest
+final class TwitterTest extends TestCase
 {
     /**
      * @throws Exception
