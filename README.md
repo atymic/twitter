@@ -1,4 +1,4 @@
-# Twitter for PHP
+# X (formerly Twitter) for PHP
 
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
 [![StyleCI](https://styleci.io/repos/11009743/shield)](https://styleci.io/repos/11009743)
@@ -62,7 +62,7 @@ use the `response_format` option in the parameters you pass to any method.
 response_format : object|json|array (v1 default:object) (v2 default:json)
 ```
 
-## Twitter API Versions
+## X (formerly Twitter) API Versions
 
 To set the default twitter API version to v2 instead of the default `v1.1`, set the  `TWITTER_API_VERSION` to `2` in
 your `.env`.
@@ -74,7 +74,7 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 
 ## Functions
 
-### Twitter API v1.1
+### X (formerly Twitter) API v1.1
 
 #### Account
 
@@ -174,14 +174,14 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 
 #### Help
 
-* `postSpam()` - Report the specified user as a spam account to Twitter. Additionally performs the equivalent of POST
+* `postSpam()` - Report the specified user as a spam account to X (formerly Twitter). Additionally performs the equivalent of POST
   blocks / create on behalf of the authenticated user.
-* `getHelpConfiguration()` - Returns the current configuration used by Twitter including twitter.com slugs which are not
+* `getHelpConfiguration()` - Returns the current configuration used by X (formerly Twitter) including x.com slugs which are not
   usernames, maximum photo resolutions, and t.co URL lengths.
-* `getHelpLanguages()` - Returns the list of languages supported by Twitter along with the language code supported by
-  Twitter.
+* `getHelpLanguages()` - Returns the list of languages supported by X (formerly Twitter) along with the language code supported by X
+  (formerly Twitter).
 * `getHelpPrivacy()` - Returns Twitter’s Privacy Policy.
-* `getHelpTos()` - Returns the Twitter Terms of Service. Note: these are not the same as the Developer Policy.
+* `getHelpTos()` - Returns the X (formerly Twitter) Terms of Service. Note: these are not the same as the Developer Policy.
 * `getAppRateLimit()` - Returns the current rate limits for methods belonging to the specified resource families.
 
 #### List
@@ -255,7 +255,7 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 * `postTweet()` - Updates the authenticating user’s current status, also known as tweeting.
 * `postRt()` - Retweets a tweet. Returns the original tweet with retweet details embedded.
 * `getOembed()` - Returns a single Tweet, specified by either a Tweet web URL or the Tweet ID, in an oEmbed-compatible
-  format. The returned HTML snippet will be automatically recognized as an Embedded Tweet when Twitter’s widget
+  format. The returned HTML snippet will be automatically recognized as an Embedded Tweet when X (formerly Twitter’s) widget
   JavaScript is included on the page.
 * `getRters()` - Returns a collection of up to 100 user IDs belonging to users who have retweeted the tweet specified by
   the id parameter.
@@ -266,8 +266,8 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 
 * `getTrendsPlace()` - Returns the top 10 trending topics for a specific WOEID, if trending information is available for
   it.
-* `getTrendsAvailable()` - Returns the locations that Twitter has trending topic information for.
-* `getTrendsClosest()` - Returns the locations that Twitter has trending topic information for, closest to a specified
+* `getTrendsAvailable()` - Returns the locations that X (formerly Twitter) has trending topic information for.
+* `getTrendsClosest()` - Returns the locations that X (formerly Twitter) has trending topic information for, closest to a specified
   location.
 
 #### User
@@ -292,7 +292,7 @@ It is safe to call `Twitter::forApiV1()` on either a `v1` or `v2` client instanc
 * `getSuggestedsMembers()` - Access the users in a given category of the Twitter suggested user list and return their
   most recent status if they are not a protected user.
 
-### Twitter API v2
+### X (formerly Twitter) API v2
 
 #### Tweet Lookup
 
