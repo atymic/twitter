@@ -28,7 +28,7 @@ class ClientException extends RuntimeException implements TwitterException
      */
     public static function fromClientResponse(
         ResponseInterface $response,
-        Throwable $previousException = null
+        ?Throwable $previousException = null
     ): TwitterException {
         $responseStatusCode = $response->getStatusCode();
         try {

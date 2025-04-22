@@ -22,7 +22,7 @@ final class FormattingHelpersTest extends ConcernTestCase
         );
     }
 
-    public function dataGetUserLink(): array
+    public static function dataGetUserLink(): array
     {
         return [
             'string' =>  ['atymic'],
@@ -42,7 +42,7 @@ final class FormattingHelpersTest extends ConcernTestCase
         );
     }
 
-    public function dataLinkAddTweetToFavorites(): array
+    public static function dataLinkAddTweetToFavorites(): array
     {
         return [
             'object' =>  [(object) ['id_str' => '1381031025053155332']],
