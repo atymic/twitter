@@ -1,6 +1,6 @@
 # X (formerly Twitter) for PHP
 
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE.md)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 [![StyleCI](https://styleci.io/repos/11009743/shield)](https://styleci.io/repos/11009743)
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/atymic/twitter.svg?style=flat-square)](https://packagist.org/packages/thujohn/twitter)
 [![3.x Downloads](https://img.shields.io/packagist/dt/atymic/twitter.svg?style=flat-square&label=3.x%20downloads)](https://packagist.org/packages/atymic/twitter)
